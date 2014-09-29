@@ -1,9 +1,10 @@
-package quickstart.action
+package haru.action
 
 import xitrum.annotation.GET
+import xitrum.Action
 
 @GET("")
-class SiteIndex extends DefaultLayout {
+class Index extends Action {
   def execute() {
     respondView()
   }

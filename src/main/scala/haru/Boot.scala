@@ -1,4 +1,4 @@
-package quickstart
+package haru
 
 import xitrum.Server
 
