@@ -21,4 +21,4 @@ To generate Eclipse or IntelliJ project:
   sbt/sbt gen-idea
 
   fdsfds
-  readme changefdsfds
+  readme changefdsfdsfdsfds
