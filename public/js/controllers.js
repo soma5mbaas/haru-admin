@@ -73,7 +73,11 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
-      
+     $translate('aside.nav.components.COMPONENTS').then(function(text){
+    	 console.log(text);
+     });
+     
+     
       // Defining user logged status
       $scope.logged = false;
 	  if($scope.logged == false 
