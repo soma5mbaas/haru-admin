@@ -9,3 +9,10 @@ class Home extends Action {
     respondView()
   }
 }
+
+@GET("/Home")
+class Home2 extends Action {
+  def execute() {
+    respondView()
+  }
+}
