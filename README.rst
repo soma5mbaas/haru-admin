@@ -19,3 +19,6 @@ To generate Eclipse or IntelliJ project:
 
   sbt/sbt eclipse
   sbt/sbt gen-idea
+
+  
+  readme change
