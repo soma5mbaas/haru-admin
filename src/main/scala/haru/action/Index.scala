@@ -10,8 +10,8 @@ class Home extends Action {
   }
 }
 
-@GET("/Home")
-class Home2 extends Action {
+@GET("/HomeMin")
+class HomeMin extends Action {
   def execute() {
     respondView()
   }

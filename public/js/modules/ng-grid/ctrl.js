@@ -52,7 +52,6 @@ angular.module('app').controller('GridDemoCtrl', ['$scope', '$http', function($s
     $scope.gridOptions = {
         data: 'myData',
         enablePaging: true,
-        enableCellEdit: true,
         showFooter: true,
         totalServerItems: 'totalServerItems',
         pagingOptions: $scope.pagingOptions,

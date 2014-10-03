@@ -32,7 +32,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           asideColor: 'bg-black',
           headerFixed: true,
           asideFixed: false,
-          asideFolded: false,
+          asideFolded: true,
           asideDock: false,
           container: false
         }

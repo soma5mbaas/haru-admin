@@ -17,7 +17,7 @@ html(lang="en" data-ng-app="app")
     link(type="text/css" rel="stylesheet" media="all" href={publicUrl("css/font.css")})
     link(type="text/css" rel="stylesheet" media="all" href={publicUrl("css/app.css")})
   body(ng-controller="AppCtrl")
-    .app(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed}" ui-view="")
+    #app.app(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="")
     <!-- jQuery -->
     script(src={publicUrl("js/jquery/jquery.min.js")})
     <!-- Angular -->

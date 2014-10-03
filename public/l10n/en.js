@@ -67,6 +67,9 @@
   },
   "MILESTONE" : "Milestone",
   "RELEASE" : "Release"
+},
+"TEST" : {
+	"TEST" : "test"
 }
 
 }

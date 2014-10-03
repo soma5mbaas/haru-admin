@@ -1,0 +1,20 @@
+- import haru.action._
+
+!!! 5
+html(lang="en" data-ng-app="app")
+  head
+    != antiCsrfMeta
+    meta(content="text/html; charset=utf-8" http-equiv="content-type")
+    meta(name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components")
+    meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1")
+    title Be Angular | Bootstrap Admin Web App with AngularJS
+
+    link(rel="shortcut icon" href={publicUrl("favicon.ico")})
+    link(type="text/css" rel="stylesheet" media="all" href={publicUrl("css/app.min.css")})
+    
+  body(ng-controller="AppCtrl")
+    #app.app(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="")
+    script(src={publicUrl("js/app.min.js")})
+    <!-- Lazy load ng -->
+    
+    = jsForView
