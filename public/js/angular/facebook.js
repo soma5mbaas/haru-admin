@@ -518,11 +518,6 @@
                    FB.Event.subscribe(name, function(response) {
                      $timeout(function() {
                        $rootScope.$broadcast('Facebook:' + mapped, response);
-                       
-                       if(mapped == 'auth.statusChange'){
-                    	   console.log(JSON.stringify(response));
-                       }
-                       
                      });
                    });
                  });

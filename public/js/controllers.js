@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
-  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$window', 'Facebook', 'GooglePlus', 'UserService',
-    function(              $rootScope,   $scope,   $translate,   $localStorage,   $window,   Facebook,   GooglePlus, UserService) {
+  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$window', '$state', 'UserService',
+    function(              $rootScope,   $scope,   $translate,   $localStorage,   $window,   $state,   UserService) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -76,9 +76,18 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
       
       // Defining user logged status
       $scope.logged = false;
-    
+	  if($scope.logged == false 
+			  && $localStorage.user != null 
+			  && $localStorage.user != '') {
+		  console.log('localstorage  sigin: ' +  JSON.stringify($localStorage.user));
+		  UserService.setUserInfo($localStorage.user);
+		  UserService.setLoggedin(true);
+          $scope.logged = true;
+	  }
+	  
+      /*check facebook sdk load complete*/
       $scope.$watch(function() {
-    	        return Facebook.isReady();
+    	        return UserService.FacebookIsReady();
     	      },
     	      function(newVal) {
     	        if (newVal)
@@ -86,22 +95,43 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     	      }
     	    );
       
+      /*check googleplus sdk load complete*/
+      $scope.$watch(function() {
+	        return UserService.GooglePlusIsReady();
+	      },
+	      function(newVal) {
+	        if (newVal)
+	          $scope.googleplusReady = true;
+	      }
+	    );
+      
+      
+      $rootScope.$on('Auth:statusChange', function(ev, data) {
+    	  console.log('Auth Status: ', data);
+    	  if (data.status == 'connected') { // login
+              $scope.logged = true;
+    		  $state.go('app.dashboard-v1');
+    	  } else if (data.status == 'disconnect') { // logout
+	          $scope.logged = false;
+    	  }
+      });
       
       $rootScope.$on('Facebook:statusChange', function(ev, data) {
           console.log('Facebook Status: ', data);
           
           if (data.status == 'connected') {
-            $scope.$apply(function() {
-    	      $scope.logged = true;
-            });
-            UserService.isloggedin = true;
-  	        UserService.provider = 'facebook';
+	            $scope.$apply(function() {
+	            	$scope.logged = true;
+	            });
+            UserService.setLoggedin(true);
+            UserService.setProvider('facebook');
   	        UserService.FacebookMe();
+  	        $state.go('app.dashboard-v1');
           } else {
-            $scope.$apply(function() {
-              $scope.logged = false;
-       	      
-            });
+  	            $scope.$apply(function() {
+  	            	$scope.logged = false;
+  	            });
+            $state.go('access.signin');
           }
         });
       
@@ -112,17 +142,24 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         	  $scope.$apply(function() {
         		  $scope.logged = true;
         	  });
-              UserService.isloggedin = true;
-    	      UserService.provider = 'google';
+              UserService.setLoggedin(true);
+              UserService.setProvider('google');
     	      UserService.GoogleMe();
+    	      $state.go('app.dashboard-v1');
           } else {
               $scope.$apply(function() {
             	  $scope.logged = false;
 	          });
+              $state.go('access.signin');
           }
         });
   }])
 
+ .controller('UserInfoCtrl', ['$scope', '$state', function($scope, $state) {
+	 $scope.login = function (){
+		 $state.go('access.signin');
+	 }
+  }])
   // bootstrap controller
   .controller('AccordionDemoCtrl', ['$scope', function($scope) {
     $scope.oneAtATime = true;
@@ -547,39 +584,32 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   // signin controller
   .controller('SigninFormController', ['$rootScope','$scope', '$http', '$state', '$timeout', 'UserService',
                                        function($rootScope, $scope, $http, $state, $timeout, UserService) {
-      $scope.FacebookLogin = function() {
-	     UserService.FacebookLogin();
-	  };
-	  $scope.GoogleLogin = function() {
-	     UserService.GoogleLogin();
-	  };
+
+	  
+	  
+	  $scope.authError = null;
+	  $scope.FacebookLogin = UserService.FacebookLogin;
+	  $scope.GoogleLogin = UserService.GoogleLogin;
+	  
 	  $scope.login = function() {
-	     UserService.Login($scope.user.email, $scope.user.password);
+		 var token = $('meta[name=csrf-token]').attr('content');
+	     UserService.Login($scope.user.email, $scope.user.password, token);
 	  }
 	  $scope.logout = function() {
-	     UserService.Logout();
+		  UserService.Logout();
 	  }
     
   }])
 
   // signup controller
-  .controller('SignupFormController', ['$scope', '$http', '$state', function($scope, $http, $state) {
-    $scope.user = {};
+  .controller('SignupFormController', ['$rootScope', '$scope', '$http', '$state', 'UserService', '$localStorage', 
+                               function($rootScope,   $scope,   $http,   $state,   UserService,   $localStorage) {
     $scope.authError = null;
+    
     $scope.signup = function() {
-      $scope.authError = null;
-      // Try to create
-      $http.post('api/signup', {name: $scope.user.name, email: $scope.user.email, password: $scope.user.password})
-      .then(function(response) {
-        if ( !response.data.user ) {
-          $scope.authError = response;
-        }else{
-          $state.go('app.dashboard-v1');
-        }
-      }, function(x) {
-        $scope.authError = 'Server Error';
-      });
-    };
+    	var token = $('meta[name=csrf-token]').attr('content')
+	    UserService.Signup($scope.user.name, $scope.user.email, $scope.user.password, token);
+	}
   }])
   // tab controller
   .controller('CustomTabController', ['$scope', function($scope) {

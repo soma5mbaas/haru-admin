@@ -18,8 +18,8 @@
     /**
      * UserService Servie
      */
-    service('UserService', ['$rootScope', '$http', 'Facebook', 'GooglePlus', 
-                    function($rootScope,   $http,    Facebook,   GooglePlus) {
+    service('UserService', ['$rootScope', '$http', '$state', 'Facebook', 'GooglePlus', '$localStorage',
+                    function($rootScope,   $http,   $state,   Facebook,   GooglePlus, $localStorage) {
     	
     	var isloggedin = false;
     	var provider = '';
@@ -30,6 +30,12 @@
     	this.isloggedin = function(){
     		return isloggedin;
     	}
+    	this.setLoggedin = function(login){
+    		isloggedin = !!login;
+    	}
+    	this.setProvider = function(p){
+    		provider = p;
+    	}
     	
     	this.setScope = function(scope){
     		this.scope = scope;
@@ -38,6 +44,10 @@
 	    this.getUserInfo = function(){
 	    	return userinfo;
 	    };
+	    this.setUserInfo = function(user){
+	    	userinfo = user;
+	    };
+	    
 	    
 	    this.getUserName = function(){
 	    	if(!this.isloggedin || !this.userinfo.name) return '';
@@ -58,31 +68,64 @@
 		};
 		
 	    
-	    this.Login = function(email, password) {
+	    this.Login = function(email, password, token) {
 	      // Try to login
-	      $http.post('api/login', {email: email, password: password})
+	      $http({url:'user/login', 
+	    	  method:'POST',
+	    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password,
+	    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 	      .then(function(response) {
-	        if ( !response.data.user ) {
-	          
-	          this.authError = 'Email or Password not right';
+	    	console.log(response);
+	        if ( !response.data.email ) {
+	          authError = 'Email or Password not right';
 	        }else{
-	          this.userinfo.name = response.data.user;
-	          this.userinfo.email = response.data.user;
-	          this.provider = 'web'; 
-	          $state.go('app.dashboard-v1');
+	          provider = 'web'; 
+	          isloggedin = true;
+		      userinfo = response.data;
+		      console.log(response.data);
+		      $localStorage.user = response.data;
+		      $rootScope.$broadcast('Auth:statusChange', {'status':'connected'});
+		    	
+	         
 	        }
 	      }, function(x) {
-	        this.authError = 'Server Error';
+	        authError = 'Server Error';
 	      });
 		};
+		
 		    
+		this.Signup = function(name, email, password, token){
+			//$http.post('user/add', {name: name, email:email, password:password})
+			   $http({url:'user/login', 
+			    	  method:'POST',
+			    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name,
+			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+		      .then(function(response) {
+		        if ( !response.data.email ) {
+		          authError = response;
+		        }else{
+		          provider = 'web'; 
+			      isloggedin = true;
+			      userinfo = response.data;
+			      $localStorage.user = response.data;
+			      console.log("web :" + JSON.stringify(userinfo));
+			      $rootScope.$broadcast('Auth:statusChange', {'status':'connected'});
+		        }
+		      }, function(x) {
+		        authError = 'Server Error';
+		      });
+		};
+		
 	    this.Logout = function(){
-	    	console.log('logout' + this.isloggedin + this.provider);
-	    	if(!this.isloggedin) return;
+	    	console.log('logout' + isloggedin + provider);
 	    	
-	    	if(this.provider =='facebook'){
+
+	    	$localStorage.$reset();
+	    	$rootScope.$broadcast('Auth:statusChange', {'status':'disconnect'});
+	    	
+	    	if(provider =='facebook'){
 	    		this.FacebookLogout();
-	    	} else if (this.provider == 'google'){
+	    	} else if (provider == 'google'){
 	    		this.GoogleLogout();
 	    	} else {
 		    	clearUserinfo();
@@ -90,7 +133,9 @@
 	    };
 		    
 		
-	   
+		this.FacebookIsReady = function(){
+			return Facebook.isReady()
+		}
 	    
 	    this.FacebookLogout = function() {
 	        Facebook.logout(function() {
@@ -101,25 +146,22 @@
 	    this.FacebookMe = function() {
 	        Facebook.api('/me', function(response) {
 	        	userinfo = response;
-	        	console.log('facebook : ' + userinfo);
+	        	$localStorage.user = response;
+	        	console.log('facebook : ' +  JSON.stringify(userinfo));
 	        });
 	    };
 	    this.FacebookLogin = function() {
 	        Facebook.login(function(response) {
 	         if (response.status == 'connected') {
-	        	// console.log(this.isloggedin + response);
-	        	 isloggedin = true;
-	        	 provider = 'facebook';
-	        	 Facebook.api('/me', function(response) {
-	 	        	userinfo = response;
-	 	        	console.log('facebook : ' + userinfo);
-	 	        });
+	        	
 	         }
 	       });
 	    };
 	   
 	      
-
+	    this.GooglePlusIsReady = function(){
+			return GooglePlus.isReady()
+		}
 	     this.GoogleLogout = function () {
 		     GooglePlus.logout();
 		     clearUserinfo();
@@ -128,19 +170,14 @@
 	     this.GoogleMe = function(){
 	    	 GooglePlus.getUser().then(function (user) {
 	            	userinfo = user;
+	            	$localStorage.user = user;
 	            	console.log('google : ' + JSON.stringify(userinfo));
 	         });
 		 };
 		 this.GoogleLogin = function () {
 		        GooglePlus.login().then(function (authResult) {
 		            console.log(authResult);
-		        	isloggedin = true;
-		        	provider = 'google';
-		           /*
-		        	GooglePlus.getUser().then(function (user) {
-		            	userinfo = user;
-		            	console.log('google : ' + JSON.stringify(userinfo));
-		            });*/
+		        	
 		        }, function (err) {
 		            console.log(err);
 		        });

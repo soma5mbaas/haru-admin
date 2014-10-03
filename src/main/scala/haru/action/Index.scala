@@ -4,7 +4,7 @@ import xitrum.annotation.GET
 import xitrum.Action
 
 @GET("")
-class Index extends Action {
+class Home extends Action {
   def execute() {
     respondView()
   }

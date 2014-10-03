@@ -8,12 +8,16 @@
   
   
   var settings = {};
-
+  var flags = {
+		    sdk: false,
+		    ready: false
+		  };
   /**
   * googleplus module
   */
   angular.module('googleplus', []).
   	value('settings', settings).
+	value('flags', flags).
     /**
     * GooglePlus provider
     */
@@ -77,6 +81,7 @@
         return settings.scopes;
       };
 
+      
       /**
       * Init Google Plus API
       */
@@ -93,6 +98,7 @@
       */
       this.$get = ['$q', '$rootScope', '$window','$timeout', function($q, $rootScope, $window, $timeout) {
 
+      
         /**
         * Create a deferred instance to implement asynchronous calls
         * @type {Object}
@@ -106,6 +112,14 @@
         var NgGooglePlus = function () {};
 
         
+
+ 	   /**
+        * Ready state method
+        * @return {Boolean}
+        */
+        NgGooglePlus.prototype.isReady = function() {
+          return flags.ready;
+        };
         
         NgGooglePlus.prototype.login =  function () {
           gapi.auth.authorize({
@@ -200,7 +214,11 @@
   // Initialization of module
   .run(['$rootScope', '$timeout' , function($rootScope, $timeout) {
 	    var libonload = function() {
+	    	flags.sdk = true;
+	    	
 	    	$timeout(function(){
+		    	flags.ready = true;
+
 	    		gapi.auth.authorize({
 	                client_id: settings.clientId, 
 	                scope: settings.scopes,
@@ -212,7 +230,7 @@
 	                	  $rootScope.$broadcast('GooglePlus:statusChange', authResult);
 	            	  }
 	              });
-	    	}, 700);
+	    	}, 1000);
 	    };
 		  
 	    var loadSDK = settings.loadSDK;

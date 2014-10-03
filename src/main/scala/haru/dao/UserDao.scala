@@ -37,16 +37,19 @@ object UserDao extends DatabasePool{
 	}
     
 	
-    def insertUser(email:String, name:String) = databasePool withSession {
+    def insertUser(name :String, email:String,  password:String) = databasePool withSession {
       implicit session =>
-
-         user += User(None, email,"A",name,"A","A","A","A","A","A","WEB", Some(123) ,"A");
+      	 user += User(None, email,password,name,"","","","","","","WEB", None,"");
+    }
+     def findUser(email:String,  password:String) = databasePool withSession {
+      implicit session =>
+      	 //user += User(None, email,password,name,"","","","","","","WEB", None,"");
+        
     }
     
-	def insertUserWeb(email:String, name:String) = databasePool withSession {
+	def insertUserWeb(name :String, email:String,  password:String) = databasePool withSession {
       implicit session =>
-      	// user.web.insert(UserWeb(email, "A", "WEB")
-         //Users += UserWeb(email, "A", "WEB")
+      	user += User(None, email,password,name,"","","","","","","WEB", None,"");
     }
     
 }
