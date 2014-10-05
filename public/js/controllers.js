@@ -572,8 +572,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   }])
 
   // signin controller
-  .controller('SigninFormController', ['$rootScope','$scope', '$http', '$state', '$timeout', 'UserService',
-                                       function($rootScope, $scope, $http, $state, $timeout, UserService) {
+  .controller('SigninFormController', ['$scope', '$http', '$state', '$timeout', 'UserService',
+                                       function($scope, $http, $state, $timeout, UserService) {
 
 	  
 	  
@@ -593,8 +593,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   }])
 
   // signup controller
-  .controller('SignupFormController', ['$rootScope', '$scope', '$http', '$state', 'UserService',
-                               function($rootScope,   $scope,   $http,   $state,   UserService) {
+  .controller('SignupFormController', ['$scope', '$http', '$state', 'UserService',
+                               function($scope,   $http,   $state,   UserService) {
     $scope.authError = null;
     
     $scope.signup = function() {
@@ -603,7 +603,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     	$state.go('access.project');
 	}
   }])
-   // signup controller
+   // project controller
   .controller('ProjectFormController', ['$rootScope', '$scope', '$window', '$http', '$state', 'UserService','$localStorage',
                                function($rootScope,   $scope,   $window,    $http,   $state,   UserService, $localStorage) {
     $scope.authError = null;
@@ -628,6 +628,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 		        $scope.authError = response.data.error;
 		        $window.alert(response.data.error);
 		    }else{
+		    	// project data save
+		    	
 		    	$state.go('app.dashboard-v1');
 		    }
 	    }, function(x) {
