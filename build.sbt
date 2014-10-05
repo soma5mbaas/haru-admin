@@ -72,3 +72,4 @@ libraryDependencies ++= List(
   "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "org.openid4java" % "openid4java" % "0.9.8",
   "javax.servlet" % "javax.servlet-api" % "3.0.1")
+  

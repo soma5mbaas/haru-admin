@@ -229,6 +229,8 @@
 	                	  authResult.status='connected';
 	                	  $rootScope.$broadcast('GooglePlus:statusChange', authResult);
 	            	  }
+	            	  
+	            	  //$rootScope.$broadcast('GooglePlus:statusChange', authResult);
 	              });
 	    	}, 1000);
 	    };

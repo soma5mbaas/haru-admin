@@ -279,6 +279,10 @@ var app = angular.module('app', [
                 url: '/signup',
                 templateUrl: 'tpl/page_signup.html'
             })
+             .state('access.project', {
+                url: '/project',
+                templateUrl: 'tpl/page_project.html'
+            })
             .state('access.forgotpwd', {
                 url: '/forgotpwd',
                 templateUrl: 'tpl/page_forgotpwd.html'

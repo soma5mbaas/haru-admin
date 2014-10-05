@@ -18,8 +18,8 @@
     /**
      * UserService Servie
      */
-    service('UserService', ['$rootScope', '$http', '$state', 'Facebook', 'GooglePlus', '$localStorage',
-                    function($rootScope,   $http,   $state,   Facebook,   GooglePlus, $localStorage) {
+    service('UserService', ['$rootScope', '$http', '$state', 'Facebook', 'GooglePlus', '$localStorage','$sessionStorage',
+                    function($rootScope,   $http,   $state,   Facebook,   GooglePlus, $localStorage, $sessionStorage) {
     	
     	var isloggedin = false;
     	var provider = '';
@@ -42,29 +42,16 @@
     	};
     	
 	    this.getUserInfo = function(){
-	    	return userinfo;
+	    	return $sessionStorage.user;
 	    };
 	    this.setUserInfo = function(user){
 	    	userinfo = user;
 	    };
 	    
-	    
-	    this.getUserName = function(){
-	    	if(!this.isloggedin || !this.userinfo.name) return '';
-	    	
-	    	return this.userinfo.name;
-	    };
-	    
-	    this.getUserEmail = function(){
-	    	if(!this.isloggedin || !this.userinfo.email) return '';
-	    	
-	    	return this.userinfo.email;
-	    };
-	    
 	    var clearUserinfo = function(){
-			userinfo = {};
-	    	provider = '';
 	    	isloggedin = false;
+	    	$localStorage.$reset();
+	    	$sessionStorage.$reset();
 		};
 		
 	    
@@ -72,21 +59,21 @@
 	      // Try to login
 	      $http({url:'user/login', 
 	    	  method:'POST',
-	    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password,
+	    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&provider=WEB',
 	    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 	      .then(function(response) {
-	    	console.log(response);
-	        if ( !response.data.email ) {
-	          authError = 'Email or Password not right';
-	        }else{
-	          provider = 'web'; 
-	          isloggedin = true;
-		      userinfo = response.data;
-		      console.log(response.data);
-		      $localStorage.user = response.data;
-		      $rootScope.$broadcast('Auth:statusChange', {'status':'connected'});
+	    	console.log("Login : " + response.data);
 		    	
-	         
+	        if ( !response.data.email ) {
+	          authError = response.data.error;
+	          response.data.status = 'error';
+	          $rootScope.$broadcast('Auth:statusChange', response.data);
+	        }else{
+		      userinfo = response.data;
+		      userinfo.status = 'connected';
+		      
+		      $sessionStorage.user = userinfo.data;
+		      $rootScope.$broadcast('Auth:statusChange', userinfo);
 	        }
 	      }, function(x) {
 	        authError = 'Server Error';
@@ -96,20 +83,23 @@
 		    
 		this.Signup = function(name, email, password, token){
 			//$http.post('user/add', {name: name, email:email, password:password})
-			   $http({url:'user/login', 
+			   $http({url:'user/add', 
 			    	  method:'POST',
-			    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name,
+			    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name+'&provider=WEB',
 			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 		      .then(function(response) {
+		    	console.log("signup : " + response.data);
+		    	  
 		        if ( !response.data.email ) {
-		          authError = response;
+		          authError = response.data.error;
+		          response.data.status = 'error';
+		          $rootScope.$broadcast('Auth:statusChange', response.data);
 		        }else{
-		          provider = 'web'; 
-			      isloggedin = true;
 			      userinfo = response.data;
-			      $localStorage.user = response.data;
-			      console.log("web :" + JSON.stringify(userinfo));
-			      $rootScope.$broadcast('Auth:statusChange', {'status':'connected'});
+			      userinfo.status = 'signup';
+			      
+			      $sessionStorage.user = userinfo.data;
+			      $rootScope.$broadcast('Auth:statusChange', userinfo);
 		        }
 		      }, function(x) {
 		        authError = 'Server Error';
@@ -119,10 +109,6 @@
 	    this.Logout = function(){
 	    	console.log('logout' + isloggedin + provider);
 	    	
-
-	    	$localStorage.$reset();
-	    	$rootScope.$broadcast('Auth:statusChange', {'status':'disconnect'});
-	    	
 	    	if(provider =='facebook'){
 	    		this.FacebookLogout();
 	    	} else if (provider == 'google'){
@@ -130,6 +116,8 @@
 	    	} else {
 		    	clearUserinfo();
 	    	}
+	    	$rootScope.$broadcast('Auth:statusChange', {'status':'disconnect'});
+
 	    };
 		    
 		
@@ -143,17 +131,19 @@
 	        });
 	    };
 	    
+      
 	    this.FacebookMe = function() {
 	        Facebook.api('/me', function(response) {
 	        	userinfo = response;
-	        	$localStorage.user = response;
+	        	$sessionStorage.user = response;
 	        	console.log('facebook : ' +  JSON.stringify(userinfo));
 	        });
 	    };
+	    
 	    this.FacebookLogin = function() {
 	        Facebook.login(function(response) {
 	         if (response.status == 'connected') {
-	        	
+	        	// broadcast Facebook:statusChange
 	         }
 	       });
 	    };
@@ -170,19 +160,17 @@
 	     this.GoogleMe = function(){
 	    	 GooglePlus.getUser().then(function (user) {
 	            	userinfo = user;
-	            	$localStorage.user = user;
+	            	$sessionStorage.user = user;
 	            	console.log('google : ' + JSON.stringify(userinfo));
 	         });
 		 };
 		 this.GoogleLogin = function () {
 		        GooglePlus.login().then(function (authResult) {
-		            console.log(authResult);
-		        	
+		            console.log("userservice : " + authResult);
 		        }, function (err) {
 		            console.log(err);
 		        });
 		      };
-		    
         
     }]).
 
