@@ -630,6 +630,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 		    }else{
 		    	// project data save
 		    	
+		    	
 		    	$state.go('app.dashboard-v1');
 		    }
 	    }, function(x) {
