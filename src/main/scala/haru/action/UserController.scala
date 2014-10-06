@@ -11,161 +11,106 @@ import xitrum.annotation.GET
 import xitrum.annotation.POST
 import java.security.MessageDigest
 import xitrum.Log
-import haru.util.CryptoMD5
+import haru.util.Encryption
 
 trait Api extends ActorAction
 trait Api2 extends ActorAction with SkipCsrfCheck
 
-
-
-@GET("/config")
-class config extends Api {
-   def execute() {
-     respondText("hello")
-   }
-}
-
-
-    
-@GET("token")
-class Token extends Api2{
-
-  def execute() {
-	  val token = BearerTokenGenerator.generateToken
-	  respondJson(token)
+object ERROR {
+  val NOTFOUNT = -1;
+  def generatorErrorJson(errorcode: Int, error: String) : Map[String, Any] = {
+    var json: Map[String, Any] = Map()
+    json += ("errorcode" -> errorcode)
+    json += ("error" -> error)
+    return json;
   }
 }
 
 
 @POST("user/login")
-class UserLogin extends Api2{
+class UserLogin extends Api {
   def execute() {
-	  val pemail = param("email")
-      val ppassword = param("password")
-	  val pprovider = param("provider")
-	  
-	  val crypto_password = CryptoMD5.md5(ppassword);
-	 
-	  println(pemail, crypto_password, pprovider);
-	  
-	  val (id, name, email, provider) = UserDao.findUser(pemail, crypto_password, pprovider)
-	  if(id == -1){
-	     var json:Map[String, Any] = Map()
-	     json += ("error" -> "Email or Password not right")
-         json += ("errorcode" -> 404)
-         respondJson(json);
-         return;
-	  }
-      val project = UserDao.selectUserProjectForId(id);
-	  val data = Map("id" -> id, "name" ->name, "email" -> email, "provider" -> provider, "project" -> project)
-	  respondJson(data)
+    val pemail = param("email")
+    val ppassword = param("password")
+    val pprovider = param("provider")
+    val crypto_password = Encryption.md5(ppassword);
+
+    val (id, name, email, provider) = UserDao.findUser(pemail, crypto_password, pprovider)
+    if (id == ERROR.NOTFOUNT) {
+      val json = ERROR.generatorErrorJson(404, "Email or Password not right");
+      respondJson(json);
+      return ;
+    }
+    val project = UserDao.selectUserProjectForId(id);
+    val data = Map("id" -> id, "name" -> name, "email" -> email, "provider" -> provider, "project" -> project)
+    respondJson(data)
+  }
+}
+
+@POST("user/add")
+class AddUser extends Api {
+  def execute() {
+    val password = param("password")
+    val email = param("email")
+    val name = param("name")
+    val provider = param("provider")
+
+    val crypto_password = Encryption.md5(password);
+
+    var token = "";
+    if (provider == "WEB") {
+      token = BearerTokenGenerator.generateToken
+    } else {
+      token = param("token")
+    }
+
+    val (success, error) = UserDao.insertUser(name, email, crypto_password, provider, token);
+
+    if (success) {
+      //val json = "{\"email\":"+email+",\"name\":"+name+",\"token\":"+token+"}"
+      var json: Map[String, Any] = Map()
+      json += ("email" -> email)
+      json += ("name" -> name)
+      json += ("provider" -> provider)
+      json += ("token" -> token)
+      respondJson(json);
+    } else {
+      val json = ERROR.generatorErrorJson(404, error);
+      respondJson(json);
+    }
+  }
+}
+
+
+
+@GET("token")
+class Token extends Api2 {
+  def execute() {
+    val token = BearerTokenGenerator.generateToken
+    respondJson(token)
   }
 }
 
 @GET("user/vaildate")
 class VaildateToken extends Api2 {
   def execute() {
-     val token = param("token")
-	 UserDao.selectUserToken(token)
-	 
-	// val time = new Timestamp(new java.util.Date().getTime())
-	// val current = new java.sql.Timestamp()
-     println();
-     
-     val day = 60 * 60 * 24 * 1000
-     val dayaftercurrent = System.currentTimeMillis() + day;
-   
-     println( (dayaftercurrent - System.currentTimeMillis()) / 1000);
-     
-     println();
-	 
-     respondJson("");
+    val token = param("token")
+    UserDao.selectUserToken(token)
+
+    // val time = new Timestamp(new java.util.Date().getTime())
+    // val current = new java.sql.Timestamp()
+    println();
+
+    val day = 60 * 60 * 24 * 1000
+    val dayaftercurrent = System.currentTimeMillis() + day;
+
+    println((dayaftercurrent - System.currentTimeMillis()) / 1000);
+
+    println();
+
+    respondJson("");
   }
 }
-
-
-
-
-
-@POST("user/add")
-class AddUser extends Api {
-  def execute() {
-     val password = param("password")
-	 val email = param("email")
-	 val name = param("name")
-	 val provider = param("provider")
-	 
-	 val crypto_password = CryptoMD5.md5(password);
-	 
-	 Log.debug(crypto_password)
-	 var token = "";
-	 if(provider == "WEB") {
-	   token = BearerTokenGenerator.generateToken
-	 } else {
-	   token = param("token")
-	 }
-	 
-	 val (success, error) = UserDao.insertUser(name, email, crypto_password, provider, token);
-    
-     if (success) {
-       //val json = "{\"email\":"+email+",\"name\":"+name+",\"token\":"+token+"}"
-       var json:Map[String, Any] = Map()
-       json += ("email" -> email)
-       json += ("name" -> name)
-       json += ("provider" -> provider)
-       json += ("token" -> token)
-       respondJson(json);
-     } else {
-       //val json = "{\"error\":"+error+",\"errorcode\":200}"
-       var json:Map[String, Any] = Map()
-       json += ("error" -> error)
-       json += ("errorcode" -> 404)
-       respondJson(json);
-     }
-  }
-}
-
-@POST("project/add")
-class AddProject extends Api2 {
-  def execute() {
-     val authtoken = param("authtoken")
-	 val projectname = param("projectname")
-	 val company = paramo("company")
-	 
-	 val (id, name, email, provider) = UserDao.selectUserToken(authtoken);
-     println(id);
-     
-	 val projectid = ProjectDao.insertProject(projectname, company, id);
-	 
-     if(projectid == -1) {
-       //val json = "{\"error\":\"when create project, error\", \"errorcode\":404}"
-       var json:Map[String, Any] = Map()
-       json += ("error" -> "Already exsists Project name")
-       json += ("errorcode" -> 404)
-       respondJson(json);
-       return;
-     }
-	 
-	 val (success, error) = ViewerDao.insertViewer(id, projectid, 0);
-     if(success){
-       //val json = "{\"projectname\":" + projectname + "}"
-       var json:Map[String, Any] = Map()
-       json += ("pname" -> projectname)
-       json += ("company" -> company)
-       respondJson(json)
-     } else {
-       //val json = "{\"error\":"+error+",\"errorcode\":200}"
-       var json:Map[String, Any] = Map()
-       json += ("error" -> error)
-       json += ("errorcode" -> 404)
-       respondJson(json);
-     }
-  }
-}
-
-
-
-
 @GET("/slicktest")
 class slicktest extends Api {
   def execute() {
@@ -250,7 +195,7 @@ class slicktest extends Api {
   
   
 */
-     respondJson("{success:1}");
+    respondJson("{success:1}");
   }
 }
 
