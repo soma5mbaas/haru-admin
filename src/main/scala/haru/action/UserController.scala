@@ -12,20 +12,21 @@ import xitrum.annotation.POST
 import java.security.MessageDigest
 import xitrum.Log
 import haru.util.Encryption
+import scala.annotation.meta.param
+import xitrum.Action
 
-trait Api extends ActorAction
-trait Api2 extends ActorAction with SkipCsrfCheck
+trait Api extends Action
+trait Api2 extends Action with SkipCsrfCheck
 
 object ERROR {
   val NOTFOUNT = -1;
-  def generatorErrorJson(errorcode: Int, error: String) : Map[String, Any] = {
+  def generatorErrorJson(errorcode: Int, error: String): Map[String, Any] = {
     var json: Map[String, Any] = Map()
     json += ("errorcode" -> errorcode)
     json += ("error" -> error)
     return json;
   }
 }
-
 
 @POST("user/login")
 class UserLogin extends Api {
@@ -35,18 +36,19 @@ class UserLogin extends Api {
     val pprovider = param("provider")
     val crypto_password = Encryption.md5(ppassword);
 
-    val (id, name, email, provider) = UserDao.findUser(pemail, crypto_password, pprovider)
-    if (id == ERROR.NOTFOUNT) {
+    val (id, name, email, provider, provider_id) = UserDao.findUser(pemail, crypto_password, pprovider)
+    if (id != ERROR.NOTFOUNT) {
+      val projects = UserDao.selectUserProjectForId(id);
+      val data = Map("id" -> id, "name" -> name, "email" -> email, "provider" -> provider, "token" -> provider_id, "project" -> projects)
+      respondJson(data)
+    } else {
       val json = ERROR.generatorErrorJson(404, "Email or Password not right");
       respondJson(json);
-      return ;
     }
-    val project = UserDao.selectUserProjectForId(id);
-    val data = Map("id" -> id, "name" -> name, "email" -> email, "provider" -> provider, "project" -> project)
-    respondJson(data)
   }
 }
 
+/// TODO : sql injection check 
 @POST("user/add")
 class AddUser extends Api {
   def execute() {
@@ -54,25 +56,14 @@ class AddUser extends Api {
     val email = param("email")
     val name = param("name")
     val provider = param("provider")
-
     val crypto_password = Encryption.md5(password);
-
-    var token = "";
-    if (provider == "WEB") {
-      token = BearerTokenGenerator.generateToken
-    } else {
-      token = param("token")
-    }
+    val token = BearerTokenGenerator.generateToken
 
     val (success, error) = UserDao.insertUser(name, email, crypto_password, provider, token);
-
     if (success) {
       //val json = "{\"email\":"+email+",\"name\":"+name+",\"token\":"+token+"}"
       var json: Map[String, Any] = Map()
-      json += ("email" -> email)
-      json += ("name" -> name)
-      json += ("provider" -> provider)
-      json += ("token" -> token)
+      json += ("email" -> email, "name" -> name, "provider" -> provider, "token" -> token)
       respondJson(json);
     } else {
       val json = ERROR.generatorErrorJson(404, error);
@@ -82,6 +73,29 @@ class AddUser extends Api {
 }
 
 
+
+@POST("snsuser/add")
+class AddSNSUser extends Api {
+  def execute() {
+    val email = param("email")
+    val name = param("name")
+    val provider = param("provider")
+    val token = param("token")
+
+    val timezone = paramo("timezone");
+    val locale = paramo("locale");
+    val gender = paramo("gender");
+
+    // 항상 실패 가능함!! ????
+    val (success, error) = UserDao.insertSNSUser(name, email, "", provider, token, timezone, locale, gender);
+
+    val projects = ProjectDao.findProjectForUser(email, provider);
+   
+    var json: Map[String, Any] = Map()
+    json += ("email" -> email, "name" -> name, "provider" -> provider, "token" -> token, "projects" -> projects)
+    respondJson(json);
+  }
+}
 
 @GET("token")
 class Token extends Api2 {

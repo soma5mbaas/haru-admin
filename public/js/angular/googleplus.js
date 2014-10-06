@@ -147,7 +147,7 @@
         
         NgGooglePlus.prototype.handleAuthResult = function(authResult) {
             if (authResult && !authResult.error) {
-              authResult.status='connected';
+              authResult.status="loggin";
            	  $rootScope.$broadcast('GooglePlus:statusChange', authResult);
               deferred.resolve(authResult);
               $rootScope.$apply();

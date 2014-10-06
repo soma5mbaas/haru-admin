@@ -18,11 +18,12 @@ trait DatabasePool {
     val ds = new ComboPooledDataSource
     ds.setDriverClass(Driver)
     ds.setJdbcUrl(Url)
-    ds.setMinPoolSize(20)
+    ds.setMinPoolSize(10)
     ds.setAcquireIncrement(5)
     ds.setMaxPoolSize(100)
     ds.setUser(DBUser)
     ds.setPassword(DBPassword)
+ 
     Database.forDataSource(ds)
   }
 }

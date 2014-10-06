@@ -26,11 +26,12 @@
     	var authError = null;
     	var userinfo = {};
     	var scope = '';
+    	var token = '';
     	
-    	this.isloggedin = function(){
+    	this.isLogin = function(){
     		return isloggedin;
     	}
-    	this.setLoggedin = function(login){
+    	this.setLogin = function(login){
     		isloggedin = !!login;
     	}
     	this.setProvider = function(p){
@@ -38,11 +39,19 @@
     	}
     	
     	this.setScope = function(scope){
-    		this.scope = scope;
+    		scope = scope;
     	};
     	
+    	this.getToken = function(){
+	    	return token;
+	    };
+	    this.setToken = function(token){
+	    	token = token;
+	    };
+	    
+    	
 	    this.getUserInfo = function(){
-	    	return $sessionStorage.user;
+	    	return userinfo;
 	    };
 	    this.setUserInfo = function(user){
 	    	userinfo = user;
@@ -67,11 +76,12 @@
 	        if ( !response.data.email ) {
 	          authError = response.data.error;
 	          response.data.status = 'error';
+	          isloggedin = false;
 	          $rootScope.$broadcast('Auth:statusChange', response.data);
 	        }else{
 		      userinfo = response.data;
 		      userinfo.status = 'connected';
-		      
+		      isloggedin = true;
 		      $sessionStorage.user = userinfo.data;
 		      $rootScope.$broadcast('Auth:statusChange', userinfo);
 	        }
@@ -93,11 +103,12 @@
 		        if ( !response.data.email ) {
 		          authError = response.data.error;
 		          response.data.status = 'error';
+		          isloggedin = false;
 		          $rootScope.$broadcast('Auth:statusChange', response.data);
 		        }else{
 			      userinfo = response.data;
 			      userinfo.status = 'signup';
-			      
+			      isloggedin = true;
 			      $sessionStorage.user = userinfo.data;
 			      $rootScope.$broadcast('Auth:statusChange', userinfo);
 		        }
@@ -108,16 +119,15 @@
 		
 	    this.Logout = function(){
 	    	console.log('logout' + isloggedin + provider);
+	    	clearUserinfo();
 	    	
-	    	if(provider =='facebook'){
+	    	if (provider =='FACEBOOK') {
 	    		this.FacebookLogout();
-	    	} else if (provider == 'google'){
+	    	} else if (provider == 'GOOGLE') {
 	    		this.GoogleLogout();
-	    	} else {
-		    	clearUserinfo();
 	    	}
+	    	
 	    	$rootScope.$broadcast('Auth:statusChange', {'status':'disconnect'});
-
 	    };
 		    
 		
@@ -127,16 +137,37 @@
 	    
 	    this.FacebookLogout = function() {
 	        Facebook.logout(function() {
-	        	clearUserinfo();
+	        	
 	        });
 	    };
 	    
       
-	    this.FacebookMe = function() {
+	    this.FacebookMe = function(csrftoken, authtoken) {
 	        Facebook.api('/me', function(response) {
 	        	userinfo = response;
-	        	$sessionStorage.user = response;
+		        $sessionStorage.user =response;
+		        
 	        	console.log('facebook : ' +  JSON.stringify(userinfo));
+	        	
+	        	 $http({url:'snsuser/add', 
+			    	  method:'POST',
+			    	  data:'csrf-token='+csrftoken+'&email=' +userinfo.email+ '&password=&name='+userinfo.name+'&provider=FACEBOOK&timezone='+userinfo.timezone+'&locale='+userinfo.locale+'&gender='+userinfo.gender+'&token='+authtoken,
+			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+		      .then(function(response) {
+		    	console.log("facebook : " + JSON.stringify(response.data));
+		    	  
+		        if ( !response.data ) {
+		          authError = response.data.error;
+		          response.data.status = 'error';
+		          isloggedin = false;
+		          $rootScope.$broadcast('Auth:statusChange', response.data);
+		        }else{
+		        	$sessionStorage.userproject = response.data.projects
+		        	$rootScope.$broadcast('Project:statusChange', response.data);
+		        }
+		      }, function(x) {
+		        authError = 'Server Error';
+		      });
 	        });
 	    };
 	    
@@ -144,6 +175,10 @@
 	        Facebook.login(function(response) {
 	         if (response.status == 'connected') {
 	        	// broadcast Facebook:statusChange
+	        	 isloggedin = true;
+	        	 provider = 'FACEBOOK';
+	         } else {
+	        	 isloggedin = false;
 	         }
 	       });
 	    };
@@ -157,18 +192,41 @@
 		     clearUserinfo();
 	     };
 	     
-	     this.GoogleMe = function(){
+	     this.GoogleMe = function(csrftoken, authtoken){
 	    	 GooglePlus.getUser().then(function (user) {
-	            	userinfo = user;
-	            	$sessionStorage.user = user;
-	            	console.log('google : ' + JSON.stringify(userinfo));
+            	userinfo = user;
+            	$sessionStorage.user = user;
+
+	        	 $http({url:'snsuser/add', 
+			    	  method:'POST',
+			    	  data:'csrf-token='+csrftoken+'&email=' +user.email+ '&password=&name='+user.name+'&provider=GOOGLE&timezone='+user.timezone+'&locale='+user.locale+'&gender='+user.gender+'&token='+authtoken,
+			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+		       .then(function(response) {
+		    	 console.log("google : " + JSON.stringify(response.data));
+		    	  
+		        if ( !response.data ) {
+		          authError = response.data.error;
+		          response.data.status = 'error';
+		          isloggedin = false;
+		          $rootScope.$broadcast('Auth:statusChange', response.data);
+		        }else{
+		        	$sessionStorage.userproject = response.data.projects
+		        	$rootScope.$broadcast('Project:statusChange', response.data);
+		        }
+		       }, function(x) {
+			        authError = 'Server Error';
+			   });
 	         });
 		 };
+		 
 		 this.GoogleLogin = function () {
 		        GooglePlus.login().then(function (authResult) {
-		            console.log("userservice : " + authResult);
+		            //console.log("userservice google : " + authResult);
+		            isloggedin = true;
+		        	provider = 'GOOGLE';
 		        }, function (err) {
 		            console.log(err);
+		            isloggedin = false;
 		        });
 		      };
         

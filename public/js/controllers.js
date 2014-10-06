@@ -73,41 +73,56 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
-     
       console.log($localStorage.auth);
+      
       if($localStorage.auth &&
-    		 $localStorage.auth.status =='connected' ){
-    	  console.log(UserService.getUserInfo())
+    	 $localStorage.auth.status =='connected' ){
+    	  console.log("userinfo : " + JSON.stringify(UserService.getUserInfo()))
+    	  UserService.setLogin(true);
 	      $scope.logged = true;
+    	  console.log("already log in !!!!!");
      }
      
-     
-     
-    console.log('logged : ' + $scope.logged);
-	  
-      
       
       $rootScope.$on('Auth:statusChange', function(ev, data) {
     	  console.log('Auth Status: ', data);
     	  if (data.status == 'connected') { // login
-              $scope.logged = true;
+    		  UserService.setLogin(true);
+          	  UserService.setProvider('WEB');
+          	  UserService.setToken(data.token);
     		  $localStorage.auth = {'token':data.token, 'provider':'WEB', 'status':'connected'};
     		  $state.go('app.dashboard-v1');
     	  } else if (data.status == 'signup')  {
-    		  $scope.logged = true;
+    		  UserService.setLogin(true);
+          	  UserService.setProvider('WEB');
     		  $localStorage.auth = {'token':data.token, 'provider':'WEB', 'status':'connected'};
-    	  }
+    	  } else if (data.status == 'error') {
+    		  $window.alert(data.error);
+    	  } 
+      });
+      
+      $rootScope.$on('Project:statusChange', function(ev, data) {
+    	  console.log('Project info : ', data);
+    	  if ( Object.keys(data.projects).length === 0) { // login
+    		  $state.go('access.project');
+    	  } 
+    	  
+    	  
       });
       
       $rootScope.$on('Facebook:statusChange', function(ev, data) {
           console.log('Facebook Status: ', JSON.stringify(data));
           
           if (data.status == 'connected') {
-	        $scope.$apply(function() {
-	        	$scope.logged = true;
-	        });
-  	        UserService.FacebookMe();
+        	UserService.setLogin(true);
+        	UserService.setProvider('FACEBOOK');
+        	
+        	var token = $('meta[name=csrf-token]').attr('content');
+        	UserService.FacebookMe(token, data.authResponse.accessToken);
   	        $localStorage.auth = {'token':data.authResponse.accessToken, 'provider':'FACEBOOK', 'status':'connected'};
+  	        if($state.current.name == 'access.signin') {
+  	        	$state.go('app.dashboard-v1');
+  	        }
           }
         });
       
@@ -115,12 +130,21 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           console.log('Google Status: ', data);
           
           if (data.status == 'connected') {
-        	  $scope.$apply(function() {
-        		  $scope.logged = true;
-        	  });
-    	      UserService.GoogleMe();
+        	  UserService.setLogin(true);
+          	  UserService.setProvider('GOOGLE');
+        	  
+          	  var token = $('meta[name=csrf-token]').attr('content');
+    	      UserService.GoogleMe(token, data.access_token);
               $localStorage.auth = {'token':data.access_token, 'provider':'GOOGLE', 'status':'connected'};
-          } 
+          } else if (data.status == 'loggin') {
+        	  var token = $('meta[name=csrf-token]').attr('content');
+    	      UserService.GoogleMe(token, data.access_token);
+    	      
+              $localStorage.auth = {'token':data.access_token, 'provider':'GOOGLE', 'status':'connected'};
+              if($state.current.name == 'access.signin') {
+    	        	$state.go('app.dashboard-v1');
+    	      }
+          }
         });
       
       
@@ -145,10 +169,22 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 	    );
   }])
 
- .controller('UserInfoCtrl', ['$scope', '$state', function($scope, $state) {
-	 $scope.login = function (){
-		 $state.go('access.signin');
+ .controller('UserInfoCtrl', ['$scope', '$state', '$sessionStorage','UserService', function($scope, $state, $sessionStorage, UserService) {
+	 if(UserService.isLogin()){
+		  $scope.logged = true;
+	 } else {
+		  $scope.logged = false;
 	 }
+	 
+	 console.log($sessionStorage);
+	 //console.log($localStorage);
+	
+	 $scope.Logout = function () {
+		 UserService.Logout();
+		 
+		 $state.go('access.signin');
+	 };
+	 
   }])
   // bootstrap controller
   .controller('AccordionDemoCtrl', ['$scope', function($scope) {
@@ -575,9 +611,14 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   .controller('SigninFormController', ['$scope', '$http', '$state', '$timeout', 'UserService',
                                        function($scope, $http, $state, $timeout, UserService) {
 
-	  
-	  
+	  if(UserService.isLogin()){
+		  $scope.logged = true;
+	  } else {
+		  $scope.logged = false;
+	  }
+	
 	  $scope.authError = null;
+	  
 	  $scope.FacebookLogin = UserService.FacebookLogin;
 	  $scope.GoogleLogin = UserService.GoogleLogin;
 	  
@@ -585,11 +626,11 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 		 var token = $('meta[name=csrf-token]').attr('content');
 	     UserService.Login($scope.user.email, $scope.user.password, token);
 	  }
+	  
 	  $scope.logout = function() {
 		  UserService.Logout();
 		  $scope.logged = false;
 	  }
-    
   }])
 
   // signup controller
@@ -629,7 +670,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 		        $window.alert(response.data.error);
 		    }else{
 		    	// project data save
-		    	
+		    	$rootScope.projects = response.data.projects
 		    	$state.go('app.dashboard-v1');
 		    }
 	    }, function(x) {
