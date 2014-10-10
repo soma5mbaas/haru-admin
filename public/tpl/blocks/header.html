@@ -139,12 +139,13 @@
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span>{{ currentproject != undefined ? currentproject.title : "New Project" }}</span> <span class="caret"></span>
             </a>
-            
+
             <ul class="dropdown-menu" role="menu" ng-show="projects[0].title">
               <li ng-repeat="project in projects">
                 <a  href>{{project.title}}</a>
               </li>
             </ul>
+
             <!-- 
             <ul class="dropdown-menu" role="menu">
               <li><a href="#" translate="header.navbar.new.PROJECT">Projects</a></li>

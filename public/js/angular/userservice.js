@@ -1,9 +1,8 @@
-(function(window, angular, undefined) {
+(function(window, angular) {
   'use strict';
 
   // Deferred Object which will be resolved when the Facebook SDK is ready
   // and the `fbAsyncInit` function is called.
-  var loadDeferred;
 
   /**
    * @name User
@@ -21,54 +20,12 @@
     service('UserService', ['$rootScope', '$http', '$state', 'Facebook', 'GooglePlus', '$localStorage','$sessionStorage', '$q',
                     function($rootScope,   $http,   $state,   Facebook,   GooglePlus, $localStorage, $sessionStorage, $q) {
     	
-    	var isloggedin = false;
-    	var provider = '';
-    	var authError = null;
-    	var userinfo = {};
-    	var scope = '';
-    	var token = '';
-    	
-    	this.isLogin = function(){
-    		return isloggedin;
-    	}
-    	this.setLogin = function(login){
-    		isloggedin = !!login;
-    	}
-    	this.setProvider = function(p){
-    		provider = p;
-    	}
-    	
-    	this.setScope = function(scope){
-    		scope = scope;
-    	};
-    	
-    	this.getToken = function(){
-	    	return token;
-	    };
-	    this.setToken = function(token){
-	    	token = token;
-	    };
-	    
-    	
-	    this.getUserInfo = function(){
-	    	return userinfo;
-	    };
-	    this.setUserInfo = function(user){
-	    	userinfo = user;
-	    };
-	    
-	    var clearUserinfo = function(){
-	    	isloggedin = false;
-	    	$localStorage.$reset();
-	    	$sessionStorage.$reset();
-		};
-		
 		 this.UserInfo = function(csrftoken, authtoken) {
 		      var deferred = $q.defer();
 
 		      $http({url:'user/getfortoken', 
 		    	  method:'POST',
-		    	  data:'csrf-token=' + token + '&token=' + authtoken +'&provider=WEB',
+		    	  data:'csrf-token=' + csrftoken + '&token=' + authtoken +'&provider=WEB',
 		    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 		      .then(function(response) {
 		    	  console.log("success");
@@ -137,7 +94,7 @@
 		
 		this.FacebookIsReady = function(){
 			return Facebook.isReady()
-		}
+		};
 	
 	    this.FacebookMe = function(csrftoken, authtoken) {
 	    	var deferred = $q.defer();
@@ -169,14 +126,13 @@
 	      
 	    this.GooglePlusIsReady = function(){
 			return GooglePlus.isReady()
-		}
+		};
 	   
 	     this.GoogleMe = function(csrftoken, authtoken){
 	    	 var deferred = $q.defer();
 	    	 
 	    	 GooglePlus.getUser().then(function (user) {
 	    		 console.log(JSON.stringify(user));
-            	userinfo = user;
             	$sessionStorage.user = user;
 
 	        	 $http({url:'snsuser/add', 
@@ -199,11 +155,9 @@
 		 
 		 this.GoogleLogin = function () {
 		        GooglePlus.login().then(function (authResult) {
-		            isloggedin = true;
-		        	provider = 'GOOGLE';
+
 		        }, function (err) {
 		            console.log(err);
-		            isloggedin = false;
 		        });
 		      };
         

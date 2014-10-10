@@ -36,7 +36,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           asideDock: false,
           container: false
         }
-      }
+      };
 
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
@@ -135,13 +135,13 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   	        }
           }
         });
-      
+
       $rootScope.$on('GooglePlus:statusChange', function(ev, data) {
           console.log('Google Status: ', data);
-          
+
           if (data.status == 'connected') {
-          	  var token = $('meta[name=csrf-token]').attr('content');
-          	  UserService.GoogleMe(token, data.access_token).then(function(data){
+          	  var csrftoken = $('meta[name=csrf-token]').attr('content');
+          	  UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
         		console.log(data);
         		$scope.authuser = data.user;
         		$scope.projects = data.projects;
@@ -155,8 +155,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     	      
               $localStorage.auth = {'token':data.access_token, 'provider':'GOOGLE'};
           } else if (data.status == 'loggin') {
-        	  var token = $('meta[name=csrf-token]').attr('content');
-    	      UserService.GoogleMe(token, data.access_token).then(function(data){
+        	  var csrftoken = $('meta[name=csrf-token]').attr('content');
+    	      UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
         		console.log(data);
         		$scope.authuser = data.user;
         		$scope.projects = data.projects;
@@ -231,11 +231,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         delete $localStorage.auth;
 
         $state.go('access.signin');
-    };
-
-
-
-
+    }
 
     }])
   // bootstrap controller
@@ -532,7 +528,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     $scope.notBlackListed = function(value) {
       var blacklist = ['bad@domain.com','verybad@domain.com'];
       return blacklist.indexOf(value) === -1;
-    }
+    };
 
     $scope.val = 15;
     var updateModel = function(val){
@@ -550,7 +546,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
       {text:'Third',  value:'Three'}
     ];
 
-    $scope.list_of_string = ['tag1', 'tag2']
+    $scope.list_of_string = ['tag1', 'tag2'];
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
@@ -612,7 +608,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         res.push([i, data[i]])
       }
       return res;
-    }
+    };
 
     $scope.d4 = $scope.getRandomData();
   }])
@@ -660,13 +656,13 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   }])
 
   // signin controller
-  .controller('SigninFormController', ['$scope', '$http', '$state', '$timeout', 'UserService','$localStorage',
-                               function($scope,   $http,   $state,   $timeout,   UserService,  $localStorage) {
+  .controller('SigninFormController', ['$scope', '$http', '$state', '$timeout', 'UserService',
+                               function($scope,   $http,   $state,   $timeout,   UserService) {
 	  $scope.authError = null;
 	  
 	  $scope.FacebookLogin = function(){
 		  UserService.FacebookLogin();
-	  }
+	  };
 	  $scope.GoogleLogin = UserService.GoogleLogin;
 	  
 	  $scope.weblogin = function() {
@@ -681,11 +677,11 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 	     },function(data) {
 	    	 $scope.authError = data.error;
 	     });
-	  }
+	  };
 	  
 	  $scope.weblogout = function() {
 		$scope.$emit('Logout');
-	  }
+	  };
   }])
 
   // signup controller
@@ -701,7 +697,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 	     },function(data) {
 	    	 $scope.authError = data.error;
 	     });
-	}
+	};
   }])
    // project controller
   .controller('ProjectFormController', ['$rootScope', '$scope', '$window', '$http', '$state', 'UserService','$localStorage',

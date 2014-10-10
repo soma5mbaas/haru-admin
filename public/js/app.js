@@ -49,6 +49,8 @@ var app = angular.module('app', [
         app.constant   = $provide.constant;
         app.value      = $provide.value;
 
+
+
         $urlRouterProvider
             .otherwise('/app/dashboard-v1');
         $stateProvider

@@ -38,6 +38,7 @@
         return settings.clientId;
       };
 
+
       settings.loadSDK = true;
 
       this.setLoadSDK = function(a) {
@@ -74,6 +75,10 @@
 
       this.setScopes = function(scopes) {
     	  settings.scopes = scopes;
+
+
+
+
         return this;
       };
 
