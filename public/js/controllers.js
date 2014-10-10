@@ -140,7 +140,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           console.log('Google Status: ', data);
 
           if (data.status == 'connected') {
-          	  var csrftoken = $('meta[name=csrf-token]').attr('content');
+          	  csrftoken = $('meta[name=csrf-token]').attr('content');
           	  UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
         		console.log(data);
         		$scope.authuser = data.user;
@@ -155,7 +155,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     	      
               $localStorage.auth = {'token':data.access_token, 'provider':'GOOGLE'};
           } else if (data.status == 'loggin') {
-        	  var csrftoken = $('meta[name=csrf-token]').attr('content');
+        	  csrftoken = $('meta[name=csrf-token]').attr('content');
     	      UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
         		console.log(data);
         		$scope.authuser = data.user;
@@ -672,8 +672,6 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 
 	    	 $scope.$emit('Signin', data);
 	    	 
-	    	 
-
 	     },function(data) {
 	    	 $scope.authError = data.error;
 	     });
