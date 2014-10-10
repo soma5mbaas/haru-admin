@@ -8,10 +8,11 @@ angular.module('app').controller('GridDemoCtrl', ['$scope', '$http', function($s
         pageSizes: [250, 500, 1000],
         pageSize: 250,
         currentPage: 1
-    };  
+    };
+
     $scope.setPagingData = function(data, page, pageSize){  
         var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-        $scope.myData = pagedData;
+        $scope.myData =pagedData;
         $scope.totalServerItems = data.length;
         if (!$scope.$$phase) {
             $scope.$apply();
@@ -49,12 +50,20 @@ angular.module('app').controller('GridDemoCtrl', ['$scope', '$http', function($s
         }
     }, true);
 
+    $scope.$on('ngGridEventEndCellEdit', function (event) {
+        console.log(event.targetScope.row.entity);
+
+    });
+
     $scope.gridOptions = {
         data: 'myData',
         enablePaging: true,
         showFooter: true,
+        enableCellEdit: true,
         totalServerItems: 'totalServerItems',
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions
+
     };
+
 }]);

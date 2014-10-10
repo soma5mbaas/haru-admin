@@ -28,7 +28,6 @@
 		    	  data:'csrf-token=' + csrftoken + '&token=' + authtoken +'&provider=WEB',
 		    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 		      .then(function(response) {
-		    	  console.log("success");
 		        if (response.data.user) {
 		          deferred.resolve(response.data);
 		        }else{

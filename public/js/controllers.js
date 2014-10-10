@@ -73,14 +73,11 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
-      console.log($localStorage.auth);
       if($localStorage.auth &&
     	$localStorage.auth.token !== ''){
     	var authtoken = $localStorage.auth.token;
-    	console.log(authtoken);
     	var csrftoken = $('meta[name=csrf-token]').attr('content');
     	UserService.UserInfo(csrftoken, authtoken).then(function(data){
-    		console.log(JSON.stringify(data));
     		$scope.authuser = data.user;
     		$scope.projects = data.projects;
     	});
@@ -231,6 +228,13 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         delete $localStorage.auth;
 
         $state.go('access.signin');
+    }
+
+    // select project
+    $scope.selectproject = function(index){
+        if($scope.projects.length >= index){
+            $scope.currentproject = $scope.projects[index]
+        }
     }
 
     }])
@@ -437,8 +441,12 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   }])
   .controller('TypeaheadDemoCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.selected = undefined;
+
+
+
     $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
     // Any function returning a promise object can be used to load values asynchronously
+
     $scope.getLocation = function(val) {
       return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
         params: {
@@ -446,6 +454,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           sensor: false
         }
       }).then(function(res){
+        console.log(res);
         var addresses = [];
         angular.forEach(res.data.results, function(item){
           addresses.push(item.formatted_address);

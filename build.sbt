@@ -71,5 +71,7 @@ libraryDependencies ++= List(
   "org.joda" % "joda-convert" % "1.5",
   "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "org.openid4java" % "openid4java" % "0.9.8",
+  "com.hazelcast" % "hazelcast" % "3.3.1",
+  "com.hazelcast" % "hazelcast-client" % "3.3.1",
+  "tv.cntt" %% "xitrum-hazelcast3" % "1.12",
   "javax.servlet" % "javax.servlet-api" % "3.0.1")
-  

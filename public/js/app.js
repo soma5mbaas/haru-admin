@@ -185,6 +185,7 @@ var app = angular.module('app', [
                     }]
                 }
             })
+
             // form
             .state('app.form', {
                 url: '/form',
@@ -312,7 +313,35 @@ var app = angular.module('app', [
                     }]
                 }
             })
-
+            // databrowser
+            .state('app.databrowser', {
+                abstract: true,
+                url: '/databrowser',
+                templateUrl: 'tpl/databrowser.html',
+                // use resolve to load other dependences
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( ['js/app/databrowser/databrowser.js',
+                                'js/app/databrowser/databrowser-service.js',
+                                'js/libs/moment.min.js'] );
+                        }]
+                }
+            })
+            .state('app.databrowser.list', {
+                url: '/inbox/{fold}',
+                templateUrl: 'tpl/databrowser.list.html',
+                resolve: {
+                    deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad ){
+                            return $ocLazyLoad.load('ngGrid').then(
+                                function(){
+                                    return $ocLazyLoad.load('js/modules/ng-grid/ctrl.js');
+                                }
+                            );
+                        }]
+                }
+            })
             // mail
             .state('app.mail', {
                 abstract: true,
