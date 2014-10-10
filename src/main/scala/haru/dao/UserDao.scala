@@ -7,6 +7,7 @@ import java.sql.SQLIntegrityConstraintViolationException
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
 import Q.interpolation
 import java.sql.Timestamp
+import xitrum.Log
 
 
 case class UserParam(name:String, email:String, password:String, provider:String, provider_id:String, expire:Timestamp)
@@ -64,12 +65,13 @@ object UserDao extends DatabasePool {
        }     
       } catch {
         case e: SQLIntegrityConstraintViolationException =>
+          Log.error(e.getMessage());
           return (false, e.getMessage());
       }
   }
 
 
-  def insertUserWeb(name: String, email: String, password: String, token: String): Boolean = databasePool withSession {
+  def insertUserWeb(name: String, email: String, password: String, token: String): Boolean = databasePool withTransaction {
     implicit session =>
       try {
         if (!user_table.filter(p => p.email === email && p.provider === "WEB").exists.run) {
@@ -85,7 +87,7 @@ object UserDao extends DatabasePool {
       }
   }
 
-  def findUser(email: String, password: String, provider: String) :  (Int, String, String, String, Option[String])= databasePool withSession {
+  def findUser(email: String, password: String, provider: String) :  (Int, String, String, String, Option[String])= databasePool withTransaction {
     implicit session =>
        if (user_table.filter(p => p.email === email && p.provider === "WEB" && p.password === password).exists.run) {
     	  return user_table.filter(p => p.email === email && p.provider === provider && p.password === password).map(p => (p.id, p.name, p.email, p.provider, p.provider_id)).first
@@ -94,7 +96,7 @@ object UserDao extends DatabasePool {
        }
   }
 
-  def selectUserToken(token: String): (Int, String, String, String) = databasePool withSession {
+  def selectUserToken(token: String): (Int, String, String, String) = databasePool withTransaction {
     implicit session =>
 	     if (user_table.filter(_.provider_id === token).exists.run) {
 	    	 return user_table.filter(_.provider_id === token).map(p => (p.id, p.name, p.email, p.provider)).first
@@ -103,25 +105,7 @@ object UserDao extends DatabasePool {
 	     }
   }
   
-  def selectUserProject(email: String, provider:String):List[(String, String, String, Int)]  = databasePool withSession {
-    implicit session =>
-       val query = sql"""
-       select u.email, p.title, p.company, v.permission 
-       from  Viewers v, Users u, Projects p 
-       where v.userid = u.id and v.projectid = p.id and email = $email and provider = $provider
-       """.as[(String, String, String, Int)]
-       
-       return query.list
-  }
-   def selectUserProjectForId(userid: Int):List[(String, String, Int, String, String, String, String, String, String)]  = databasePool withSession {
-    implicit session =>
-       val query = sql"""
-       select p.title, p.company, v.permission, p.applicationkey, p.clientkey, p.netkey, p.javascriptkey, p.restkey, p.masterkey
-       from  Viewers v, Users u, Projects p 
-       where v.userid = u.id and v.projectid = p.id and u.id = $userid
-       """.as[(String, String, Int, String, String, String, String, String, String)]
-       return query.list
-  }
+ 
   
   
    def selectUserProjectCount(email: String, provider:String) : Int  = databasePool withSession {

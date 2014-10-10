@@ -21,6 +21,8 @@ trait DatabasePool {
     ds.setMinPoolSize(10)
     ds.setAcquireIncrement(5)
     ds.setMaxPoolSize(100)
+    ds.setTestConnectionOnCheckin(true)
+    ds.setMaxIdleTime(1000);
     ds.setUser(DBUser)
     ds.setPassword(DBPassword)
  

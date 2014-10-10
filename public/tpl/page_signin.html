@@ -8,7 +8,7 @@
       <div class="text-danger wrapper text-center" ng-show="authError">
           {{authError}}
       </div>
-      <div class="list-group list-group-sm" data-ng-show="!logged">
+      <div class="list-group list-group-sm" data-ng-hide="authuser.token">
         <div class="list-group-item">
           <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required >
         </div>
@@ -16,10 +16,10 @@
            <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" required >
         </div>
       </div>
-      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" ng-disabled='form.$invalid' data-ng-show="!logged" >Log in</button>
-      <a href class="btn btn-lg btn-primary btn-block" ng-click="logout()" data-ng-show="logged">Log out</a>
+      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="weblogin()" ng-disabled='form.$invalid' data-ng-hide="authuser.token" >Log in</button>
+      <a href class="btn btn-lg btn-primary btn-block" ng-click="weblogout()" data-ng-show="authuser.token">Log out</a>
       <br/>
-	 <a href class="btn btn-primary btn-block m-b-sm" ng-click="FacebookLogin()" data-ng-disabled="!facebookReady" data-ng-show="!logged"><i class="fa fa-facebook pull-left"></i>Sign in with Facebook</a>
+	 <a href class="btn btn-primary btn-block m-b-sm" ng-click="FacebookLogin()" data-ng-disabled="!facebookReady" data-ng-hide="authuser.token"><i class="fa fa-facebook pull-left"></i>Sign in with Facebook</a>
 	<!--  <a href class="btn btn-primary btn-block m-b-sm" ng-click="logout()" data-ng-disabled="!facebookReady" data-ng-show="logged"><i class="fa fa-facebook pull-left"></i>Logout with Facebook</a> -->
 	 <!-- 
       <a href class="btn btn-info btn-block m-b-sm" data-ng-show="!logged"><i class="fa fa-twitter pull-left" ></i>Sign in with Twitter</a>
@@ -27,7 +27,7 @@
        
 	<!-- Define controller for body. In this example we use only one controller for the scope of entire body. --><!-- Place a span that is going to act as a container for button rendering through script code. -->
        
-       <a href class="btn btn-danger btn-block m-b-sm" ng-click="GoogleLogin()"  data-ng-disabled="!googleplusReady" data-ng-show="!logged"><i class="fa fa-google-plus pull-left"></i>Sign in with Google+</a>
+       <a href class="btn btn-danger btn-block m-b-sm" ng-click="GoogleLogin()"  data-ng-disabled="!googleplusReady" data-ng-hide="authuser.token"><i class="fa fa-google-plus pull-left"></i>Sign in with Google+</a>
 	<!--  <a href class="btn btn-primary btn-block m-b-sm" ng-click="googlelogout()" data-ng-show="glogged"><i class="fa fa-google-plus pull-left"></i>Logout with Facebook</a>
 	  -->
       <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">Forgot password?</a></div>

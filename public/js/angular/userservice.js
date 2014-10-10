@@ -18,8 +18,8 @@
     /**
      * UserService Servie
      */
-    service('UserService', ['$rootScope', '$http', '$state', 'Facebook', 'GooglePlus', '$localStorage','$sessionStorage',
-                    function($rootScope,   $http,   $state,   Facebook,   GooglePlus, $localStorage, $sessionStorage) {
+    service('UserService', ['$rootScope', '$http', '$state', 'Facebook', 'GooglePlus', '$localStorage','$sessionStorage', '$q',
+                    function($rootScope,   $http,   $state,   Facebook,   GooglePlus, $localStorage, $sessionStorage, $q) {
     	
     	var isloggedin = false;
     	var provider = '';
@@ -63,123 +63,106 @@
 	    	$sessionStorage.$reset();
 		};
 		
-	    
+		 this.UserInfo = function(csrftoken, authtoken) {
+		      var deferred = $q.defer();
+
+		      $http({url:'user/getfortoken', 
+		    	  method:'POST',
+		    	  data:'csrf-token=' + token + '&token=' + authtoken +'&provider=WEB',
+		    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+		      .then(function(response) {
+		    	  console.log("success");
+		        if (response.data.user) {
+		          deferred.resolve(response.data);
+		        }else{
+		          deferred.reject(response.data)
+		        }
+		      }, function(x) {
+		        deferred.reject({ error: "Server Error" });
+		      });
+		      return deferred.promise;
+			};
+			
 	    this.Login = function(email, password, token) {
-	      // Try to login
+	      var deferred = $q.defer();
+
 	      $http({url:'user/login', 
 	    	  method:'POST',
 	    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&provider=WEB',
 	    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 	      .then(function(response) {
-	    	console.log("Login : " + response.data);
-		    	
-	        if ( !response.data.email ) {
-	          authError = response.data.error;
-	          response.data.status = 'error';
-	          isloggedin = false;
-	          $rootScope.$broadcast('Auth:statusChange', response.data);
+	        if (response.data.user) {
+	          var data = response.data;
+	          deferred.resolve(data);
 	        }else{
-		      userinfo = response.data;
-		      userinfo.status = 'connected';
-		      isloggedin = true;
-		      $sessionStorage.user = userinfo.data;
-		      $rootScope.$broadcast('Auth:statusChange', userinfo);
+	          deferred.reject(response.data);
 	        }
 	      }, function(x) {
-	        authError = 'Server Error';
+	        deferred.reject({ error: "Server Error" });
 	      });
+	      
+	      return deferred.promise;
 		};
 		
 		    
 		this.Signup = function(name, email, password, token){
-			//$http.post('user/add', {name: name, email:email, password:password})
-			   $http({url:'user/add', 
-			    	  method:'POST',
-			    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name+'&provider=WEB',
-			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
-		      .then(function(response) {
-		    	console.log("signup : " + response.data);
-		    	  
-		        if ( !response.data.email ) {
-		          authError = response.data.error;
-		          response.data.status = 'error';
-		          isloggedin = false;
-		          $rootScope.$broadcast('Auth:statusChange', response.data);
+			var deferred = $q.defer();
+		    $http({url:'user/add', 
+		    	  method:'POST',
+		    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name+'&provider=WEB',
+		    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+	       .then(function(response) {
+	    	   console.log(response);
+	    	   if ( response.data.email ) {
+		        	deferred.resolve(response.data);
 		        }else{
-			      userinfo = response.data;
-			      userinfo.status = 'signup';
-			      isloggedin = true;
-			      $sessionStorage.user = userinfo.data;
-			      $rootScope.$broadcast('Auth:statusChange', userinfo);
+		        	deferred.reject(response.data);
 		        }
-		      }, function(x) {
-		        authError = 'Server Error';
-		      });
+	        }, function(x) {
+	        	deferred.reject({ error: "Server Error" });
+	        });
+		    return deferred.promise;
 		};
 		
-	    this.Logout = function(){
-	    	console.log('logout' + isloggedin + provider);
-	    	clearUserinfo();
-	    	
-	    	if (provider =='FACEBOOK') {
-	    		this.FacebookLogout();
-	    	} else if (provider == 'GOOGLE') {
-	    		this.GoogleLogout();
+	    this.Logout = function(provider){
+	    	try{
+		    	if (provider =='FACEBOOK') {
+		    		Facebook.logout();
+		    	} else if (provider == 'GOOGLE') {
+		    		GooglePlus.logout();
+		    	}
+	    	}catch(exception){
 	    	}
-	    	
-	    	$rootScope.$broadcast('Auth:statusChange', {'status':'disconnect'});
 	    };
-		    
 		
 		this.FacebookIsReady = function(){
 			return Facebook.isReady()
 		}
-	    
-	    this.FacebookLogout = function() {
-	        Facebook.logout(function() {
-	        	
-	        });
-	    };
-	    
-      
+	
 	    this.FacebookMe = function(csrftoken, authtoken) {
-	        Facebook.api('/me', function(response) {
-	        	userinfo = response;
-		        $sessionStorage.user =response;
-		        
-	        	console.log('facebook : ' +  JSON.stringify(userinfo));
-	        	
+	    	var deferred = $q.defer();
+	    	
+	          Facebook.api('/me', function(response) {
 	        	 $http({url:'snsuser/add', 
 			    	  method:'POST',
-			    	  data:'csrf-token='+csrftoken+'&email=' +userinfo.email+ '&password=&name='+userinfo.name+'&provider=FACEBOOK&timezone='+userinfo.timezone+'&locale='+userinfo.locale+'&gender='+userinfo.gender+'&token='+authtoken,
+			    	  data:'csrf-token='+csrftoken+'&email=' +response.email+ '&password=&name='+response.name+'&provider=FACEBOOK&timezone='+response.timezone+'&locale='+response.locale+'&gender='+response.gender+'&token='+authtoken,
 			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
-		      .then(function(response) {
-		    	console.log("facebook : " + JSON.stringify(response.data));
-		    	  
-		        if ( !response.data ) {
-		          authError = response.data.error;
-		          response.data.status = 'error';
-		          isloggedin = false;
-		          $rootScope.$broadcast('Auth:statusChange', response.data);
-		        }else{
-		        	$sessionStorage.userproject = response.data.projects
-		        	$rootScope.$broadcast('Project:statusChange', response.data);
-		        }
-		      }, function(x) {
-		        authError = 'Server Error';
-		      });
-	        });
+		        .then(function(response) {
+		          if ( response.data ) {
+		        	deferred.resolve(response.data);
+		          } else {
+		        	deferred.reject(response.data);
+		          }
+		        }, function(x) {
+		    	  deferred.reject({error:'Server Error'});
+		        });
+	          });
+	        return deferred.promise;
 	    };
 	    
 	    this.FacebookLogin = function() {
-	        Facebook.login(function(response) {
-	         if (response.status == 'connected') {
-	        	// broadcast Facebook:statusChange
-	        	 isloggedin = true;
-	        	 provider = 'FACEBOOK';
-	         } else {
-	        	 isloggedin = false;
-	         }
+	       Facebook.login(function(response) {
+	    	   
 	       });
 	    };
 	   
@@ -187,13 +170,12 @@
 	    this.GooglePlusIsReady = function(){
 			return GooglePlus.isReady()
 		}
-	     this.GoogleLogout = function () {
-		     GooglePlus.logout();
-		     clearUserinfo();
-	     };
-	     
+	   
 	     this.GoogleMe = function(csrftoken, authtoken){
+	    	 var deferred = $q.defer();
+	    	 
 	    	 GooglePlus.getUser().then(function (user) {
+	    		 console.log(JSON.stringify(user));
             	userinfo = user;
             	$sessionStorage.user = user;
 
@@ -202,26 +184,21 @@
 			    	  data:'csrf-token='+csrftoken+'&email=' +user.email+ '&password=&name='+user.name+'&provider=GOOGLE&timezone='+user.timezone+'&locale='+user.locale+'&gender='+user.gender+'&token='+authtoken,
 			    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 		       .then(function(response) {
-		    	 console.log("google : " + JSON.stringify(response.data));
-		    	  
-		        if ( !response.data ) {
-		          authError = response.data.error;
-		          response.data.status = 'error';
-		          isloggedin = false;
-		          $rootScope.$broadcast('Auth:statusChange', response.data);
-		        }else{
-		        	$sessionStorage.userproject = response.data.projects
-		        	$rootScope.$broadcast('Project:statusChange', response.data);
-		        }
+		    	  if ( response.data ) {
+		    		deferred.resolve(response.data);
+		          } else {
+		        	deferred.reject(response.data);
+		          }
 		       }, function(x) {
-			        authError = 'Server Error';
+		    	  deferred.reject({error:'Server Error'});
 			   });
 	         });
+	    	 
+	    	 return deferred.promise;
 		 };
 		 
 		 this.GoogleLogin = function () {
 		        GooglePlus.login().then(function (authResult) {
-		            //console.log("userservice google : " + authResult);
 		            isloggedin = true;
 		        	provider = 'GOOGLE';
 		        }, function (err) {

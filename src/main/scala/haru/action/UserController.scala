@@ -14,6 +14,7 @@ import xitrum.Log
 import haru.util.Encryption
 import scala.annotation.meta.param
 import xitrum.Action
+import xitrum.annotation.CacheActionMinute
 
 trait Api extends Action
 trait Api2 extends Action with SkipCsrfCheck
@@ -29,6 +30,7 @@ object ERROR {
 }
 
 @POST("user/login")
+@CacheActionMinute(1)
 class UserLogin extends Api {
   def execute() {
     val pemail = param("email")
@@ -38,8 +40,9 @@ class UserLogin extends Api {
 
     val (id, name, email, provider, provider_id) = UserDao.findUser(pemail, crypto_password, pprovider)
     if (id != ERROR.NOTFOUNT) {
-      val projects = UserDao.selectUserProjectForId(id);
-      val data = Map("id" -> id, "name" -> name, "email" -> email, "provider" -> provider, "token" -> provider_id, "project" -> projects)
+      val projects = ProjectDao.selectUserProjectForId(id);
+      val user = Map("email" -> email, "name" -> name, "provider" -> provider, "token" -> provider_id)
+      val data = Map("user" -> user, "projects" -> projects)
       respondJson(data)
     } else {
       val json = ERROR.generatorErrorJson(404, "Email or Password not right");
@@ -72,8 +75,6 @@ class AddUser extends Api {
   }
 }
 
-
-
 @POST("snsuser/add")
 class AddSNSUser extends Api {
   def execute() {
@@ -85,15 +86,45 @@ class AddSNSUser extends Api {
     val timezone = paramo("timezone");
     val locale = paramo("locale");
     val gender = paramo("gender");
-
+    println(token);
     // 항상 실패 가능함!! ????
     val (success, error) = UserDao.insertSNSUser(name, email, "", provider, token, timezone, locale, gender);
+    Log.error(error);
+    if (success) {
+      val projects = ProjectDao.findProjectForToken(token);
+      val user = Map("email" -> email, "name" -> name, "provider" -> provider, "token" -> token)
+      val data = Map("user" -> user, "projects" -> projects)
+      respondJson(data);
+    } else {
+      val json = ERROR.generatorErrorJson(404, "Database Error");
+      respondJson(json);
+    }
 
-    val projects = ProjectDao.findProjectForUser(email, provider);
-   
-    var json: Map[String, Any] = Map()
-    json += ("email" -> email, "name" -> name, "provider" -> provider, "token" -> token, "projects" -> projects)
-    respondJson(json);
+    //val projects = ProjectDao.findProjectForUser(email, provider);
+
+    //var json: Map[String, Any] = Map()
+    //json += ("email" -> email, "name" -> name, "provider" -> provider, "token" -> token, "projects" -> projects)
+    //respondJson(json);
+  }
+}
+
+@POST("user/getfortoken")
+@CacheActionMinute(1)
+class getUserForToken extends Api2 {
+  def execute() {
+
+    val token = param("token")
+    /// TODO : vaildate token
+    val (id, name, email, provider) = UserDao.selectUserToken(token);
+    if (id != ERROR.NOTFOUNT) {
+      val projects = ProjectDao.findProjectForToken(token);
+      val user = Map("email" -> email, "name" -> name, "provider" -> provider, "token" -> token)
+      val data = Map("user" -> user, "projects" -> projects)
+      respondJson(data);
+    } else {
+      val json = ERROR.generatorErrorJson(404, "Email or Password not right");
+      respondJson(json);
+    }
   }
 }
 

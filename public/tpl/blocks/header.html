@@ -8,7 +8,7 @@
         </button>
         <!-- brand -->
         <a href="#/" class="navbar-brand text-lt">
-          <i class="fa fa-btc"></i>
+          <i class="fa fa-h-square"></i>
           <img src="img/logo.png" alt="." class="hide">
           <span class="hidden-folded m-l-xs">{{app.name}}</span>
         </a>
@@ -137,8 +137,15 @@
           <li class="dropdown">
             <a href class="dropdown-toggle">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
-              <span translate="header.navbar.new.NEW">New</span> <span class="caret"></span>
+              <span>{{ currentproject != undefined ? currentproject.title : "New Project" }}</span> <span class="caret"></span>
             </a>
+            
+            <ul class="dropdown-menu" role="menu" ng-show="projects[0].title">
+              <li ng-repeat="project in projects">
+                <a  href>{{project.title}}</a>
+              </li>
+            </ul>
+            <!-- 
             <ul class="dropdown-menu" role="menu">
               <li><a href="#" translate="header.navbar.new.PROJECT">Projects</a></li>
               <li>
@@ -155,7 +162,9 @@
                   <span translate="header.navbar.new.EMAIL">Email</span>
                 </a>
               </li>
+             
             </ul>
+              -->
           </li>
         </ul>
         <!-- / link and dropdown -->
@@ -174,7 +183,7 @@
         <!-- / search form -->
 
         <!-- nabar right -->
-        <ul class="nav navbar-nav navbar-right" ng-controller="UserInfoCtrl">
+        <ul class="nav navbar-nav navbar-right">
           <li class="dropdown hidden-sm" is-open="lang.isopen">
             <a href class="dropdown-toggle" data-toggle="dropdown">
               {{selectLang}} <b class="caret"></b>
@@ -227,14 +236,19 @@
             </div>
             <!-- / dropdown -->
           </li>
-          
-          <li class="dropdown" ng-show="logged">
+          <li ng-hide="authuser.email">
+            <a href ui-sref="app.docs" class="dropdown-toggle">
+              <i class="icon-login"></i>
+              <span>&nbsp;Sign in</span>
+            </a>
+          </li>
+          <li class="dropdown" ng-show="authuser.email">
             <a href class="dropdown-toggle clear" data-toggle="dropdown">
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                 <img src="img/a0.jpg" alt="...">
                 <i class="on md b-white bottom"></i>
               </span>
-              <span class="hidden-sm hidden-md">John.Smith</span> <b class="caret"></b>
+              <span class="hidden-sm hidden-md">{{authuser.name}}</span> <b class="caret"></b>
             </a>
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">

@@ -8,17 +8,11 @@ unzip, then run:
 
   sbt/sbt run
 
-Now you have a new empty skeleton project running at
-http://localhost:8000/ and https://localhost:4430/
 
-.. image:: screenshot.png
-
-To generate Eclipse or IntelliJ project:
-
-::lcd
 
   sbt/sbt eclipse
   sbt/sbt gen-idea
 
-  fdsfds
-  readme changefdsfdsfdsfds
+
+sb/sbt xitrum-package
+./target/script/runner haru.Boot

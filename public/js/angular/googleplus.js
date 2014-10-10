@@ -70,7 +70,7 @@
       * @default 'https://www.googleapis.com/auth/plus.login'
       * @type {Boolean}
       */
-      settings.scopes = 'https://www.googleapis.com/auth/plus.login';
+      settings.scopes = 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email';
 
       this.setScopes = function(scopes) {
     	  settings.scopes = scopes;

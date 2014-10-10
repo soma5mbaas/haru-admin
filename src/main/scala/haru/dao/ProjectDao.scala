@@ -34,6 +34,8 @@ object ProjectDao extends DatabasePool {
        select count(*) cnt from Viewers v, Projects p where p.id = v.projectid and v.userid = $id and p.title = $title
        """.as[(Int)]
       val exist = query.first;
+      // error
+
       if (exist == 0) {
         def applicationkey = java.util.UUID.randomUUID.toString
         def clientkey = java.util.UUID.randomUUID.toString
@@ -72,11 +74,46 @@ object ProjectDao extends DatabasePool {
        """.as[(String, String, Int, String, String, String, String, String, String)]
 
       val projectlist = query.list
-      var projects : List[Map[String, Any]] = List();
+
+      var projects: List[Map[String, Any]] = List();
       projectlist.foreach { p =>
         projects ++= List(Map("title" -> p._1, "company" -> p._2, "permission" -> p._3, "applicationkey" -> p._4, "clientkey" -> p._5, "netkey" -> p._6, "restkey" -> p._7, "masterkey" -> p._8))
       }
       println(projects)
+      return projects
+  }
+
+  def selectUserProject(email: String, provider: String): List[Map[String, Any]] = databasePool withSession {
+    implicit session =>
+      val query = sql"""
+       select p.title, p.company, v.permission, p.applicationkey, p.clientkey, p.netkey, p.javascriptkey, p.restkey, p.masterkey 
+       from  Viewers v, Users u, Projects p 
+       where v.userid = u.id and v.projectid = p.id and email = $email and provider = $provider
+       """.as[(String, String, Int, String, String, String, String, String, String)]
+
+      val projectlist = query.list
+
+      var projects: List[Map[String, Any]] = List();
+      projectlist.foreach { p =>
+        projects ++= List(Map("title" -> p._1, "company" -> p._2, "permission" -> p._3, "applicationkey" -> p._4, "clientkey" -> p._5, "netkey" -> p._6, "restkey" -> p._7, "masterkey" -> p._8))
+      }
+      return projects
+  }
+  
+  def selectUserProjectForId(userid: Int):List[Map[String, Any]] = databasePool withSession {
+    implicit session =>
+      val query = sql"""
+       select p.title, p.company, v.permission, p.applicationkey, p.clientkey, p.netkey, p.javascriptkey, p.restkey, p.masterkey
+       from  Viewers v, Users u, Projects p 
+       where v.userid = u.id and v.projectid = p.id and u.id = $userid
+       """.as[(String, String, Int, String, String, String, String, String, String)]
+       val projectlist = query.list
+
+      var projects: List[Map[String, Any]] = List();
+      projectlist.foreach { p =>
+        projects ++= List(Map("title" -> p._1, "company" -> p._2, "permission" -> p._3, "applicationkey" -> p._4, "clientkey" -> p._5, "netkey" -> p._6, "restkey" -> p._7, "masterkey" -> p._8))
+      }
+      
       return projects
   }
 
