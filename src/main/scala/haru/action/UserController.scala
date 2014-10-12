@@ -30,7 +30,6 @@ object ERROR {
 }
 
 @POST("user/login")
-@CacheActionMinute(1)
 class UserLogin extends Api {
   def execute() {
     val pemail = param("email")

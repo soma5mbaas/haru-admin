@@ -197,6 +197,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     $scope.Logout = Logout;
 
  	$scope.$on('Signin', function(event, data) {
+        event.stopPropagation();
+
  		$scope.authuser = data.user;
  		$scope.projects = data.projects;
  		$localStorage.auth = {'token':data.user.token, 'provider':data.user.provider};
@@ -209,6 +211,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
  	});
 
  	$scope.$on('Signup', function(event, data) {
+        event.stopPropagation();
+
  		console.log(data);
  		$scope.authuser = data;
  		//$scope.projects = data.projects;
@@ -217,7 +221,9 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     	$state.go('access.project');
  	});
 
- 	$scope.$on('Logout', function() {
+ 	$scope.$on('Logout', function(event) {
+        event.stopPropagation();
+
         Logout();
  	});
 
@@ -673,7 +679,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 		  UserService.FacebookLogin();
 	  };
 	  $scope.GoogleLogin = UserService.GoogleLogin;
-	  
+
 	  $scope.weblogin = function() {
 		 var token = $('meta[name=csrf-token]').attr('content');
 	     UserService.Login($scope.user.email, $scope.user.password, token).then(function(data){
