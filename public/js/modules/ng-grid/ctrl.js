@@ -144,6 +144,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
 
     $scope.gridOptions.afterSelectionChange = function(rowItem, event){
         console.log(rowItem);
+
     };
 
 }]);
