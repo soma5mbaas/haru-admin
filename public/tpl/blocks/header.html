@@ -3,9 +3,11 @@
         <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse">
           <i class="glyphicon glyphicon-cog"></i>
         </button>
+
         <button class="pull-right visible-xs" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll="app">
           <i class="glyphicon glyphicon-align-justify"></i>
         </button>
+
         <!-- brand -->
         <a href="#/" class="navbar-brand text-lt">
           <i class="fa fa-h-square"></i>
@@ -19,14 +21,18 @@
       <!-- navbar collapse -->
       <div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
         <!-- buttons -->
+
         <div class="nav navbar-nav hidden-xs">
           <a href class="btn no-shadow navbar-btn" ng-click="app.settings.asideFolded = !app.settings.asideFolded">
             <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
           </a>
-          <a href class="btn no-shadow navbar-btn" ui-toggle-class="show" target="#aside-user">
-            <i class="icon-user fa-fw"></i>
-          </a>
-        </div>
+          <!--
+       <a href class="btn no-shadow navbar-btn" ui-toggle-class="show" target="#aside-user">
+         <i class="icon-user fa-fw"></i>
+       </a>
+        -->
+     </div>
+
         <!-- / buttons -->
 
         <!-- link and dropdown -->
@@ -140,8 +146,8 @@
               <span>{{ currentproject != undefined ? currentproject.title : "Select Project" }}</span> <span class="caret"></span>
             </a>
 
-            <ul class="dropdown-menu" role="menu" ng-show="projects[0].title">
-              <li ng-repeat="project in projects">
+            <ul class="dropdown-menu" role="menu" ng-show="user.projects[0].title">
+              <li ng-repeat="project in user.projects">
                 <a  href ng-click="selectproject($index)">{{project.title}}</a>
               </li>
             </ul>
@@ -237,19 +243,19 @@
             </div>
             <!-- / dropdown -->
           </li>
-          <li ng-hide="authuser.email">
-            <a href ui-sref="app.docs" class="dropdown-toggle">
+          <li ng-hide="user.authuser.email">
+            <a href ui-sref="access.signin" class="dropdown-toggle">
               <i class="icon-login"></i>
               <span>&nbsp;Sign in</span>
             </a>
           </li>
-          <li class="dropdown" ng-show="authuser.email">
+          <li class="dropdown" ng-show="user.authuser.email">
             <a href class="dropdown-toggle clear" data-toggle="dropdown">
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                 <img src="img/a0.jpg" alt="...">
                 <i class="on md b-white bottom"></i>
               </span>
-              <span class="hidden-sm hidden-md">{{authuser.name}}</span> <b class="caret"></b>
+              <span class="hidden-sm hidden-md">{{user.authuser.name}}</span> <b class="caret"></b>
             </a>
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">

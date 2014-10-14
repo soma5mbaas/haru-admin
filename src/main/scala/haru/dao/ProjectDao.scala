@@ -27,6 +27,7 @@ object ProjectDao extends DatabasePool {
     def * = (id.?, title, company.?, applicationkey, clientkey, netkey, javascriptkey, restkey, masterkey) <> (Project.tupled, Project.unapply)
   }
 
+  
   def insertProject(title: String, company: Option[String], id: Int): Int = databasePool withSession {
     implicit session =>
       // 동일한 이름의 프로젝트가 있다면 Error처리..
@@ -52,6 +53,7 @@ object ProjectDao extends DatabasePool {
 
   def findProjectForToken(token: String): List[Map[String, Any]] = databasePool withSession {
     implicit session =>
+      /// TODO 만약없다면 exception??
       val query = sql"""
        select p.title, p.company,  v.permission, p.applicationkey, p.clientkey, p.netkey, p.javascriptkey, p.restkey, p.masterkey
        	from Viewers v, Projects p, Users u

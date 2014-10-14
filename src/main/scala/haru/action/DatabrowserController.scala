@@ -6,23 +6,17 @@ import haru.dao.SchemaDao
 import xitrum.annotation.GET
 import xitrum.hazelcast.Cache
 
-
-
-
 @POST("data/class")
-@CacheActionMinute(1)
 class GetDataBrowserClasses extends Api2 {
   def execute() {
     val appid = param("appid")
     val classes = SchemaDao.getClasses(appid)
     
-    respondJson(classes)
-    
+    respondJson(classes)    
   }
 }
 
 @POST("data/schema")
-@CacheActionMinute(1)
 class GetDataBrowserSchema extends Api2 {
   def execute() {
     val appid = param("appid")
@@ -30,8 +24,7 @@ class GetDataBrowserSchema extends Api2 {
     
     val schemas = SchemaDao.getSchema(appid, classes)
     
-    respondJson(schemas)
-    
+    respondJson(schemas) 
   }
 }
 

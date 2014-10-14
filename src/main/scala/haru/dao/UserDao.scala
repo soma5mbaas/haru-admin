@@ -56,11 +56,13 @@ object UserDao extends DatabasePool {
     implicit session =>
       //user_table += User(None, email, password, name, "", "", "", "", "", "", provider,token, "");
       try {
-       if (!user_table.filter(p => p.email === email && p.provider === provider).exists.run) {
+       val userdatafilter=  user_table.filter(p => p.email === email && p.provider === provider)
+       if (!userdatafilter.exists.run) {
     	   user_table.map(c => (c.email, c.password, c.name, c.provider, c.provider_id, c.timezone, c.location, c.gender)) += (email, password, name, provider, Some(token), timezone, locale, gender)
     	   return (true, "success");
        } else {
-           user_table.filter(p => p.email === email && p.provider === provider).map(p=>p.provider_id).update(Some(token))
+    	   userdatafilter.map(p=>p.provider_id).update(Some(token))
+           //user_table.filter(p => p.email === email && p.provider === provider).map(p=>p.provider_id).update(Some(token))
            return (true, "update token");
        }     
       } catch {

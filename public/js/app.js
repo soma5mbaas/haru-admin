@@ -31,9 +31,10 @@ var app = angular.module('app', [
   ]
 )
 .config(
-  [          '$stateProvider', '$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'FacebookProvider', 'GooglePlusProvider',
-    function ($stateProvider,   $urlRouterProvider,   $controllerProvider,   $compileProvider,   $filterProvider,   $provide,  FacebookProvider,   GooglePlusProvider) {
-        
+  [          '$stateProvider', '$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'FacebookProvider', 'GooglePlusProvider','cryptProvider',
+    function ($stateProvider,   $urlRouterProvider,   $controllerProvider,   $compileProvider,   $filterProvider,   $provide,  FacebookProvider,   GooglePlusProvider, cryptProvider) {
+
+      cryptProvider.setSecret('abcdefg1234567890');
 	  FacebookProvider.init('858617410822846');
 	  GooglePlusProvider.init({
           clientId: '619633840927-vu2p1v16sd2fi015u6c0apnifg5cosm0.apps.googleusercontent.com',

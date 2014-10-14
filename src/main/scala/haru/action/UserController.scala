@@ -15,6 +15,7 @@ import haru.util.Encryption
 import scala.annotation.meta.param
 import xitrum.Action
 import xitrum.annotation.CacheActionMinute
+import haru.dao.DatabasePool
 
 trait Api extends Action
 trait Api2 extends Action with SkipCsrfCheck
@@ -104,11 +105,12 @@ class AddSNSUser extends Api {
     //var json: Map[String, Any] = Map()
     //json += ("email" -> email, "name" -> name, "provider" -> provider, "token" -> token, "projects" -> projects)
     //respondJson(json);
+    
+ 
   }
 }
 
 @POST("user/getfortoken")
-@CacheActionMinute(1)
 class getUserForToken extends Api2 {
   def execute() {
 

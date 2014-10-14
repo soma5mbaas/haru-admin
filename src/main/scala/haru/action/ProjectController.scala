@@ -43,7 +43,6 @@ class AddProject extends Api2 {
 }
 
 @POST("project/list")
-@CacheActionMinute(1)
 class ListProject extends Api {
   def execute() {
     val token = param("token")

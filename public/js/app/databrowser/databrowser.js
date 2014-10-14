@@ -1,25 +1,31 @@
-app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', function($scope, databrowsers) {
+app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state', function($scope, databrowsers, $window, $state) {
 
+    if ($scope.currentproject == undefined) {
+        $window.alert('프로젝트를 선택해주십시오.');
+        $state.go('app.dashboard-v1');
+        return;
+    }
 
-    databrowsers.getClasses("", "", "appid").then(function(data){
-        $scope.folds = data;
+    databrowsers.getClasses("", "", $scope.currentproject.applicationkey).then(function(datas){
+        console.log(datas);
+
+        var folds = [
+        {name:'Users', filter:''},
+        {name:'Installation', filter:'Installation'}
+        ];
+
+        datas.forEach(function(element){
+            if(!(element == 'Users' || element == 'Installation')) {
+                var x = {};
+                x.name = element;
+                x.filter = element;
+                folds.push(x);
+            }
+        });
+
+        $scope.folds = folds;
     });
 
-  $scope.folds = [
-    {name: 'Inbox2', filter:''},
-    {name: 'Starred2', filter:'starred'},
-    {name: 'Sent', filter:'sent'},
-    {name: 'Important', filter:'important'},
-    {name: 'Draft', filter:'draft'},
-    {name: 'Trash', filter:'trash'}
-  ];
-
-  $scope.labels = [
-    {name: 'Angular', filter:'angular', color:'#23b7e5'},
-    {name: 'Bootstrap', filter:'bootstrap', color:'#7266ba'},
-    {name: 'Client', filter:'client', color:'#fad733'},
-    {name: 'Work', filter:'work', color:'#27c24c'}
-  ];
 
   $scope.addLabel = function(){
     $scope.labels.push(
@@ -42,10 +48,14 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', function($scope, da
   };
 
 }]);
-
+/*
 app.controller('DatabrowserListCtrl', ['$scope', 'mails', '$stateParams', function($scope, mails, $stateParams) {
   $scope.fold = $stateParams.fold;
-  mails.all().then(function(mails){
+    console.log(mails);
+
+    mails.all().then(function(mails){
+    console.log(mails);
+
     $scope.mails = mails;
   });
 }]);
@@ -70,8 +80,11 @@ app.controller('DatabrowserNewCtrl', ['$scope', function($scope) {
 }]);
 
 
-angular.module('app').directive('labelColor', function(){
-  return function(scope, $el, attrs){
-    $el.css({'color': attrs.color});
-  }
+
+
+*/
+app.directive('labelColor', function(){
+    return function(scope, $el, attrs){
+        $el.css({'color': attrs.color});
+    }
 });

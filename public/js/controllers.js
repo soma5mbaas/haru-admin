@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
-  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$sessionStorage', '$window', '$state', 'UserService', 'safeApply',
-    function(              $rootScope,   $scope,   $translate,   $localStorage,   $sessionStorage,   $window,   $state,   UserService, safeApply) {
+  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$sessionStorage', '$window', '$state', 'UserService', 'safeApply','crypt',
+    function(              $rootScope,   $scope,   $translate,   $localStorage,   $sessionStorage,   $window,   $state,   UserService, safeApply,crypt) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -73,57 +73,46 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
+
+
+
+
       if($localStorage.auth &&
-    	$localStorage.auth.token !== ''){
-    	var authtoken = $localStorage.auth.token;
-    	var csrftoken = $('meta[name=csrf-token]').attr('content');
-    	UserService.UserInfo(csrftoken, authtoken).then(function(data){
-    		$scope.authuser = data.user;
-    		$scope.projects = data.projects;
-    	});
-    	
+    	$localStorage.auth.token !== '') {
+          var authtoken = $localStorage.auth.token;
+          var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+          if ($localStorage.auth.provider == 'WEB') {
+              UserService.UserInfo(csrftoken, authtoken).then(function (data) {
+                  $scope.user = {};
+                  $scope.user.authuser = data.user;
+                  $scope.user.projects = data.projects;
+              });
+          }
+
+          if($sessionStorage.currentproject != undefined){
+              $scope.currentproject =  crypt.decrypt($sessionStorage.currentproject);
+          }
      } else {
-    	$scope.authuser = {};
-    	$scope.projects = {};
+        $scope.user = {};
+    	$scope.user.authuser = {};
+    	$scope.user.projects = {};
      }
 
-     /*
-      $rootScope.$on('Auth:statusChange', function(ev, data) {
-    	  console.log('Auth Status: ', data);
-    	  if (data.status == 'connected') { // login
-    		  UserService.setLogin(true);
-          	  UserService.setProvider('WEB');
-          	  UserService.setToken(data.token);
-    		  $localStorage.auth = {'token':data.token, 'provider':'WEB', 'status':'connected'};
-    		  $state.go('app.dashboard-v1');
-    	  } else if (data.status == 'signup')  {
-    		  UserService.setLogin(true);
-          	  UserService.setProvider('WEB');
-    		  $localStorage.auth = {'token':data.token, 'provider':'WEB', 'status':'connected'};
-    	  } else if (data.status == 'error') {
-    		  $window.alert(data.error);
-    	  } 
-      });
-      
-      $rootScope.$on('Project:statusChange', function(ev, data) {
-    	  console.log('Project info : ', data);
-    	  if ( Object.keys(data.projects).length === 0) { // login
-    		  $state.go('access.project');
-    	  }
-      });
-      */
       
       $rootScope.$on('Facebook:statusChange', function(ev, data) {
-          console.log('Facebook Status: ', JSON.stringify(data));
+          //console.log('Facebook Status: ', JSON.stringify(data));
           
           if (data.status == 'connected') {
         	var token = $('meta[name=csrf-token]').attr('content');
-        	UserService.FacebookMe(token, data.authResponse.accessToken).then(function(data){
-        		console.log(data);
-        		$scope.authuser = data.user;
-        		$scope.projects = data.projects;
+            UserService.FacebookMe(token, data.authResponse.accessToken).then(function(data){
+        	//	console.log(data);
+
+                $scope.user = {};
+        		$scope.user.authuser = data.user;
+        		$scope.user.projects = data.projects;
         	}, function(data){
-        		console.log(data);
+        	//	console.log(data);
         	});
         	
   	        $localStorage.auth = {'token':data.authResponse.accessToken, 'provider':'FACEBOOK'};
@@ -134,14 +123,15 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         });
 
       $rootScope.$on('GooglePlus:statusChange', function(ev, data) {
-          console.log('Google Status: ', data);
+        //  console.log('Google Status: ', data);
 
           if (data.status == 'connected') {
           	  csrftoken = $('meta[name=csrf-token]').attr('content');
           	  UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
-        		console.log(data);
-        		$scope.authuser = data.user;
-        		$scope.projects = data.projects;
+        //		console.log(data);
+                  $scope.user = {};
+        		$scope.user.authuser = data.user;
+        		$scope.user.projects = data.projects;
         		
         		if(data.projects.length == 0){
         			$state.go('access.project');
@@ -154,9 +144,10 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           } else if (data.status == 'loggin') {
         	  csrftoken = $('meta[name=csrf-token]').attr('content');
     	      UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
-        		console.log(data);
-        		$scope.authuser = data.user;
-        		$scope.projects = data.projects;
+        		//console.log(data);
+                  $scope.user = {};
+        		$scope.user.authuser = data.user;
+        		$scope.user.projects = data.projects;
         		if(data.projects.length == 0){
         			$state.go('access.project');
         		}
@@ -194,8 +185,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 	    );
 	 
       
-    $scope.Logout = Logout;
 
+/*
  	$scope.$on('Signin', function(event, data) {
         event.stopPropagation();
 
@@ -213,14 +204,15 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
  	$scope.$on('Signup', function(event, data) {
         event.stopPropagation();
 
- 		console.log(data);
+ 		//console.log(data);
  		$scope.authuser = data;
  		//$scope.projects = data.projects;
  		
  		$localStorage.auth = {'token':data.token, 'provider':data.provider};
     	$state.go('access.project');
  	});
-
+*/
+    $scope.Logout = Logout;
  	$scope.$on('Logout', function(event) {
         event.stopPropagation();
 
@@ -228,18 +220,25 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
  	});
 
     function Logout () {
-        UserService.Logout($scope.authuser.provider);
-        $scope.authuser = {};
-        $scope.projects = {};
+        UserService.Logout($scope.user.authuser.provider);
+        $scope.user.authuser = {};
+        $scope.user.projects = {};
+        $scope.user = {};
+        delete $scope.currentproject;
         delete $localStorage.auth;
+        delete $sessionStorage.currentproject;
 
         $state.go('access.signin');
     }
 
-    // select project
+
+        // select project
     $scope.selectproject = function(index){
-        if($scope.projects.length >= index){
-            $scope.currentproject = $scope.projects[index]
+        if($scope.user.projects.length >= index){
+            $scope.currentproject = $scope.user.projects[index];
+
+
+            $sessionStorage.currentproject = crypt.encrypt( $scope.currentproject);
         }
     }
 
@@ -671,8 +670,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   }])
 
   // signin controller
-  .controller('SigninFormController', ['$scope', '$http', '$state', '$timeout', 'UserService',
-                               function($scope,   $http,   $state,   $timeout,   UserService) {
+  .controller('SigninFormController', ['$scope', '$http', '$state', '$timeout', 'UserService','$localStorage',
+                               function($scope,   $http,   $state,   $timeout,   UserService, $localStorage) {
 	  $scope.authError = null;
 	  
 	  $scope.FacebookLogin = function(){
@@ -685,16 +684,25 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 	     UserService.Login($scope.user.email, $scope.user.password, token).then(function(data){
 	    	 $scope.authError = "";
 
-	    	 $scope.$emit('Signin', data);
-	    	 
+	    	// $scope.$emit('Signin', data);
+             $scope.user.authuser = data.user;
+             $scope.user.projects = data.projects;
+             $localStorage.auth = {'token':data.user.token, 'provider':data.user.provider};
+
+             if(data.projects.length == 0){
+                 $state.go('access.project');
+             } else {
+                 $state.go('app.dashboard-v1');
+             }
 	     },function(data) {
 	    	 $scope.authError = data.error;
 	     });
 	  };
 	  
 	  $scope.weblogout = function() {
-		$scope.$emit('Logout');
+          Logout();
 	  };
+
   }])
 
   // signup controller
@@ -703,40 +711,42 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     $scope.authError = null;
     
     $scope.signup = function() {
-    	var token = $('meta[name=csrf-token]').attr('content')
+    	var token = $('meta[name=csrf-token]').attr('content');
 	    UserService.Signup($scope.user.name, $scope.user.email, $scope.user.password, token).then(function(data){
-	    	 $scope.authError = "";
-	    	 $scope.$emit('Signup', data);
+	    	$scope.authError = "";
+            $scope.user.authuser = data;
+
+            $localStorage.auth = {'token':data.token, 'provider':data.provider};
+            $state.go('access.project');
+	    	//$scope.$emit('Signup', data);
 	     },function(data) {
-	    	 $scope.authError = data.error;
+	    	$scope.authError = data.error;
 	     });
 	};
   }])
    // project controller
-  .controller('ProjectFormController', ['$rootScope', '$scope', '$window', '$http', '$state', 'UserService','$localStorage',
-                               function($rootScope,   $scope,   $window,    $http,   $state,   UserService, $localStorage) {
+  .controller('ProjectFormController', ['$rootScope', '$scope', '$window', '$http', '$state',
+                               function($rootScope,   $scope,   $window,    $http,   $state) {
     $scope.authError = null;
     
     $scope.createproject = function() {
-    	var csrftoken = $('meta[name=csrf-token]').attr('content')
-    	var authtoken = $scope.authuser.token;
-    	
+    	var csrftoken = $('meta[name=csrf-token]').attr('content');
+    	var authtoken = $scope.user.authuser.token;
     	var projectname = $scope.project.name;
-    	$scope.authError = "";
-    	
+        $scope.authError = "";
+
+
     	$http({url:'project/add', 
 	    	  method:'POST',
 	    	  data:'csrf-token=' + csrftoken + '&authtoken=' + authtoken + '&projectname=' + projectname,
 	    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
 	    .then(function(response) {
-	    	console.log("project add : " + JSON.stringify(response.data));
-		    if (response.data.error) {
-		        $scope.authError = response.data.error;
+		    if (!response.data.error) {
+                $scope.user.projects = response.data.projects;
+                $state.go('app.dashboard-v1');
+            }else {
+                $scope.authError = response.data.error;
 		        $window.alert(response.data.error);
-		    }else{
-		    	// project data save
-		    	$rootScope.projects = response.data.projects
-		    	$state.go('app.dashboard-v1');
 		    }
 	    }, function(x) {
 	    	$scope.authError = 'Server Error';
