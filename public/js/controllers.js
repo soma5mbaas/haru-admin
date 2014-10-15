@@ -94,7 +94,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           }
 
           if($sessionStorage.currentproject != undefined){
-              $scope.currentproject =  crypt.decrypt($sessionStorage.currentproject);
+              $scope.user.currentproject =  crypt.decrypt($sessionStorage.currentproject);
           }
      }
 
@@ -414,12 +414,18 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     $scope.dynamicTooltipText = 'dynamic';
     $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
   }])
-  .controller('TypeaheadDemoCtrl', ['$scope', '$http', function($scope, $http) {
+  .controller('TypeaheadDemoCtrl', ['$scope', '$http', '$sessionStorage', 'crypt', function($scope, $http, $sessionStorage, crypt) {
     $scope.selected = undefined;
 
     $scope.submitData = function(){
-        $scope.user.currentproject = $scope.selected;
-    }
+        console.log(typeof($scope.selected));
+
+        if($scope.selected != undefined  && typeof($scope.selected) == 'object' ) {
+            $scope.user.currentproject = $scope.selected;
+
+            $sessionStorage.currentproject = crypt.encrypt($scope.user.currentproject);
+        }
+    };
 
     $scope.getLocation = function(val) {
       return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {

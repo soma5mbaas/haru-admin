@@ -1,12 +1,14 @@
 app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state', function($scope, databrowsers, $window, $state) {
 
-    if ($scope.currentproject == undefined) {
+
+    if ($scope.user == undefined || $scope.user.currentproject == undefined) {
         $window.alert('프로젝트를 선택해주십시오.');
         $state.go('app.dashboard-v1');
         return;
     }
 
-    databrowsers.getClasses("", "", $scope.currentproject.applicationkey).then(function(datas){
+
+    databrowsers.getClasses("", "", $scope.user.currentproject.applicationkey).then(function(datas){
         console.log(datas);
 
         var folds = [

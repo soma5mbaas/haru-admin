@@ -20,9 +20,16 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         currentPage: 1
     };
 
+    if($scope.user != undefined) {
+        appkey = $scope.user.currentproject.applicationkey;
+    }
+
     (function() {
-        if ($scope.currentproject != null) {
-            databrowsers.getSchemas("", "", $scope.currentproject.applicationkey, $scope.fold).then(function (datas) {
+
+        console.log(appkey);
+        if ($scope.user.currentproject != null) {
+
+            databrowsers.getSchemas("", "", appkey, $scope.fold).then(function (datas) {
                 var columnDefs = [
                     {field: '_id', displayName: 'EntityId', enableCellEdit: false}
                 ];
@@ -77,7 +84,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
 
                 $http({url:'http://stage.haru.io:10100/1/classes/' + $scope.fold,
                     method:'GET',
-                    headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':$scope.currentproject.applicationkey}})
+                    headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':appkey}})
                     .then(function(response) {
                         data = response.data.results.filter(function(item) {
                                     return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
@@ -88,7 +95,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
             } else {
                 $http({url:'http://stage.haru.io:10100/1/classes/' + $scope.fold,
                     method:'GET',
-                    headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':$scope.currentproject.applicationkey}})
+                    headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':appkey}})
                     .then(function(response) {
                         console.log(response.data.results);
                         $scope.setPagingData(response.data.results, page, pageSize);
@@ -142,7 +149,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         columnDefs:'columnDefs'
     };
 
-    $scope.gridOptions.afterSelectionChange = function(rowItem, event){
+    $scope.gridOptions.afterSelectionChange = function(rowItem){
         console.log(rowItem);
 
     };
