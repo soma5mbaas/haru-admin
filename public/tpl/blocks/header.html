@@ -143,7 +143,7 @@
           <li class="dropdown">
             <a href class="dropdown-toggle">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
-              <span>{{ currentproject != undefined ? currentproject.title : "Select Project" }}</span> <span class="caret"></span>
+              <span>{{ user.currentproject != undefined ?  user.currentproject.title : "Select Project" }}</span> <span class="caret"></span>
             </a>
 
             <ul class="dropdown-menu" role="menu" ng-show="user.projects[0].title">
@@ -177,10 +177,10 @@
         <!-- / link and dropdown -->
 
         <!-- search form -->
-        <form class="navbar-form navbar-form-sm navbar-left shift" ui-shift="prependTo" target=".navbar-collapse" role="search" ng-controller="TypeaheadDemoCtrl">
+        <form class="navbar-form navbar-form-sm navbar-left shift" ui-shift="prependTo" target=".navbar-collapse" role="search" ng-submit="submitData(person2, 'ajaxSubmitResult1')" ng-controller="TypeaheadDemoCtrl">
           <div class="form-group">
             <div class="input-group">
-              <input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:2" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search projects...">
+              <input type="text" ng-model="selected" typeahead="project as project.title for project in user.projects | filter:$viewValue | limitTo:2" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search projects...">
               <span class="input-group-btn">
                 <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
               </span>

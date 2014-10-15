@@ -54,11 +54,20 @@ var app = angular.module('app', [
 
         $urlRouterProvider
             .otherwise('/app/dashboard-v1');
+
         $stateProvider
             .state('app', {
                 abstract: true,
                 url: '/app',
                 templateUrl: 'tpl/app.html'
+            })
+            .state('app.projects', {
+                url: '/projects',
+                templateUrl: 'tpl/ui_projects.html'
+            })
+            .state('app.projects2', {
+                url: '/projects2',
+                templateUrl: 'tpl/ui_projects2.html'
             })
             .state('app.dashboard-v1', {
                 url: '/dashboard-v1',

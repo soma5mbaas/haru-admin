@@ -44,7 +44,13 @@
   </div>
   <div class="wrapper b-t b-light bg-light lter r-b">
     <div class="row row-sm">
+      <div class="m-b-sm">
+          <span style="font-size:11px;">  Applicationkey</span>
+          <!-- TODO: test fontsize -->
+          <span style="font-size:11px;"> {{currentproject.applicationkey}}</span>
+      </div>
       <div class="col-xs-6">
+
         <label class="i-checks block m-b" ng-click="
           app.settings.navbarHeaderColor='bg-black'; 
           app.settings.navbarCollapseColor='bg-white-only'; 
@@ -240,4 +246,5 @@
       </div>
     </div>
   </div>
+
 <!-- /settings -->

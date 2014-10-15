@@ -75,7 +75,10 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 
 
 
-
+    // initalize object
+    $scope.user = {};
+    $scope.user.authuser = {};
+    $scope.user.projects = {};
 
       if($localStorage.auth &&
     	$localStorage.auth.token !== '') {
@@ -93,13 +96,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           if($sessionStorage.currentproject != undefined){
               $scope.currentproject =  crypt.decrypt($sessionStorage.currentproject);
           }
-     } else {
-        $scope.user = {};
-    	$scope.user.authuser = {};
-    	$scope.user.projects = {};
      }
 
-      
       $rootScope.$on('Facebook:statusChange', function(ev, data) {
           //console.log('Facebook Status: ', JSON.stringify(data));
           
@@ -184,34 +182,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 	      }
 	    );
 	 
-      
 
-/*
- 	$scope.$on('Signin', function(event, data) {
-        event.stopPropagation();
-
- 		$scope.authuser = data.user;
- 		$scope.projects = data.projects;
- 		$localStorage.auth = {'token':data.user.token, 'provider':data.user.provider};
- 		
- 		if(data.projects.length == 0){
- 			$state.go('access.project');
- 		} else {
- 			$state.go('app.dashboard-v1');
- 		}
- 	});
-
- 	$scope.$on('Signup', function(event, data) {
-        event.stopPropagation();
-
- 		//console.log(data);
- 		$scope.authuser = data;
- 		//$scope.projects = data.projects;
- 		
- 		$localStorage.auth = {'token':data.token, 'provider':data.provider};
-    	$state.go('access.project');
- 	});
-*/
     $scope.Logout = Logout;
  	$scope.$on('Logout', function(event) {
         event.stopPropagation();
@@ -223,8 +194,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         UserService.Logout($scope.user.authuser.provider);
         $scope.user.authuser = {};
         $scope.user.projects = {};
+        $scope.user.currentproject = {};
         $scope.user = {};
-        delete $scope.currentproject;
         delete $localStorage.auth;
         delete $sessionStorage.currentproject;
 
@@ -235,10 +206,9 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         // select project
     $scope.selectproject = function(index){
         if($scope.user.projects.length >= index){
-            $scope.currentproject = $scope.user.projects[index];
+            $scope.user.currentproject = $scope.user.projects[index];
 
-
-            $sessionStorage.currentproject = crypt.encrypt( $scope.currentproject);
+            $sessionStorage.currentproject = crypt.encrypt( $scope.user.currentproject);
         }
     }
 
@@ -447,10 +417,9 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
   .controller('TypeaheadDemoCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.selected = undefined;
 
-
-
-    $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-    // Any function returning a promise object can be used to load values asynchronously
+    $scope.submitData = function(){
+        $scope.user.currentproject = $scope.selected;
+    }
 
     $scope.getLocation = function(val) {
       return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
@@ -467,6 +436,8 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         return addresses;
       });
     };
+
+
   }])
   .controller('DatepickerDemoCtrl', ['$scope', function($scope) {
     $scope.today = function() {
