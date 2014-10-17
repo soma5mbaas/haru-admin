@@ -51,12 +51,20 @@ class UserLogin extends Api {
   }
 }
 
-@GET("slack/webhook")
+@POST("slack/webhook")
 class slackWebhook extends Api2 {
   def execute() {
-    val myMap = requestContentJson[Map[String, Int]]
-    println(myMap);
     
+    val trigger_word = param("trigger_word")
+    val user_name = param("user_name")
+    val channel_name= param("channel_name")
+    
+    
+    println(trigger_word, user_name, user_name)
+    
+    
+    
+    respondJson(Map("text" ->  "African or European?"))
     
   }
 }
