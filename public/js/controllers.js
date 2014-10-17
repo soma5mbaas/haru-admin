@@ -75,7 +75,6 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
       }
 
 
-
     // initalize object
     $scope.user = {};
     $scope.user.authuser = {};
