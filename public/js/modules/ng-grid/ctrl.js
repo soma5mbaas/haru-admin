@@ -1,12 +1,10 @@
 app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers', function($scope, $http, $stateParams, databrowsers) {
-
+    console.log($stateParams.fold );
     if($stateParams.fold == ''){
         $scope.fold = 'Users'
     } else {
         $scope.fold = $stateParams.fold;
     }
-
-    $scope.fold = 'Users';
 
     $scope.filterOptions = {
         filterText: "",
@@ -15,23 +13,46 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
 
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes: [10, 250, 500, 1000],
-        pageSize: 10,
+        pageSizes: [100, 250, 500, 1000],
+        pageSize: 100,
         currentPage: 1
     };
 
-    if($scope.user != undefined) {
-        appkey = $scope.user.currentproject.applicationkey;
+
+    $scope.statuses = [true, false];
+    $scope.booleanCellSelectEditableTemplate = '<select ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" ng-options="value for value in statuses"  ng-change="update(this)"/>';
+
+    $scope.update = function(event){
+        console.log('update', event);
+    };
+
+    $scope.editcellstyle = {'width':'98%', 'border-color':'#23b7e5'};
+    $scope.numberCellEditableTemplate = "<input ng-class=\"'colt' + col.index\" ng-input=\"COL_FIELD\" ng-model=\"COL_FIELD\" ng-change=\"updateNumberEntity(col, row, row.getProperty(col.field))\" ng-style=\"editcellstyle\"/>";
+    $scope.updateNumberEntity = function(col, row, property) {
+        console.log(col, row, property);
+        console.log(this);
+
+        if(isNumber(property)){
+            $scope.editcellstyle = {'width':'98%', 'border-color':'#23b7e5'};
+        } else {
+            $scope.editcellstyle =  {'width':'98%', 'border-color':'#f05050'};
+        }
+    };
+    function isNumber(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
-    (function() {
 
-        console.log(appkey);
+    var getSchema = function() {
+        if($scope.user != undefined) {
+            appkey = $scope.user.currentproject.applicationkey;
+        }
+        console.log("getSchema", appkey,  $scope.fold);
         if ($scope.user.currentproject != null) {
 
             databrowsers.getSchemas("", "", appkey, $scope.fold).then(function (datas) {
                 var columnDefs = [
-                    {field: '_id', displayName: 'EntityId', enableCellEdit: false}
+                    {field: '_id', displayName: 'EntityId(objectid)', enableCellEdit: false}
                 ];
 
                 function isEmpty(obj) {
@@ -39,7 +60,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
                 }
 
                 if (!isEmpty(datas)) {
-                    console.log('getSchemas', datas);
+                    $scope.schema = datas;
 
                     schemakeys = Object.keys(datas);
                     schemakeys = schemakeys.sort();
@@ -49,19 +70,33 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
 
                             var field = {};
                             field.field = elem;
-                            field.displayName = elem;
+                            field.displayName = elem + "(" + datas[elem] + ")";
+
+                            if(datas[elem] == 'boolean'){
+                                console.log(datas[elem]);
+
+                                field.editableCellTemplate = $scope.booleanCellSelectEditableTemplate;
+                            } else if (datas[elem] == 'number') {
+                                field.editableCellTemplate = $scope.numberCellEditableTemplate;
+                            }
                             columnDefs.push(field);
                         }
                     });
                 }
-                columnDefs.push({field: 'createAt', displayName: 'createAt', enableCellEdit: false});
-                columnDefs.push({field: 'updateAt', displayName: 'updateAt', enableCellEdit: false});
+                columnDefs.push({field: 'createAt', displayName: 'createAt(date)', enableCellEdit: false, cellTemplate: '<div>{{row.entity[col.field] | date:"yyyy-MM-dd HH:mm:ss"}}</div>'});
+                columnDefs.push({field: 'updateAt', displayName: 'updateAt(date)', enableCellEdit: false, cellTemplate: '<div>{{row.entity[col.field] | date:"yyyy-MM-dd HH:mm:ss"}}</div>'});
 
                 $scope.columnDefs = columnDefs;
                 $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
             });
         }
-    })();
+    };
+    getSchema();
+
+    $scope.$watch('user.currentproject', function(){
+        getSchema();
+    });
+
 
 
     $scope.setPagingData = function(data, page, pageSize){  
@@ -69,7 +104,6 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         $scope.myData = pagedData;
         $scope.totalServerItems = data.length;
 
-        console.log($scope);
         if ($scope.$$phase != null && !$scope.$$phase) {
             $scope.$apply();
         }
@@ -86,6 +120,8 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
                     method:'GET',
                     headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':appkey}})
                     .then(function(response) {
+                        console.log(response);
+
                         data = response.data.results.filter(function(item) {
                                     return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                                 });
@@ -105,7 +141,6 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         }, 100);
     };
 
-    //
 
     $scope.$watch('pagingOptions', function (newVal, oldVal) {
         if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
@@ -118,17 +153,39 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         }
     }, true);
 
-    $scope.$on('ngGridEventEndCellEdit', function (event) {
-        var url = 'http://stage.haru.io:10200/1/classes/GameObject/' + event.targetScope.row.entity._id;
-        console.log(url);
+    $scope.$on('ngGridEventStartCellEdit', function(event){
+        $scope.oldrow ={};
+        angular.extend($scope.oldrow, event.targetScope.row.entity);
+    });
 
-        var data = event.targetScope.row.entity;
+    $scope.$on('ngGridEventEndCellEdit', function (event) {
+        console.log('ngGridEventEndCellEdit');
+        var url = 'http://stage.haru.io:10200/1/classes/' +$scope.fold+'/' + event.targetScope.row.entity._id;
+        //console.log(event.targetScope.row.entity);
+
+        data = {};
+        angular.extend(data, event.targetScope.row.entity);
+        console.log(data);
+
+        angular.forEach($scope.schema,function(value,index){
+            if(value == 'number'){
+                var convertnumber = Number(data[index]);
+                if(isNaN(convertnumber)){
+                   event.targetScope.row.entity[index] = $scope.oldrow[index];
+                   delete data[index];
+                }else {
+                    data[index] = convertnumber;
+                }
+            }
+        });
+        console.log(url, data);
+
         $http({url:url,
             method:'PUT',
             data:data,
-            headers:{'Application-Id':'76071388-2e99-4379-93f6-7ea5b9e6550d'}})
+            headers:{'Application-Id':$scope.user.currentproject.applicationkey}})
             .then(function(response) {
-
+                console.log(response);
             }, function(x) {
 
             });
@@ -140,7 +197,6 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         showFooter: true,
         enableCellEdit: true,
         showSelectionCheckbox:true,
-
         totalServerItems: 'totalServerItems',
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions,

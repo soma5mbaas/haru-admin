@@ -7,26 +7,33 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state'
         return;
     }
 
-
-    databrowsers.getClasses("", "", $scope.user.currentproject.applicationkey).then(function(datas){
-        console.log(datas);
-
-        var folds = [
-        {name:'Users', filter:''},
-        {name:'Installation', filter:'Installation'}
-        ];
-
-        datas.forEach(function(element){
-            if(!(element == 'Users' || element == 'Installation')) {
-                var x = {};
-                x.name = element;
-                x.filter = element;
-                folds.push(x);
-            }
-        });
-
-        $scope.folds = folds;
+    $scope.$watch('user.currentproject', function(){
+        getClasses();
     });
+
+
+    var getClasses =function(){
+       databrowsers.getClasses("", "", $scope.user.currentproject.applicationkey).then(function(datas){
+            console.log(datas);
+
+            var folds = [
+                {name:'Users', filter:''},
+                {name:'Installations', filter:'Installation'}
+            ];
+
+            datas.forEach(function(element){
+                if(!(element == 'Users' || element == 'Installation')) {
+                    var x = {};
+                    x.name = element;
+                    x.filter = element;
+                    folds.push(x);
+                }
+            });
+
+            $scope.folds = folds;
+        });
+    };
+    getClasses();
 
 
   $scope.addLabel = function(){

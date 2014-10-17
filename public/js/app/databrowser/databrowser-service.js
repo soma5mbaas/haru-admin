@@ -6,6 +6,7 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
 
     factory.getClasses = function(csrftoken, authtoken, appid) {
         var deferred = $q.defer();
+
         $http({url:'data/class',
             method:'POST',
             data:'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid,
@@ -13,7 +14,6 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
             .then(function(response) {
                 if (response.data) {
                     deferred.resolve(response.data);
-
                 }else{
                     deferred.reject(response.data)
                 }
@@ -24,15 +24,18 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
     };
 
     factory.getSchemas = function(csrftoken, authtoken, appid, classes) {
+        var url = 'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid +'&class=' + classes;
+        //console.log(url);
+
         var deferred = $q.defer();
         $http({url:'data/schema',
             method:'POST',
-            data:'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid +'&class=' + classes,
+            data:url,
             headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
             .then(function(response) {
+                //console.log(response);
                 if (response.data) {
                     deferred.resolve(response.data);
-
                 }else{
                     deferred.reject(response.data)
                 }

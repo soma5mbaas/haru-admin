@@ -231,7 +231,15 @@ angular.module('app.directives', ['ui.load'])
         }
     };
   }])
-  .directive('uiFocus', function($timeout, $parse) {
+.directive('ngBlur', function () {
+    return function (scope, elem, attrs) {
+        elem.bind('blur', function() {
+            scope.$apply(attrs.ngBlur);
+        });
+    };
+})
+
+.directive('uiFocus', function($timeout, $parse) {
     return {
       link: function(scope, element, attrs) {
         var model = $parse(attrs.uiFocus);

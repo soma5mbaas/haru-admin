@@ -51,6 +51,17 @@ class UserLogin extends Api {
   }
 }
 
+@GET("slack/webhook")
+class slackWebhook extends Api2 {
+  def execute() {
+    val myMap = requestContentJson[Map[String, Int]]
+    println(myMap);
+    
+    
+  }
+}
+
+
 /// TODO : sql injection check 
 @POST("user/add")
 class AddUser extends Api {
