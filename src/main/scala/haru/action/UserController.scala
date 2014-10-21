@@ -57,10 +57,10 @@ class slackWebhook extends Api2 {
     
     val trigger_word = param("trigger_word")
     val user_name = param("user_name")
-    val channel_name= param("channel_name")
+    val channel_name = param("channel_name")
+    val text = param("text")
     
-    
-    println(trigger_word, user_name, user_name)
+    println(trigger_word, user_name, user_name, text)
     
     
     

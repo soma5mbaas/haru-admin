@@ -1,0 +1,127 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Push Notification</h1>
+</div>
+<div class="wrapper-md" ng-controller="PushSendCtrl">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">
+                    아래 내용을 작성 후에 발송 버튼을 눌러주시면 푸시가 발송됩니다.
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" method="get">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label font-bold">Send To </label>
+                            <div class="col-sm-10">
+                                <select class="form-control w-md" ng-model="sendtype" ng-options="sendtype for sendtype in sendtypelist" />
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in" ng-show="sendtype == 'Unique'"></div>
+                        <div class="form-group"  ng-show="sendtype == 'Unique'">
+                            <label class="col-sm-2 control-label ">Unique</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" ng-model="uniquetype" ng-options="uniquetype for uniquetype in uniquetypelist" />
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control w-md" placeholder="input" ng-model="uniquevalue" />
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in" ng-show="sendtype == 'Channels'"></div>
+                        <div class="form-group"  ng-show="sendtype == 'Channels'">
+                            <label class="col-sm-2 control-label">Channels</label>
+                            <div ui-module="select2" class="col-sm-10">
+                                <input
+                                        type="hidden"
+                                        ui-select2="select2Options"
+                                        ng-model="list_of_string"
+                                        class="form-control w-md"
+                                        >
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in" ng-show="sendtype == 'Segments'"></div>
+                        <div class="form-group"  ng-show="sendtype == 'Segments'">
+                            <label class="col-sm-2 control-label">Segments</label>
+
+                            <div ng-repeat="segment in segments" class="col-sm-10" ng-class="{ 'col-sm-offset-2' : $index  != 0 }" style="margin-bottom: 10px">
+                                <div class="col-sm-3 no-padder">
+                                    <select class="form-control" ng-model="segment.segmenttype" ng-options="uniquetype for uniquetype in segmenttype" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="form-control" ng-model="segment.segmentcondition" ng-options="uniquetype for uniquetype in segmentcondition" />
+                                </div>
+                                <div class="col-sm-4 no-padder">
+                                    <input type="text" class="form-control " placeholder="" ng-model="segment.segmentvalue" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <a href ng-click="close($index)">
+                                        <i class="icon-close h2 text-danger-lter" >
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"  ng-show="sendtype == 'Segments'">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                            <button class='btn btn-default ' ng-click="addSegments()">Add Conditions</button>
+                            </div>
+                        </div>
+
+
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label font-bold">Message</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="5" />
+                            </div>
+                            <div class="col-sm-4">
+                                <textarea class="form-control" rows="5" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="col-sm-2 control-label font-bold">Data type</label>
+                                <div class="col-sm-10 btn-group" ng-init="radioModel = 'Text'">
+                                    <label class="btn btn-sm btn-info"    ng-model="radioModel" btn-radio="'Text'"><i class="fa fa-check text-active"></i> Text</label>
+                                    <label class="btn btn-sm btn-primary"    ng-model="radioModel" btn-radio="'Keyvalue'"><i class="fa fa-check text-active"></i> Key/Value</label>
+                                    <label class="btn btn-sm btn-success" ng-model="radioModel" btn-radio="'JSON'"><i class="fa fa-check text-active"></i> JSON</label>
+                                </div>
+
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label font-bold">Send Time</label>
+                            <div class="col-sm-10">
+                                <select  class="form-control w-md">
+                                    <option value="now">Now</option>
+                                    <option value="specific">specific time</option>
+                                    <option value="timezone">timezone spcific time</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label font-bold">Expiration Time</label>
+                            <div class="col-sm-10">
+                                <select  class="form-control w-md">
+                                    <option value="now">Now</option>
+                                    <option value="specific">specific time</option>
+                                    <option value="timezone">timezone spcific time</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button type="submit" class="btn btn-primary">Send Nofitication Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 visible-lg">
+            <img src="/img/pushphone.png" width ="100%" />
+
+        </div>
+    </div>
+</div>

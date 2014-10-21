@@ -3,91 +3,45 @@
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
     <span translate="aside.nav.HEADER">App Managements</span>
   </li>
-  <li>
-    <a href class="auto">      
-      <span class="pull-right text-muted">
-        <i class="fa fa-fw fa-angle-right text"></i>
-        <i class="fa fa-fw fa-angle-down text-active"></i>
-      </span>
-      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
-      <span class="font-bold" translate="aside.nav.DASHBOARD">Dashboard</span>
-    </a>
-    <ul class="nav nav-sub dk">
-      <li class="nav-sub-header">
-        <a href>
-          <span translate="aside.nav.DASHBOARD">Dashboard</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="app.dashboard-v1">
-          <span>Dashboard v1</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="app.dashboard-v2">
-          <b class="label bg-info pull-right">N</b>
-          <span>Dashboard v2</span>
-        </a>
-      </li>
-    </ul>
+
+  <li ui-sref-active="active">
+      <a ui-sref="app.dashboard-v1">
+          <i class="glyphicon glyphicon-stats icon text-info-dker"></i>
+          <span class="font-bold"  translate="aside.nav.DASHBOARD">Dashboard</span>
+      </a>
   </li>
+
   <li ui-sref-active="active">
       <a ui-sref="app.databrowser.list">
-          <i class="fa fa-database icon text-info-dker"></i>
+          <i class="fa fa-database icon text-primary-dker"></i>
           <span class="font-bold" >Data Browser</span>
       </a>
   </li>
   <li ui-sref-active="active">
-      <a ui-sref="app.calendar">
-          <i class="glyphicon glyphicon-comment icon text-black-dk"></i>
+      <a ui-sref="app.push.list">
+          <i class="fa fa-comments  icon text-success-dker"></i>
           <span class="font-bold" >Push</span>
       </a>
   </li>
   <li ui-sref-active="active">
-    <a ui-sref="app.calendar">
-      <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
-      <span class="font-bold" translate="aside.nav.CALENDAR">Calendar</span>
-    </a>
+      <a ui-sref="app.analytics">
+          <i class="fa fa-bar-chart-o icon text-info-lter"></i>
+          <span class="font-bold" >Analysis</span>
+      </a>
   </li>
   <li ui-sref-active="active">
-    <a ui-sref="app.mail.list">
-      <b class="badge bg-info pull-right">9</b>
-      <i class="glyphicon glyphicon-envelope icon text-info-lter"></i>
-      <span class="font-bold" translate="aside.nav.EMAIL">Email</span>
-    </a>
+      <a ui-sref="app.helpcenter">
+          <i class="fa fa-life-ring icon text-primary-lter"></i>
+          <span class="font-bold" >Help Center</span>
+      </a>
   </li>
-  <li>
-    <a href class="auto">
-      <span class="pull-right text-muted">
-        <i class="fa fa-fw fa-angle-right text"></i>
-        <i class="fa fa-fw fa-angle-down text-active"></i>
-      </span>
-      <i class="glyphicon glyphicon-th-large icon text-success"></i>
-      <span class="font-bold">Apps</span>
-    </a>
-    <ul class="nav nav-sub dk">
-      <li class="nav-sub-header">
-        <a href>
-          <span>Apps</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="apps.note">
-          <span>Note</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="apps.contact">
-          <span>Contacts</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="app.weather">
-          <span>Weather</span>
-        </a>
-      </li>
-    </ul>
+  <li ui-sref-active="active">
+      <a ui-sref="app.settings">
+          <i class="glyphicon glyphicon-cog icon text-black-dker text-success-dker"></i>
+          <span class="font-bold" >Settings</span>
+      </a>
   </li>
+
 
   <li class="line dk"></li>
 
@@ -378,6 +332,81 @@
       <i class="icon-question icon"></i>
       <span translate="aside.nav.your_stuff.DOCUMENTS">Documents</span>
     </a>
+  </li>
+
+  <li ui-sref-active="active">
+      <a ui-sref="app.calendar">
+          <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+          <span class="font-bold" translate="aside.nav.CALENDAR">Calendar</span>
+      </a>
+  </li>
+  <li ui-sref-active="active">
+      <a ui-sref="app.mail.list">
+          <b class="badge bg-info pull-right">9</b>
+          <i class="glyphicon glyphicon-envelope icon text-info-lter"></i>
+          <span class="font-bold" translate="aside.nav.EMAIL">Email</span>
+      </a>
+  </li>
+  <li>
+      <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+          <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+          <span class="font-bold" translate="aside.nav.DASHBOARD">Dashboard</span>
+      </a>
+      <ul class="nav nav-sub dk">
+          <li class="nav-sub-header">
+              <a href>
+                  <span translate="aside.nav.DASHBOARD">Dashboard</span>
+              </a>
+          </li>
+          <li ui-sref-active="active">
+              <a ui-sref="app.dashboard-v1">
+                  <span>Dashboard v1</span>
+              </a>
+          </li>
+          <li ui-sref-active="active">
+              <a ui-sref="app.dashboard-v2">
+                  <b class="label bg-info pull-right">N</b>
+                  <span>Dashboard v2</span>
+              </a>
+          </li>
+      </ul>
+  </li>
+  <li>
+
+      <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+          <i class="glyphicon glyphicon-th-large icon text-success"></i>
+          <span class="font-bold">Apps</span>
+      </a>
+      <ul class="nav nav-sub dk">
+          <li class="nav-sub-header">
+              <a href>
+                  <span>Apps</span>
+              </a>
+          </li>
+          <li ui-sref-active="active">
+              <a ui-sref="apps.note">
+                  <span>Note</span>
+              </a>
+          </li>
+          <li ui-sref-active="active">
+              <a ui-sref="apps.contact">
+                  <span>Contacts</span>
+              </a>
+          </li>
+          <li ui-sref-active="active">
+              <a ui-sref="app.weather">
+                  <span>Weather</span>
+              </a>
+          </li>
+      </ul>
   </li>
 </ul>
 <!-- / list -->

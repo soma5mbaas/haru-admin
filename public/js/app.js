@@ -77,6 +77,10 @@ var app = angular.module('app', [
                 url: '/dashboard-v2',
                 templateUrl: 'tpl/app_dashboard_v2.html'
             })
+            .state('app.settings', {
+                url: '/settings',
+                templateUrl: 'tpl/ui_grid.html'
+            })
             .state('app.ui', {
                 url: '/ui',
                 template: '<div ui-view class="fade-in-up"></div>'
@@ -164,6 +168,10 @@ var app = angular.module('app', [
                 url: '/chart',
                 templateUrl: 'tpl/ui_chart.html'
             })
+            .state('app.analytics', {
+                url: '/analytics',
+                templateUrl: 'tpl/app_analytics.html'
+            })
             // table
             .state('app.table', {
                 url: '/table',
@@ -246,6 +254,10 @@ var app = angular.module('app', [
                     }]
                 }
             })
+            .state('app.helpcenter', {
+                url: '/helpcenter',
+                templateUrl: 'tpl/page_helpcenter.html'
+            })
             // pages
             .state('app.page', {
                 url: '/page',
@@ -327,7 +339,7 @@ var app = angular.module('app', [
             .state('app.databrowser', {
                 abstract: true,
                 url: '/databrowser',
-                templateUrl: 'tpl/databrowser.html',
+                templateUrl: 'tpl/databrowser/databrowser.html',
                 // use resolve to load other dependences
                 resolve: {
                     deps: ['uiLoad',
@@ -340,7 +352,7 @@ var app = angular.module('app', [
             })
             .state('app.databrowser.list', {
                 url: '/inbox/{fold}',
-                templateUrl: 'tpl/databrowser.list.html',
+                templateUrl: 'tpl/databrowser/databrowser.list.html',
                 resolve: {
                     deps: ['$ocLazyLoad',
                         function( $ocLazyLoad ){
@@ -351,6 +363,41 @@ var app = angular.module('app', [
                             );
                         }]
                 }
+            })
+            // push
+            .state('app.push', {
+                abstract: true,
+                url: '/push',
+                templateUrl: 'tpl/push/push.html',
+                // use resolve to load other dependences
+                resolve: {
+                    deps: ['uiLoad',
+                        function( uiLoad ){
+                            return uiLoad.load( ['js/app/push/push.js',
+                                'js/app/push/push-service.js',
+                                'js/libs/moment.min.js'] );
+                        }]
+                }
+            })
+            .state('app.push.list', {
+                url: '/inbox/{fold}',
+                templateUrl: 'tpl/push/push.list.html'
+            })
+            .state('app.push.detail', {
+                url: '/{mailId:[0-9]{1,4}}',
+                templateUrl: 'tpl/push/push.detail.html'
+            })
+            .state('app.push.send', {
+                url: '/send',
+                templateUrl: 'tpl/push/push.new.html'
+            })
+            .state('app.pushfootable', {
+                url: '/pushfootable',
+                templateUrl: 'tpl/push/footable.html'
+            })
+            .state('app.pushsend', {
+                url: '/pushsend',
+                templateUrl: 'tpl/push/push.send.html'
             })
             // mail
             .state('app.mail', {

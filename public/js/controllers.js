@@ -320,6 +320,9 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     };
   }])
   .controller('ModalDemoCtrl', ['$scope', '$modal', '$log', function($scope, $modal, $log) {
+
+
+
     $scope.items = ['item1', 'item2', 'item3'];
     $scope.open = function (size) {
       var modalInstance = $modal.open({
@@ -520,7 +523,36 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
       $scope.mytime = null;
     };
   }])
+    .controller('PushSendCtrl', ['$scope', function($scope) {
+        $scope.sendtypelist = ['Everyone','Unique', 'Channels', 'Segments'];
+        $scope.sendtype = $scope.sendtypelist[3];
 
+        $scope.uniquetypelist = ['DeviceToken','Email', 'UserId'];
+        $scope.uniquetype = $scope.uniquetypelist[0];
+
+
+        $scope.list_of_string = [];
+        $scope.select2Options = {
+            'multiple': true,
+            'simple_tags': true,
+            'tags': ['tag1', 'tag2', 'tag3', 'tag4']  // Can be empty list.
+        };
+
+        $scope.segmenttype= ['DeviceType', 'TimeZone', 'Channels', 'createdAt', 'updatedAt','AppName', 'AppIdentifier', 'AndroidVersion', 'HaruVersion', 'AppVersion'];
+        $scope.segmentcondition= ['Equals', 'NotEquals'];
+
+        $scope.segments = [
+            { segmenttype: 'DeviceType', segmentcondition: 'Equals', segmentvalue:'' }
+        ];
+
+        $scope.addSegments = function() {
+            $scope.segments.push( { segmenttype: 'DeviceType', segmentcondition: 'Equals', segmentvalue:'' });
+        };
+
+        $scope.close = function(index) {
+            $scope.segments.splice(index, 1);
+        };
+    }])
   // Form controller
   .controller('FormDemoCtrl', ['$scope', function($scope) {
     $scope.notBlackListed = function(value) {

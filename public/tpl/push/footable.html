@@ -1,0 +1,109 @@
+<div class="bg-light lter b-b wrapper-md">
+        <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
+        <a ui-sref="app.push.send" class="btn btn-sm btn-danger w-xs font-bold">Send Push</a>
+</div>
+<div class="wrapper-md">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="btn-group">
+            <button class="btn btn-sm btn-bg btn-default" data-toggle="tooltip" data-placement="bottom" data-title="Refresh" data-original-title="" title=""><i class="fa fa-refresh"></i></button>
+        </div>
+    </div>
+  <!--  <div class="panel-body b-b b-light">
+      Search: <input id="filter" type="text" class="form-control input-sm w-sm inline m-r"/>
+    </div>-->
+    <div>
+      <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="5">
+          <colgroup>
+              <col width="12%">
+              <col width="10%">
+              <col width="12%">
+              <col width="*">
+              <col width="15%">
+              <col width="10%">
+          </colgroup>
+        <thead>
+          <tr>
+              <th data-toggle="true" >
+                  Status
+              </th>
+              <th>
+                  Read
+              </th>
+              <th >
+                  Target
+              </th>
+              <th data-hide="phone,tablet">
+                  Message
+              </th>
+              <th data-name="Date Of Birth">
+                  Send Time
+              </th>
+              <th data-hide="phone,tablet">
+                  Platform
+              </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td data-value="1"><span class="label bg-success" title="Active">Success</span></td>
+              <td data-value="1">1</td>
+              <td>Everyone</td>
+              <td>message</td>
+              <td data-value="78025368997">22 Jun 1972</td>
+              <td>Android</td>
+          </tr>
+          <tr>
+              <td data-value="1"><span class="label bg-success" title="Active">Success</span></td>
+              <td data-value="1">1</td>
+              <td>Everyone</td>
+              <td>message</td>
+              <td data-value="78025368997">22 Jun 1972</td>
+              <td>Android</td>
+          </tr>
+          <tr>
+              <td data-value="1"><span class="label bg-success" title="Active">Success</span></td>
+              <td data-value="1">1</td>
+              <td>Everyone</td>
+              <td>message</td>
+              <td data-value="78025368997">22 Jun 1972</td>
+              <td>Android</td>
+          </tr>
+          <tr>
+              <td data-value="1"><span class="label bg-success" title="Active">Active</span></td>
+              <td data-value="1">1</td>
+              <td>Everyone</td>
+              <td>message</td>
+              <td data-value="78025368997">22 Jun 1972</td>
+              <td>Android</td>
+          </tr>
+          <tr>
+              <td data-value="1"><span class="label bg-success" title="Active">Active</span></td>
+              <td data-value="1">1</td>
+              <td>Everyone</td>
+              <td>message</td>
+              <td data-value="78025368997">22 Jun 1972</td>
+              <td>Android</td>
+          </tr>
+          <tr>
+              <td data-value="1"><span class="label bg-success" title="Active">Active</span></td>
+              <td data-value="1">1</td>
+              <td>Everyone</td>
+              <td>message</td>
+              <td data-value="78025368997">22 Jun 1972</td>
+              <td>Android</td>
+          </tr>
+
+
+        </tbody>
+        <tfoot class="hide-if-no-paging">
+          <tr>
+              <td colspan="6" class="text-center">
+                  <ul class="pagination"></ul>
+              </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
