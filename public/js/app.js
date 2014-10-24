@@ -20,7 +20,8 @@ var app = angular.module('app', [
     'app.controllers',
     'facebook',
     'googleplus',
-    'user'
+    'user',
+    'infinite-scroll'
   ])
 .run(
   [          '$rootScope', '$state', '$stateParams',
@@ -375,13 +376,14 @@ var app = angular.module('app', [
                         function( uiLoad ){
                             return uiLoad.load( ['js/app/push/push.js',
                                 'js/app/push/push-service.js',
+                                'js/app/push/pushlist-service.js',
                                 'js/libs/moment.min.js'] );
                         }]
                 }
             })
             .state('app.push.list', {
                 url: '/inbox/{fold}',
-                templateUrl: 'tpl/push/push.list.html'
+                templateUrl: 'tpl/push/push.newlist.html'
             })
             .state('app.push.detail', {
                 url: '/{mailId:[0-9]{1,4}}',
@@ -397,7 +399,15 @@ var app = angular.module('app', [
             })
             .state('app.pushsend', {
                 url: '/pushsend',
-                templateUrl: 'tpl/push/push.send.html'
+                templateUrl: 'tpl/push/push.send.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function (uiLoad) {
+                            return uiLoad.load(['js/app/push/pushsend.js',
+                                'js/app/push/push-service.js',
+                                'js/libs/moment.min.js']);
+                        }]
+                }
             })
             // mail
             .state('app.mail', {

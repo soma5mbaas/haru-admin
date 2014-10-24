@@ -65,13 +65,14 @@ XitrumPackage.copy("config", "public", "script")
 libraryDependencies ++= List(
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "org.mariadb.jdbc" % "mariadb-java-client" % "1.1.7",
-  "com.typesafe.slick" %% "slick" % "2.1.0",
   "c3p0" % "c3p0" % "0.9.1.2",
-  "joda-time" % "joda-time" % "2.3",
-  "org.joda" % "joda-convert" % "1.5",
+  "com.typesafe.slick" %% "slick" % "2.1.0",
+  "joda-time" % "joda-time" % "2.5",
+  "org.joda" % "joda-convert" % "1.7",
   "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0",
   "org.openid4java" % "openid4java" % "0.9.8",
   "com.hazelcast" % "hazelcast" % "3.3.1",
   "com.hazelcast" % "hazelcast-client" % "3.3.1",
   "tv.cntt" %% "xitrum-hazelcast3" % "1.12",
+  "org.apache.httpcomponents" % "httpclient" % "4.3.5",
   "javax.servlet" % "javax.servlet-api" % "3.0.1")

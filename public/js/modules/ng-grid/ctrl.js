@@ -52,7 +52,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
 
             databrowsers.getSchemas("", "", appkey, $scope.fold).then(function (datas) {
                 var columnDefs = [
-                    {field: '_id', displayName: 'EntityId(objectid)', enableCellEdit: false}
+                    {field: '_id', displayName: 'EntityId(objectid)',width:220, enableCellEdit: false}
                 ];
 
                 function isEmpty(obj) {
@@ -66,12 +66,12 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
                     schemakeys = schemakeys.sort();
 
                     schemakeys.forEach(function (elem) {
-                        if (!(elem == '_id' || elem == 'updateAt' || elem == 'createAt')) {
+                        if (!(elem == '_id' || elem == 'updatedAt' || elem == 'createdAt' || elem == 'ACL')) {
 
                             var field = {};
                             field.field = elem;
                             field.displayName = elem + "(" + datas[elem] + ")";
-
+                            field.width=150;
                             if(datas[elem] == 'boolean'){
                                 console.log(datas[elem]);
 
@@ -83,8 +83,9 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
                         }
                     });
                 }
-                columnDefs.push({field: 'createAt', displayName: 'createAt(date)', enableCellEdit: false, cellTemplate: '<div>{{row.entity[col.field] | date:"yyyy-MM-dd HH:mm:ss"}}</div>'});
-                columnDefs.push({field: 'updateAt', displayName: 'updateAt(date)', enableCellEdit: false, cellTemplate: '<div>{{row.entity[col.field] | date:"yyyy-MM-dd HH:mm:ss"}}</div>'});
+                columnDefs.push({field: 'createdAt', displayName: 'createdAt(date)', enableCellEdit: false, width:150,cellTemplate: '<div>{{row.entity[col.field] | date:"yyyy-MM-dd HH:mm:ss"}}</div>'});
+                columnDefs.push({field: 'updatedAt', displayName: 'updatedAt(date)', enableCellEdit: false, width:150,cellTemplate: '<div>{{row.entity[col.field] | date:"yyyy-MM-dd HH:mm:ss"}}</div>'});
+                columnDefs.push({field: 'ACL', displayName: 'ACL(ACL)', width:150, enableCellEdit:false});
 
                 $scope.columnDefs = columnDefs;
                 $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
@@ -195,6 +196,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         data: 'myData',
         enablePaging: true,
         showFooter: true,
+        enableColumnResize: true,
         enableCellEdit: true,
         showSelectionCheckbox:true,
         totalServerItems: 'totalServerItems',

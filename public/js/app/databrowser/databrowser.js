@@ -18,11 +18,11 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state'
 
             var folds = [
                 {name:'Users', filter:''},
-                {name:'Installations', filter:'Installation'}
+                {name:'Installations', filter:'Installations'}
             ];
 
             datas.forEach(function(element){
-                if(!(element == 'Users' || element == 'Installation')) {
+                if(!(element == 'Users' || element == 'Installations')) {
                     var x = {};
                     x.name = element;
                     x.filter = element;
@@ -34,27 +34,6 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state'
         });
     };
     getClasses();
-
-
-  $scope.addLabel = function(){
-    $scope.labels.push(
-      {
-        name: $scope.newLabel.name,
-        filter: angular.lowercase($scope.newLabel.name),
-        color: '#ccc'
-      }
-    );
-    $scope.newLabel.name = '';
-  };
-
-  $scope.labelClass = function(label) {
-    return {
-      'b-l-info': angular.lowercase(label) === 'angular',
-      'b-l-primary': angular.lowercase(label) === 'bootstrap',
-      'b-l-warning': angular.lowercase(label) === 'client',
-      'b-l-success': angular.lowercase(label) === 'work'      
-    };
-  };
 
 }]);
 /*
@@ -92,8 +71,3 @@ app.controller('DatabrowserNewCtrl', ['$scope', function($scope) {
 
 
 */
-app.directive('labelColor', function(){
-    return function(scope, $el, attrs){
-        $el.css({'color': attrs.color});
-    }
-});

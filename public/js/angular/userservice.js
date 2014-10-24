@@ -62,23 +62,23 @@
 		
 		    
 		this.Signup = function(name, email, password, token){
-			var deferred = $q.defer();
-		    $http({url:'user/add', 
-		    	  method:'POST',
-		    	  data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name+'&provider=WEB',
-		    	  headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
-	       .then(function(response) {
-	    	   console.log(response);
-	    	   if ( response.data.email ) {
-		        	deferred.resolve(response.data);
-		        }else{
-		        	deferred.reject(response.data);
-		        }
-	        }, function(x) {
-	        	deferred.reject({ error: "Server Error" });
-	        });
-		    return deferred.promise;
-		};
+                            var deferred = $q.defer();
+                            $http({url:'user/add',
+                                method:'POST',
+                                data:'csrf-token='+token+'&email=' +email+ '&password='+password+'&name='+name+'&provider=WEB',
+                                headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
+                                .then(function(response) {
+                                    console.log(response);
+                                    if ( response.data.email ) {
+                                        deferred.resolve(response.data);
+                                    }else{
+                                        deferred.reject(response.data);
+                                    }
+                                }, function(x) {
+                                    deferred.reject({ error: "Server Error" });
+                                });
+                            return deferred.promise;
+                        };
 		
 	    this.Logout = function(provider){
 	    	try{

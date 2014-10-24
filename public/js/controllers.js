@@ -91,7 +91,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
                   $scope.user.authuser = data.user;
                   $scope.user.projects = data.projects;
                   $scope.$broadcast('loadproject', data.projects);
-                  console.log($scope.user.currentproject);
+                  //console.log($scope.user.currentproject);
               });
           }
 
@@ -108,7 +108,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
           if (data.status == 'connected') {
         	var token = $('meta[name=csrf-token]').attr('content');
             UserService.FacebookMe(token, data.authResponse.accessToken).then(function(data){
-        	//	console.log(data);
+        		//console.log(data);
 
                 //$scope.user = {};
         		$scope.user.authuser = data.user;
@@ -475,22 +475,6 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     };
     $scope.toggleMin();
 
-    $scope.open = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      $scope.opened = true;
-    };
-
-    $scope.dateOptions = {
-      formatYear: 'yy',
-      startingDay: 1,
-      class: 'datepicker'
-    };
-
-    $scope.initDate = new Date('2016-15-20');
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
   }])
   .controller('TimepickerDemoCtrl', ['$scope', function($scope) {
     $scope.mytime = new Date();
@@ -524,8 +508,16 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     };
   }])
     .controller('PushSendCtrl', ['$scope', function($scope) {
+        $scope.sendtimelists = ['Now','Specific time', 'Timezone Specific time'];
+        $scope.sendtime = $scope.sendtimelists[0];
+
+        $scope.expirationlists = ['Never', 'After Interval'];
+        $scope.expiration = $scope.expirationlists[0];
+
+
+        // send type
         $scope.sendtypelist = ['Everyone','Unique', 'Channels', 'Segments'];
-        $scope.sendtype = $scope.sendtypelist[3];
+        $scope.sendtype = $scope.sendtypelist[0];
 
         $scope.uniquetypelist = ['DeviceToken','Email', 'UserId'];
         $scope.uniquetype = $scope.uniquetypelist[0];
@@ -552,6 +544,9 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
         $scope.close = function(index) {
             $scope.segments.splice(index, 1);
         };
+
+
+
     }])
   // Form controller
   .controller('FormDemoCtrl', ['$scope', function($scope) {

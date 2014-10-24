@@ -1,7 +1,7 @@
 <div class="bg-light lter b-b wrapper-md">
     <h1 class="m-n font-thin h3">Push Notification</h1>
 </div>
-<div class="wrapper-md" ng-controller="PushSendCtrl">
+<div class="wrapper-md" ng-controller="PushNewCtrl">
     <div class="row">
         <div class="col-lg-8">
             <div class="panel panel-default">
@@ -72,18 +72,18 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label font-bold">Message</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" rows="5" />
+                                <textarea class="form-control" rows="5" ng-model="message"/>
                             </div>
                             <div class="col-sm-4">
-                                <textarea class="form-control" rows="5" readonly />
+                                <textarea class="form-control" rows="5" ng-model="jsonmessage" readonly />
                             </div>
                         </div>
                         <div class="form-group">
                         <label class="col-sm-2 control-label font-bold">Data type</label>
-                                <div class="col-sm-10 btn-group" ng-init="radioModel = 'Text'">
-                                    <label class="btn btn-sm btn-info"    ng-model="radioModel" btn-radio="'Text'"><i class="fa fa-check text-active"></i> Text</label>
-                                    <label class="btn btn-sm btn-primary"    ng-model="radioModel" btn-radio="'Keyvalue'"><i class="fa fa-check text-active"></i> Key/Value</label>
-                                    <label class="btn btn-sm btn-success" ng-model="radioModel" btn-radio="'JSON'"><i class="fa fa-check text-active"></i> JSON</label>
+                                <div class="col-sm-10 btn-group" ng-init="messagetype = '0'">
+                                    <label class="btn btn-sm btn-info"    ng-model="messagetype" btn-radio="'0'"><i class="fa fa-check text-active"></i> Text</label>
+                                    <label class="btn btn-sm btn-primary"    ng-model="messagetype" btn-radio="'1'"><i class="fa fa-check text-active"></i> Key/Value</label>
+                                    <label class="btn btn-sm btn-success" ng-model="messagetype" btn-radio="'2'"><i class="fa fa-check text-active"></i> JSON</label>
                                 </div>
 
                         </div>
@@ -91,28 +91,37 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label font-bold">Send Time</label>
                             <div class="col-sm-10">
-                                <select  class="form-control w-md">
-                                    <option value="now">Now</option>
-                                    <option value="specific">specific time</option>
-                                    <option value="timezone">timezone spcific time</option>
-                                </select>
+                                <select  class="form-control w-md"  ng-model="sendtime" ng-options="s for s in sendtimelists" />
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg pull-in"  ng-show="sendtime == 'Specific time'"></div>
+                        <div class="form-group" ng-show="sendtime == 'Specific time'">
+                            <label class="col-sm-2 control-label">Specific Time</label>
+                            <div class="col-sm-10">
+                                <div class="col-md-5 no-padder">
+                                    <p class="input-group">
+                                      <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="spdate" is-open="opened" min-date="minDate" max-date="'2099-12-31'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                      </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-10 no-padder" >
+                                    <timepicker ng-model="sptime" ng-change="changed()" show-meridian="ismeridian"></timepicker>
+                                </div>
                             </div>
                         </div>
                         <div class="line line-dashed b-b line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label font-bold">Expiration Time</label>
                             <div class="col-sm-10">
-                                <select  class="form-control w-md">
-                                    <option value="now">Now</option>
-                                    <option value="specific">specific time</option>
-                                    <option value="timezone">timezone spcific time</option>
-                                </select>
+                                <select  class="form-control w-md"  ng-model="expiration" ng-options="e for e in expirationlists" />
                             </div>
                         </div>
                         <div class="line line-dashed b-b line-lg pull-in"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button type="submit" class="btn btn-primary">Send Nofitication Message</button>
+                                <button type="submit" class="btn btn-primary" ng-click="sendpush()"> Send Nofitication Message</button>
                             </div>
                         </div>
                     </form>
