@@ -8,9 +8,9 @@ app.controller('PushCtrl', ['$scope', function($scope) {
   ];
 
   $scope.labels = [
-    {name: 'Success', filter:'angular', color:'#23b7e5'},
-    {name: 'Pending', filter:'bootstrap', color:'#7266ba'},
-    {name: 'Error', filter:'client', color:'#fad733'}
+    {name: 'Success', filter:'Success', color:'#27c24c'},
+    {name: 'Pending', filter:'Pending', color:'#7266ba'},
+    {name: 'Error', filter:'Error', color:'#f05050'}
   ];
 
   $scope.addLabel = function(){
@@ -36,14 +36,39 @@ app.controller('PushCtrl', ['$scope', function($scope) {
 }]);
 
 app.controller('PushListCtrl', ['$scope', 'pushs', '$stateParams', 'pushlists', function($scope, pushs, $stateParams, pushlists) {
+  var fold = $stateParams.fold
+
+    //0:everyone, 1:unique, 2:channels, 3:segments
+    var filter ={};
+
+    if(fold == 'Everyone'){
+        filter.pushtype = 0;
+    } else if(fold == 'Unique') {
+        filter.pushtype = 1;
+    } else if(fold == 'Channels') {
+        filter.pushtype = 2;
+    } else if(fold == 'Segments') {
+        filter.pushtype = 3;
+    } else if(fold == 'Success') {
+        filter.status = 1;
+    } else if(fold == 'Pending') {
+        filter.status = 0;
+    } else if(fold == 'Error') {
+        filter.status = 2;
+    }
+
+  $scope.filterdata = filter;
 
   $scope.reddit = new pushlists();
+  $scope.pushtype = ['Everyone', 'Unique', 'Channels', 'Segments'];
 
 
 
 }]);
 
 app.controller('PushDetailCtrl', ['$scope', 'pushs', '$stateParams', function($scope, pushs, $stateParams) {
+
+
     pushs.get($stateParams.mailId).then(function(mail){
     $scope.mail = mail;
   })

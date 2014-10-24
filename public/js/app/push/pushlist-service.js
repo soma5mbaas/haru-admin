@@ -1,5 +1,5 @@
 // A RESTful factory for retreiving mails from 'mails.json'
-app.factory('pushlists', ['$http', '$q', function ($http) {
+app.factory('pushlists', ['$http', function ($http) {
     var Reddit = function() {
         this.items = [];
         this.busy = false;
@@ -8,17 +8,12 @@ app.factory('pushlists', ['$http', '$q', function ($http) {
     };
 
     Reddit.prototype.nextPage = function() {
-        console.log("test");
         if (this.busy) return;
         this.busy = true;
 
-        var authtoken = '';
+        var limit = 50;
         var csrftoken = $('meta[name=csrf-token]').attr('content');
-        //var data = {'csrf-token='+csrftoken+'&authtoken='+authtoken +'&limit=' +10 + '&pages=' + this.next};
-        var data = {'csrf-token':csrftoken, 'authtoken':authtoken, 'limit':10, 'page':this.next};
-
-        console.log(data);
-
+        var data = {'csrf-token':csrftoken,'limit':limit, 'page':this.next};
 
         $http({url:'push/list',
             method:'GET',
@@ -33,13 +28,10 @@ app.factory('pushlists', ['$http', '$q', function ($http) {
 
                 this.next = this.next + 1;
 
-                if(items.length != 0) {
+                if(items.length >= limit) {
                     this.busy = false;
                 }
             }.bind(this));
-
-
-
     };
 
     return Reddit;

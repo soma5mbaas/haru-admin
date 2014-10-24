@@ -20,7 +20,7 @@ app.factory('pushs', ['$http', '$q', function ($http, $q) {
 
   factory.sendpush = function(csrftoken, appid, pushtype, wherevalue, message, messagetype, totalcount, sendtimezone, sendtime, expirationtime, status){
       var data = 'csrf-token='+csrftoken+'&appid='+appid +'&pushtype=' +pushtype + '&wherevalue=' +wherevalue+ '&message='+message+'&messagetype='+messagetype +'&totalcount=' + totalcount+'&sendtimezone=' + sendtimezone+'&sendtime=' + sendtime+'&expirationtime=' + expirationtime + '&status=' + status
-
+      console.log(data);
       var deferred = $q.defer();
       $http({url:'push/register',
           method:'POST',

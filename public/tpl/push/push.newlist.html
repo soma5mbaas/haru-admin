@@ -3,24 +3,28 @@
     <div class="col">
         <div class="padder" infinite-scroll='reddit.nextPage()' infinite-scroll-disabled='reddit.busy' infinite-scroll-distance='2'>
             <div class="streamline b-l b-info m-l-lg m-b padder-v" >
-                <div ng-repeat='item in reddit.items'>
+                <div ng-repeat='item in reddit.items  | filter:filterdata track by $index'>
                     <a class="pull-left thumb-sm avatar m-l-n-md" style="background-color: #f0f3f4">
-                  <span class="fa fa-times-circle text-danger " style="font-size:46px">
+                  <span class="fa " ng-class="{' fa-history text-primary' : item.status == 0,
+                                              'fa-check-circle text-success' : item.status == 1,
+                                              'fa-times-circle text-danger' : item.status == 2}" style="font-size:40px">
                   </span>
                     </a>
                     <div class="m-l-lg panel b-a">
                         <div class="panel-heading pos-rlt b-b b-light">
                             <span class="arrow left"></span>
-                            <a href><span class="h4">Everyone</span></a>
+                            <a href><span class="h4">{{ pushtype[item.pushtype] }}</span></a>
                             <label class="label bg-light m-l-xs">channels</label>
                       <span class="text-muted m-l-sm pull-right h5">
                         {{item.sendtime | fromNow}}
                       </span>
                         </div>
                         <div class="panel-body ">
-                            <blockquote class="padder  b-l-danger">
+                            <blockquote class="padder  " ng-class="{'b-l-primary' : item.status == 0,
+                                                                  'b-l-success' : item.status == 1,
+                                                                  'b-l-danger' : item.status == 2}" >
                                 <p>{{item.message}}</p>
-                                <small>Received 10 / Total {{item.totalcount}} (100%)</small>
+                                <small>Received {{item.totalcount}} / Total {{item.totalcount}} (100%)</small>
                             </blockquote>
                         </div>
                     </div>

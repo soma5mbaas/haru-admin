@@ -149,7 +149,7 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
                        'Asia/Seoul',
                         sendtimeparam,
                         sendtimeparam,
-                        1).then(function(result){
+                        0).then(function(result){
 
             $state.go('app.push.list');
         }, function(data) {
