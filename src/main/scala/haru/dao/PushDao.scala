@@ -14,17 +14,7 @@ import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
 import java.util.{ TimeZone, Locale }
 
-object DateUtils {
-   implicit val dateTimeColumnType = MappedColumnType.base[DateTime, Timestamp](
-      { dt => new java.sql.Timestamp(dt.getMillis) },
-      { ts => new DateTime(ts) }
-    )
 
-  implicit val timeZoneColumnType = MappedColumnType.base[DateTimeZone, String](
-      { tz => tz.getID },
-      { s => org.joda.time.DateTimeZone.forID(s) }
-    )
-}
 
 object PushDao extends DatabasePool { 
   
@@ -63,7 +53,7 @@ object PushDao extends DatabasePool {
           return (false, e.getMessage());
       }
   }
-  
+
   def SelectPush(limit : Int, page:Int) :Seq[haru.dao.PushDao.Pushs#TableElementType] = databasePool withSession {
     implicit session => 
      push_table.sortBy(_.sendtime.desc).drop(page * limit).take(limit).run
