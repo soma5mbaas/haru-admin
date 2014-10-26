@@ -1,5 +1,6 @@
-app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers', function($scope, $http, $stateParams, databrowsers) {
-    console.log($stateParams.fold );
+app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers', '$modal', '$log',
+     function($scope, $http, $stateParams, databrowsers, $modal, $log) {
+
     if($stateParams.fold == ''){
         $scope.fold = 'Users'
     } else {
@@ -207,9 +208,47 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
         columnDefs:'columnDefs'
     };
 
+    var selectlist = [];
     $scope.gridOptions.afterSelectionChange = function(rowItem){
         console.log(rowItem);
 
+        if(rowItem.selected) {
+            selectlist.push(rowItem.entity._id);
+        } else {
+            selectlist.splice(selectlist.indexOf(rowItem.entity._id), 1);
+        }
+
+
+        console.log(selectlist);
+        console.log( $scope.myData );
     };
 
+    $scope.deleteRows = function(){
+        console.log(selectlist);
+    }
+    $scope.addRow = function(){
+
+    }
+
+
+
+    $scope.items = ['item1', 'item2', 'item3'];
+    $scope.open = function (size) {
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: 'ModalInstanceCtrl',
+            size: size,
+            resolve: {
+                items: function () {
+                    return $scope.items;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
 }]);
