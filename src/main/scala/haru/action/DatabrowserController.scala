@@ -28,6 +28,22 @@ class GetDataBrowserSchema extends Api2 {
   }
 }
 
+@POST("data/column/add")
+class AddColumn extends Api2 {
+  def execute() {
+    val appid = param("appid")
+    val classes = param("class")
+    val columnname = param("columnname")
+    val columntype = param("columntype")
+    
+    val result = SchemaDao.addColumn(appid, classes, columnname, columntype)
+    
+    respondJson(s"{success:$result}") 
+  }
+}
+
+
+
 @GET("cache/test")
 class cachetest extends Api2 {
   def execute() {

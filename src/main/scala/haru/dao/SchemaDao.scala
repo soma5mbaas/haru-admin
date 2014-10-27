@@ -32,4 +32,17 @@ object SchemaDao {
     }
   }
 
+  def addColumn(appid: String, classes: String, columnname:String, columntype:String): Boolean = {
+    clients.withClient {
+      client =>
+        {
+          val key = RedisKeyGenerator.getSchema(appid, classes)
+
+          val schema = client.hsetnx(key, columnname, columntype);
+          
+          return schema;
+        }
+
+    }
+  }
 }

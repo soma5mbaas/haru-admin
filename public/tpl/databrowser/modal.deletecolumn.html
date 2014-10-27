@@ -1,0 +1,22 @@
+<div class="modal-body wrapper-lg" >
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="m-t-none m-b font-thin">Delete Column</h3>
+      <form role="form" >
+          <div class="text-danger wrapper text-center" ng-show="authError">
+              {{authError}}
+          </div>
+          <div class="form-group">
+              <label>Column Name</label>
+              <select class="form-control w-md" ng-model="column.columnname" ng-options="columnname for columnname in items.columnnames" required />
+          </div>
+
+        <div class="checkbox m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>Delete Column</strong></button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

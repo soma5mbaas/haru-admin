@@ -1,6 +1,6 @@
-app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers', '$modal', '$log',
-     function($scope, $http, $stateParams, databrowsers, $modal, $log) {
-
+app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams', 'databrowsers', '$modal', '$log', '$state',
+                        function($rootScope, $scope, $http, $stateParams, databrowsers, $modal, $log, $state) {
+    console.log('GridDemoCtrl');
     if($stateParams.fold == ''){
         $scope.fold = 'Users'
     } else {
@@ -44,6 +44,8 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
     }
 
 
+    var columnnames = [];
+
     var getSchema = function() {
         if($scope.user != undefined) {
             appkey = $scope.user.currentproject.applicationkey;
@@ -60,6 +62,8 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
                     return Object.keys(obj).length === 0;
                 }
 
+//                columnnames = ['_id','createdAt','updatedAt', 'ACL'];
+                columnnames = [];
                 if (!isEmpty(datas)) {
                     $scope.schema = datas;
 
@@ -81,6 +85,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
                                 field.editableCellTemplate = $scope.numberCellEditableTemplate;
                             }
                             columnDefs.push(field);
+                            columnnames.push(elem);
                         }
                     });
                 }
@@ -188,6 +193,7 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
             headers:{'Application-Id':$scope.user.currentproject.applicationkey}})
             .then(function(response) {
                 console.log(response);
+
             }, function(x) {
 
             });
@@ -224,31 +230,128 @@ app.controller('GridDemoCtrl', ['$scope', '$http', '$stateParams', 'databrowsers
     };
 
     $scope.deleteRows = function(){
-        console.log(selectlist);
-    }
+        var deletewhere = '{"where": {"_id": {"$in":'  + JSON.stringify(selectlist) + ' } } }';
+        console.log(deletewhere);
+        databrowsers.deleteRows($scope.user.currentproject.applicationkey, $scope.fold, deletewhere).then(function(result){
+            console.log(result);
+            getSchema();
+        }, function(x){
+            console.log('test error');
+        });
+
+        //{"where": {"_id": {"$in": ["2c663306-5f16-4ad4-bca2-85503e91c148"] } } }
+        //console.log(deletewhere);
+    };
+    $scope.deleteAllRows = function() {
+        console.log("deleteAllRows");
+        //'{"where": {} }'
+
+        var alldelete = '{"where": {} }';
+        databrowsers.deleteRows($scope.user.currentproject.applicationkey, $scope.fold, alldelete).then(function(result){
+            console.log(result);
+            getSchema();
+        }, function(x){
+            console.log('test error');
+        });
+    };
+
     $scope.addRow = function(){
+        databrowsers.addRow($scope.user.currentproject.applicationkey, $scope.fold ).then(function (datas) {
+            console.log(datas);
+            $scope.myData.push(datas);
+        }, function (error) {
+            console.log(error);
+        });
+    };
 
-    }
+    $scope.dropClass = function(){
+        console.log("deleteClasses");
+        databrowsers.deleteClasses($scope.user.currentproject.applicationkey, $scope.fold).then(function(result){
+            $rootScope.$emit('deleteclass', undefined);
+
+            $state.go('app.databrowser.list', {fold:'', update:true});
+
+        }, function(x){
+            console.log('test error');
+        });
+
+    };
+
+    $scope.exportClass = function(){
+
+    };
+
+    $scope.refreshlist = function(){
+        getSchema();
+    };
 
 
+    $scope.opendeletecolumn = function(size){
+        $scope.type.columnnames = columnnames;
 
-    $scope.items = ['item1', 'item2', 'item3'];
-    $scope.open = function (size) {
         var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
-            controller: 'ModalInstanceCtrl',
+            templateUrl: 'myColumnModalContent.html',
+            controller: 'ColumnDeleteModalInstanceCtrl',
             size: size,
             resolve: {
                 items: function () {
-                    return $scope.items;
+                    return $scope.type;
                 }
             }
         });
 
-        modalInstance.result.then(function (selectedItem) {
-            $scope.selected = selectedItem;
+        modalInstance.result.then(function (column) {
+            // TODO : add schema  & update
+            var deletecolumn = '{"column": "'+column+'" }';
+            databrowsers.deleteRows($scope.user.currentproject.applicationkey, $scope.fold, deletecolumn).then(function(result){
+                getSchema();
+            }, function(x){
+                console.log('test error');
+            });
+            console.log(column);
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    }
+
+
+
+    $scope.type = {};
+    $scope.type.items =['string', 'number', 'boolean', 'date', 'file', 'geopoint', 'array', 'object', 'pointer', 'relation'];
+    $scope.open = function (size) {
+        $scope.type.columnnames = columnnames;
+
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: 'ColumnModalInstanceCtrl',
+            size: size,
+            resolve: {
+                items: function () {
+                    return $scope.type;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (column) {
+            // TODO : add schema  & update
+            databrowsers.addSchemas("", "", appkey, $scope.fold, column.columnname, column.columntype).then(function (datas) {
+                console.log(datas);
+                getSchema();
+            }, function(error){
+
+            });
+
+            console.log(column);
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
         });
     };
+
+
 }]);
+/*
+app.controller('DatabrowserModelCtrl', ['$scope', '$http', '$stateParams', 'databrowsers', '$modal', '$log',
+                        function($scope, $http, $stateParams, databrowsers, $modal, $log) {
+    console.log("DatabrowserModelCtrl");
+
+}]);*/

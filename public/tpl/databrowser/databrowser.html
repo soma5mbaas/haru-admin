@@ -3,7 +3,10 @@
   <div class="col w-md bg-light dk b-r bg-auto">
     <div class="wrapper b-b bg">
       <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
-      <a ui-sref="app.mail.compose" class="btn btn-sm btn-danger w-xs font-bold">Create Class</a>
+        <script type="text/ng-template" id="myClassesModalContent.html">
+            <div ng-include="'tpl/databrowser/modal.addclasses.html'"></div>
+        </script>
+        <button class="btn  btn-sm btn-danger  btn-addon" ng-click="open('sm')"><i class="fa fa-plus"></i>Create Class</button>
     </div>
     <div class="wrapper hidden-sm hidden-xs" id="email-menu">
       <ul class="nav nav-pills nav-stacked nav-sm">

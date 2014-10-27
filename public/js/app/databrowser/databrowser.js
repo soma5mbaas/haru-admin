@@ -1,4 +1,6 @@
-app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state', function($scope, databrowsers, $window, $state) {
+app.controller('DatabrowserCtrl', ['$rootScope', '$scope', 'databrowsers', '$window', '$state', '$stateParams','$modal', '$log',
+                           function($rootScope, $scope, databrowsers, $window, $state, $stateParams, $modal, $log) {
+
 
 
     if ($scope.user == undefined || $scope.user.currentproject == undefined) {
@@ -7,11 +9,15 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state'
         return;
     }
 
+    $rootScope.$on('deleteclass', function(event, data){
+        getClasses();
+    });
+
     $scope.$watch('user.currentproject', function(){
         getClasses();
     });
 
-
+    var foldsname;
     var getClasses =function(){
        databrowsers.getClasses("", "", $scope.user.currentproject.applicationkey).then(function(datas){
             console.log(datas);
@@ -21,12 +27,19 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state'
                 {name:'Installations', filter:'Installations'}
             ];
 
-            datas.forEach(function(element){
+           foldsname = ["Users", 'Installations'];
+
+           //schemakeys = Object.keys(datas);
+           schemakeys = datas.sort();
+
+
+           schemakeys.forEach(function(element){
                 if(!(element == 'Users' || element == 'Installations')) {
                     var x = {};
                     x.name = element;
                     x.filter = element;
                     folds.push(x);
+                    foldsname.push(element);
                 }
             });
 
@@ -34,6 +47,36 @@ app.controller('DatabrowserCtrl', ['$scope', 'databrowsers', '$window', '$state'
         });
     };
     getClasses();
+
+
+
+    // add class modal
+    $scope.open = function (size) {
+        console.log("openentitymodel");
+        var modalInstance = $modal.open({
+            templateUrl: 'myClassesModalContent.html',
+            controller: 'ClassModalInstanceCtrl',
+            size: size,
+            resolve: {
+                items: function () {
+                    return foldsname;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (classname) {
+            // TODO : add schema  & update
+            databrowsers.addClasses($scope.user.currentproject.applicationkey, classname.columnname).then(function (datas) {
+                console.log(datas);
+                getClasses();
+            }, function (error) {
+
+            });
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
 
 }]);
 /*
