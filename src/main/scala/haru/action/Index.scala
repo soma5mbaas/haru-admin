@@ -16,3 +16,10 @@ class HomeMin extends Action {
     respondView()
   }
 }
+
+@GET("/ping")
+class ping extends Action {
+  def execute() {
+    respondText("hello world");
+  }
+}

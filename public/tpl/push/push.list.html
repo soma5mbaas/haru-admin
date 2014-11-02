@@ -28,7 +28,7 @@
   <ul class="list-group list-group-lg no-radius m-b-none m-t-n-xxs">
     <li ng-repeat="mail in mails | filter:fold" ng-class="labelClass(mail.label)" class="list-group-item clearfix b-l-3x">
       <div class="pull-right text-sm text-muted">
-        <span class="hidden-xs">{{ mail.date | fromNow }}</span>
+        <span class="hidden-xs">{{ mail.date |  date:"yyyy-MM-dd HH:mm:ss" }}</span>
         <i class="fa fa-paperclip ng-hide m-l-sm" ng-show="{{mail.attach}}"></i>
         <div>
             <button class="pull-right btn btn-rounded btn-sm btn-info"><i class="fa fa-fw fa-envelope-o"></i> 0</button>

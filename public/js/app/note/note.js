@@ -6,6 +6,7 @@ app.controller('NoteCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.notes[0].selected = true;
   });
 
+
   $scope.colors = ['primary', 'info', 'success', 'warning', 'danger', 'dark'];
 
   $scope.createNote = function(){
@@ -33,5 +34,6 @@ app.controller('NoteCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.note = note;
     $scope.note.selected = true;
   }
+
 
 }]);

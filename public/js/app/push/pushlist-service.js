@@ -1,19 +1,25 @@
 // A RESTful factory for retreiving mails from 'mails.json'
 app.factory('pushlists', ['$http', function ($http) {
-    var Reddit = function() {
+    var Reddit = function(appid) {
         this.items = [];
         this.busy = false;
         this.after = '';
         this.next = 0;
+        this.appid = appid;
+        console.log(appid);
+
     };
+
+
 
     Reddit.prototype.nextPage = function() {
         if (this.busy) return;
         this.busy = true;
 
+        console.log(this.appid);
         var limit = 50;
         var csrftoken = $('meta[name=csrf-token]').attr('content');
-        var data = {'csrf-token':csrftoken,'limit':limit, 'page':this.next};
+        var data = {'csrf-token':csrftoken,'limit':limit, 'page':this.next, 'appid':this.appid};
 
         $http({url:'push/list',
             method:'GET',

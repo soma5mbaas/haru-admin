@@ -35,18 +35,18 @@ class PushRegister extends Api2{
     val expirationtime = param[Long]("expirationtime")
     val status = param[Int]("status")
       
-    PushDao.insertPush(appid, pushtype, Some(wherevalue), message, messagetype, totalcount, DateTimeZone.forID(sendtimezone).getID(),sendtime, expirationtime, status);
+    val id = PushDao.insertPush(appid, pushtype, Some(wherevalue), message, messagetype, totalcount, DateTimeZone.forID(sendtimezone).getID(),sendtime, expirationtime, status);
     
 
-    sendPushActor(appid, message)
+    sendPushActor(id._1, appid, message)
     
     respondJson("{success:1}");
   }
 
-  def sendPushActor(appid : String, message:String){
+  def sendPushActor(id :Int, appid : String, message:String){
     val system = ActorSystem("MySystem")
 	val pushactor = system.actorOf(Props[PushActor], name = "pusher")
-	pushactor ! PushMessage(appid, message)
+	pushactor ! PushMessage(id, appid, message)
   }
 }
 
@@ -55,25 +55,28 @@ class PushList extends Api2 {
   def execute() {
     val limit = param[Int]("limit");
     val page = param[Int]("page");
-    
-    respondJson(PushDao.SelectPush(limit, page));
+    val appid = param[String]("appid")
+    respondJson(PushDao.SelectPush(limit, page, appid));
   }
 }
 
-case class PushMessage(appid: String, message : String)
+case class PushMessage(id:Int, appid: String, message : String)
 class PushActor extends Actor with ActorLogging {
   def receive = {
-    case PushMessage(appid, message) ⇒ 
+    case PushMessage(id, appid, message) ⇒ 
     	Log.info("Actor receive")
     	val url = "http://stage.haru.io:10300/push";
     	val post = new HttpPost(url)
 	    post.addHeader("Application-Id", appid)
 	    post.addHeader("Content-Type","application/json")
-	    val json = "{\"where\":{\"pushType\": \"mqtt\"}, \"notification\":"+message+"}"
+	    val json = "{\"installations\":{\"pushType\": \"mqtt\"}, \"notification\":"+message+"}"
 	    post.setEntity(new StringEntity(json));
 	    
 	    // send the post request
 	    val client = HttpClientBuilder.create().build();
 	    val response = client.execute(post)
+	    
+	    PushDao.updateStatus(id, 1)
+    
   }
 }

@@ -1,0 +1,53 @@
+
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Settings</h1>
+</div>
+<div class="wrapper-md">
+<div class="panel panel-default" ng-controller="AppConfigCtl">
+  <div class="panel-heading">
+    Application Configuration
+  </div>
+  <div class="row wrapper" >
+    <div class="col-sm-2">
+      <div class="input-group">
+        <input type="text" class="input-sm form-control" placeholder="Search" ng-model="filter_paramter">
+          <span class="input-group-btn">
+            <button class="btn btn-sm btn-default" type="button">Go!</button>
+          </span>
+      </div>
+
+    </div>
+    <div class=" pull-right m-r-sm">
+      <div class="btn-group">
+        <script type="text/ng-template" id="myParameterModalContent.html">
+          <div ng-include="'tpl/setting/modal.addparameter.html'"></div>
+        </script>
+        <button class="btn  btn-sm btn-default btn-addon" ng-click="addparameter('sm')"><i class="fa fa-plus pull-right"></i>Add Parameter</button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped b-t b-light">
+      <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Data Type</th>
+        <th>Value</th>
+        <th style="width:30px;">Delete</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr  ng-repeat="param in params track by $index">
+        <td>{{param[0]}}</td>
+        <td>{{param[1]}}</td>
+        <td>{{param[2]}}</td>
+        <td>
+          <a href ng-click="deleteparameter($index)"><i class="fa fa-times text-danger text"></i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</div>

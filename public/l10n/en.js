@@ -15,13 +15,13 @@
 },
 "aside" : {
   "nav" : {
-    "HEADER" : "App Managements",
+    "HEADER" : "Navigation",
     "DASHBOARD" : "Dashboard",
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
     "WIDGETS" : "Widgets",
     "components" : {
-      "COMPONENTS" : "Documents",
+      "COMPONENTS" : "Components",
       "ui_kits" : {
         "UI_KITS" : "UI Kits",
         "BUTTONS" : "Buttons",
@@ -67,9 +67,6 @@
   },
   "MILESTONE" : "Milestone",
   "RELEASE" : "Release"
-},
-"TEST" : {
-	"TEST" : "test"
 }
 
 }

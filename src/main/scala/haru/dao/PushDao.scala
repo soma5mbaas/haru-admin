@@ -43,19 +43,24 @@ object PushDao extends DatabasePool {
   
   
   
-  def insertPush(appid:String, pushtyp :Int, wherevaleue:Option[String], message:String, messagetype : Int, totalcount :Int, sendtimezone:String, sendtime:Long, expirationtime:Long, status:Int) : (Boolean, String) = databasePool withSession {
+  def insertPush(appid:String, pushtyp :Int, wherevaleue:Option[String], message:String, messagetype : Int, totalcount :Int, sendtimezone:String, sendtime:Long, expirationtime:Long, status:Int) : (Int, String) = databasePool withSession {
     implicit session => 
       try {
-    	  push_table += Push(None, appid, pushtyp, wherevaleue, message, messagetype, totalcount, sendtimezone, sendtime, expirationtime, status);
-    	  return (true, "Success")
+    	  val id = (push_table returning push_table.map(_.id)) += Push(None, appid, pushtyp, wherevaleue, message, messagetype, totalcount, sendtimezone, sendtime, expirationtime, status);
+    	  return (id, "Success")
       } catch {
         case e: SQLIntegrityConstraintViolationException =>
-          return (false, e.getMessage());
+          return (-1, e.getMessage());
       }
   }
 
-  def SelectPush(limit : Int, page:Int) :Seq[haru.dao.PushDao.Pushs#TableElementType] = databasePool withSession {
+  def SelectPush(limit : Int, page:Int, appid:String) :Seq[haru.dao.PushDao.Pushs#TableElementType] = databasePool withSession {
     implicit session => 
-     push_table.sortBy(_.sendtime.desc).drop(page * limit).take(limit).run
+      push_table.filter(p => p.appid === appid).sortBy(_.sendtime.desc).drop(page * limit).take(limit).run
+  }
+  
+   def updateStatus(id : Int, status:Int) = databasePool withSession {
+    implicit session => 
+      push_table.filter(_.id === id).map(p => (p.status)).update((status))
   }
 }

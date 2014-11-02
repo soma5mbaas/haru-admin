@@ -16,7 +16,7 @@
                             <a href><span class="h4">{{ pushtype[item.pushtype] }}</span></a>
                             <label class="label bg-light m-l-xs">channels</label>
                       <span class="text-muted m-l-sm pull-right h5">
-                        {{item.sendtime | fromNow}}
+                        {{item.sendtime | date:"yyyy.MM.dd HH:mm:ss" }}
                       </span>
                         </div>
                         <div class="panel-body ">
