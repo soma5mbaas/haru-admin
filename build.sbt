@@ -75,4 +75,5 @@ libraryDependencies ++= List(
   "com.hazelcast" % "hazelcast-client" % "3.3.1",
   "tv.cntt" %% "xitrum-hazelcast3" % "1.12",
   "org.apache.httpcomponents" % "httpclient" % "4.3.5",
+  "io.spray" %%  "spray-json" % "1.3.1",
   "javax.servlet" % "javax.servlet-api" % "3.0.1")

@@ -73,8 +73,6 @@ angular.module('app')
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
-
-
       // initalize object
       $scope.user = {};
       $scope.user.authuser = {};
@@ -99,8 +97,6 @@ angular.module('app')
           $scope.user.currentproject =  crypt.decrypt($sessionStorage.currentproject);
         }
       }
-
-
 
       $rootScope.$on('Facebook:statusChange', function(ev, data) {
         //console.log('Facebook Status: ', JSON.stringify(data));
@@ -212,16 +208,13 @@ angular.module('app')
 
           $sessionStorage.currentproject = crypt.encrypt( $scope.user.currentproject);
 
-          $socket.send("message", $scope.user.currentproject.applicationkey);
+          $socket.send("change", $scope.user.currentproject.applicationkey);
         }
       }
 
 
-
-
-
       $scope.toaster = {
-        type: 'success',
+        type: 'note',
         title: 'Title',
         text: 'Message'
       };
@@ -233,8 +226,10 @@ angular.module('app')
 
       $socket.on("open", function(event, data){
         // process the data here
-        console.log(event, data);
-
+        //console.log(event, data);
+        if($scope.user.currentproject != undefined && $scope.user.currentproject.applicationkey != undefined && $scope.user.currentproject.applicationkey != ''){
+          $socket.send("messgae", $scope.user.currentproject.applicationkey);
+        }
       });
 
       $socket.on("close", function(event, data){
@@ -248,7 +243,13 @@ angular.module('app')
 
         if (data.appid == $scope.user.currentproject.applicationkey ) {
           console.log(data.appid);
-          toaster.pop($scope.toaster.type, $scope.toaster.title, $scope.toaster.text);
+
+          if(data.type == 'crawler') {
+            toaster.pop('note', '리뷰 수집', '리뷰 수집이 완료되었습니다.');
+          } else if (data.type == 'qna') {
+            toaster.pop('note', 'Q&A', '질문...');
+          }
+
         } else {
           console.log(data.appid);
         }

@@ -1,0 +1,22 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">FAQ(Frequently asked questions)</h1>
+</div>
+<div class="wrapper-md"  ng-controller="FAQListCtrl">
+  <ul ui-jq="sortable" ui-options="sortableOptions" class="list-group gutter list-group-lg list-group-sp">
+    <li ng-repeat="faq in faqlists track by $index" class="list-group-item bg-primary" index="sortableitem1">
+      <span class="pull-right" >
+        <a href><i class="fa fa-pencil fa-fw m-r-xs h5"></i></a>
+        <a href><i class="fa fa-times fa-fw  h5"></i></a>
+      </span>
+      <span class="pull-left"><i class="fa fa-sort text-muted fa m-r-sm h4"></i> </span>
+      <div class="clear">
+        <a href ng-click="isCollapsed = !isCollapsed" class="h5" >{{faq.Title}}</a>
+
+        <div collapse="isCollapsed" class="m-t">
+          <blockquote class="m-n h5">{{faq.Body}}</blockquote>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+</div>

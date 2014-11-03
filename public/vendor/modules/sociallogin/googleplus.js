@@ -237,7 +237,7 @@
 	            	  
 	            	  //$rootScope.$broadcast('GooglePlus:statusChange', authResult);
 	              });
-	    	}, 1000);
+	    	}, 1500);
 	    };
 		  
 	    var loadSDK = settings.loadSDK;

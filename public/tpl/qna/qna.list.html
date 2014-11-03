@@ -1,29 +1,24 @@
-<div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3">Q&A(Question & Answer)</h1>
-</div>
 
 <div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="QNACtrl">
   <div class="col  bg-light dk b-r bg-auto">
     <div class="wrapper b-b bg">
-      <span class="h3">Notice</span>
-      <a ui-sref="app.helpcenter.new" class="btn btn-sm btn-danger w-xs font-bold pull-right ">Write Notice</a>
+      <span class="h3">Q&A(Question & Answer)</span>
     </div>
     <div class="wrapper">
       <ul class="list-group" style="list-style:none;">
         <li class="m-b" ng-repeat="question in questions track by $index">
           <div class="b-info">
             <div class="tl-content panel padder b-a block">
-              <span class="arrow right pull-up visible-left"></span>
-              <div class="text-lt m-b-sm"><span class="h3 font-bold">{{question.Title}}</span>
-                <span class="m-l-sm" >({{question.Time * 1000|  date:"yyyy.MM.dd HH:mm:ss"}})</span>
-                               <span class="pull-right">
+              <div class="panel-body pull-in b-light">
+                      <span class="pull-right">
                                 <a href><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
                                 <a href><i class="fa fa-plus fa-fw m-r-xs"></i></a>
                                 <a href ng-click="deleteQna($index)"><i class="fa fa-times fa-fw"></i></a>
                               </span>
-              </div>
-              <div class="panel-body pull-in b-t b-light">
-                <p  ng-bind="question.Body"></p>
+                <blockquote>
+                  <p  ng-bind="question.Body"></p>
+                </blockquote>
+                <span class="m-l-sm" >- {{question.Time * 1000|  date:"yyyy.MM.dd HH:mm:ss"}}</span>
                 <div class="panel panel-default m-t-md m-b-n-sm pos-rlt" ng-hide="question.Comment">
                   <span class="arrow top pull-left"></span>
                   <textarea class="form-control no-border" rows="3" placeholder="Your comment..." ng-model="comment[$index]"></textarea>

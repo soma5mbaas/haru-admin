@@ -1,25 +1,30 @@
-<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="NoticeCtrl">
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="ReviewCtrl">
     <div class="col  bg-light dk b-r bg-auto">
         <div class="wrapper b-b bg">
-            <span class="h3">Notice</span>
-            <a ui-sref="app.helpcenter.new" class="btn btn-sm btn-danger w-xs font-bold pull-right ">Write Notice</a>
+            <span class="h3">Review</span>
+        </div>
+        <div class="wrapper bg-white b-b">
+            <ul class="nav nav-pills nav-sm">
+                <li ng-class="{active: market=='playGoogle'}" ng-click="reviewReflash('playGoogle')"><a href>Play Store</a></li>
+                <li ng-class="{active: market=='amazon'}" ng-click="reviewReflash('amazon')"><a href>Amazon AppStore</a></li>
+                <li ng-class="{active: market=='ios'}" ng-click="reviewReflash('ios')"><a href>iOS AppStore</a></li>
+            </ul>
         </div>
         <div class="wrapper">
             <ul class="list-group" style="list-style:none;">
-                <li class="m-b" ng-repeat="notice in notices track by $index">
+                <li class="m-b" ng-repeat="review in reviews track by $index">
                     <div class="b-info">
                         <div class="tl-content panel padder b-a block">
                             <span class="arrow right pull-up visible-left"></span>
-                            <div class="text-lt m-b-sm"><span class="h3 font-bold">{{notice.Title}}</span>
-                                <span class="m-l-sm" >({{notice.Time * 1000|  date:"yyyy.MM.dd HH:mm:ss"}})</span>
-                               <span class="pull-right">
-                                <a href><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
-                                <a href><i class="fa fa-plus fa-fw m-r-xs"></i></a>
-                                <a href ng-click="deleteNotice($index)"><i class="fa fa-times fa-fw"></i></a>
-                              </span>
+                            <div class="text-lt m-b-sm"><span class="h3 font-bold">{{review.title}}</span>
+                                <span class="m-l-sm" >({{review.name}}, {{review.date |  date:"yyyy.MM.dd HH:mm:ss"}})</span>
+                                <div ng-init="xx = review.rating" class="m-b text-lg pull-right">
+                                    <rating ng-model="xx" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'"></rating> <b>({{xx}})</b>
+                                </div>
+
                             </div>
                             <div class="panel-body pull-in b-t b-light">
-                                <p ta-bind ng-model="notice.Body"></p>
+                                <p ta-bind ng-model="review.body">{{review.body}}</p>
                             </div>
                         </div>
                     </div>

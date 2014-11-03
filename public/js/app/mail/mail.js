@@ -34,7 +34,6 @@ app.controller('MailCtrl', ['$scope', function($scope) {
       'b-l-success': angular.lowercase(label) === 'work'      
     };
   };
-
 }]);
 
 app.controller('MailListCtrl', ['$scope', 'mails', '$stateParams', function($scope, mails, $stateParams) {
@@ -62,6 +61,7 @@ app.controller('MailNewCtrl', ['$scope', function($scope) {
     {name: 'Lucy Yokes', email:'lucy.yokes@gmail.com'}
   ];
 }]);
+
 
 angular.module('app').directive('labelColor', function(){
   return function(scope, $el, attrs){

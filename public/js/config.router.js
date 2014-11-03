@@ -627,28 +627,26 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                           function( uiLoad ){
-                              return uiLoad.load( ['js/app/mail/mail.js',
-                                  'js/app/mail/mail-service.js',
-                                  'vendor/libs/moment.min.js'] );
+                              return uiLoad.load( ['vendor/libs/moment.min.js'] );
                           }]
                   }
               })
               .state('app.helpcenter.notice', {
                   url: '/notice',
-                  templateUrl: 'tpl/helpcenter/notice.list.html',
+                  templateUrl: 'tpl/notice/notice.list.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
-                              return $ocLazyLoad.load(['textAngular',
+                              return $ocLazyLoad.load([
                                   'js/app/notice/notice.js',
                                   'js/app/notice/notice-service.js'
                               ]);
                           }]
                   }
               })
-              .state('app.helpcenter.new', {
-                  url: '/new',
-                  templateUrl: 'tpl/helpcenter/notice.new.html',
+              .state('app.helpcenter.noticenew', {
+                  url: '/noticenew',
+                  templateUrl: 'tpl/notice/notice.new.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
@@ -663,26 +661,36 @@ angular.module('app')
               .state('app.helpcenter.faq', {
                   abstract: true,
                   url: '/faq',
-                  templateUrl: 'tpl/helpcenter/faq.html',
+                  templateUrl: 'tpl/faq/faq.html',
                   // use resolve to load other dependences
                   resolve: {
-                      deps: ['uiLoad',
-                          function( uiLoad ){
-                              return uiLoad.load( ['js/app/push/push.js',
-                                  'js/app/push/push-service.js',
-                                  'js/app/push/pushlist-service.js',
-                                  'vendor/libs/moment.min.js'] );
+                      deps: ['$ocLazyLoad',
+                          function ($ocLazyLoad) {
+                              return $ocLazyLoad.load([
+                                  'js/app/faq/faq.js',
+                                  'js/app/faq/faq-service.js',
+                              ]);
                           }]
                   }
               })
               .state('app.helpcenter.faq.list', {
                   url: '/list/{fold}',
-                  templateUrl: 'tpl/helpcenter/faq.list.html'
-              })
+                  templateUrl: 'tpl/faq/faq.list.html'
 
+              })
+              .state('app.helpcenter.faq.new', {
+                  url: '/new',
+                  templateUrl: 'tpl/faq/faq.new.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function ($ocLazyLoad) {
+                              return $ocLazyLoad.load(['textAngular']);
+                          }]
+                  }
+              })
               .state('app.helpcenter.qna', {
                   url: '/qna',
-                  templateUrl: 'tpl/helpcenter/qna.list.html',
+                  templateUrl: 'tpl/qna/qna.list.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
@@ -694,9 +702,19 @@ angular.module('app')
                   }
               })
 
-              .state('app.helpcenter.appreviews', {
-                  url: '/appreviews',
-                  templateUrl: 'tpl/helpcenter/page_appreviews.html'
+
+              .state('app.helpcenter.review', {
+                  url: '/review',
+                  templateUrl: 'tpl/review/review.list.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'js/app/review/review.js',
+                                  'js/app/review/review-service.js'
+                              ]);
+                          }]
+                  }
               })
       }
     ]

@@ -1,77 +1,94 @@
 package haru.action
 
 import scala.reflect.runtime.universe
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.StringEntity
-import org.apache.http.impl.client.HttpClientBuilder
-import org.joda.time.DateTimeZone
-import akka.actor.Actor
-import akka.actor.ActorLogging
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.actor.actorRef2Scala
-import haru.dao.PushDao
-import xitrum.Log
-import xitrum.annotation.GET
-import xitrum.annotation.POST
-import xitrum.SockJsText
-import xitrum.annotation.SOCKJS
-import akka.actor.{Actor, ActorRef, Props, Terminated}
-import glokka.Registry
-import xitrum.{Config, Log, SockJsAction, SockJsText, WebSocketAction, WebSocketText, WebSocketBinary, WebSocketPing, WebSocketPong}
-import xitrum.annotation.{GET, SOCKJS, WEBSOCKET}
-import xitrum.SkipCsrfCheck
-import xitrum.ActorAction
 import scala.util.parsing.json.JSON._
+import scala.util.parsing.json.JSON
 import scala.util.parsing.json.JSONArray
 import scala.util.parsing.json.JSONObject
+
+import akka.actor.Actor
+import akka.actor.ActorLogging
+import akka.actor.ActorRef
+import akka.actor.ActorSystem
+import akka.actor.Props
+import akka.actor.Terminated
+import akka.actor.actorRef2Scala
+import glokka.Registry
+import xitrum.ActorAction
+import xitrum.Config
+import xitrum.Log
+import xitrum.SkipCsrfCheck
+import xitrum.SockJsAction
+import xitrum.SockJsText
+import xitrum.WebSocketAction
+import xitrum.annotation.GET
+import xitrum.annotation.SOCKJS
+
+import spray.json._
+import DefaultJsonProtocol._ 
+
 
 @GET("/qna/webhook")
 class QnAWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatRoom {
   import ChatRoom._
-  var test ="" 
+ 
   def execute() {
-    //val appid = param[Int]("appid")
-    //test = "{\"appid\":\"934b90c0-20e5-40f4-94e7-31c05840ec83\", \"qna\":\"question\"}";
-    test = JSONArray("message" :: JSONObject (Map ("appid" -> "934b90c0-20e5-40f4-94e7-31c05840ec83", "qna" -> "question")) :: Nil) .toString()
+    val appid = param[String]("appid")
+    val messagetype = param[String]("messagetype")
+    val title = paramo[String]("title")
+    val body = paramo[String]("Body")
     
-	registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
-    context.become(WebHookRegister)
+    
+    val message = JSONArray("message" :: JSONObject (Map ("appid" -> appid, "type" -> messagetype)) :: Nil) .toString()
+    registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
+    context.become(WebHookRegister(appid, message))
   }
 
-  private def WebHookRegister(): Actor.Receive = {
+  private def WebHookRegister(appid:String, message:String): Actor.Receive = {
     case msg: Registry.FoundOrCreated =>
       val chatRoom = msg.ref
-      chatRoom !  Msg(test)
+      chatRoom !  Msg(appid, message)
       respondJson("{success:true}") 
-      //context.become(onJoinChatRoom(chatRoom))
   }
   
+  
   def onJoinChatRoom(chatRoom: ActorRef) = {
-    case WebHookJoin =>
-      chatRoom ! Msg(test)
-      respondJson("{success:true}") 
+    case ChatRoom.Msg(appid, body) =>
+      log.debug("Socket Send Msg: " + body)
   }
 }
 
+object MyJsonProtocol extends DefaultJsonProtocol {
+  implicit object RegisterSockJSJSONFormat extends RootJsonFormat[ChatRoom.RegisterSockJS] {
+    def write(c: ChatRoom.RegisterSockJS) =
+      JsArray(JsString(c.typeval), JsString(c.message ))
+
+    def read(value: JsValue) = value match {
+      case JsArray(Vector(JsString(typeval), JsString(message))) =>
+        new ChatRoom.RegisterSockJS(typeval, message)
+      case _ => deserializationError("Color expected")
+    }
+  }
+}
 
 @SOCKJS("sockJsChat")
-class SockJsChatActor extends SockJsAction with LookupOrCreateChatRoom {
+class SockJsChatActor extends SockJsAction  with LookupOrCreateChatRoom {
   def execute() {
     joinChatRoom()
   }
 
   def onJoinChatRoom(chatRoom: ActorRef) = {
     case SockJsText(msg) =>
-      chatRoom ! ChatRoom.Msg(msg)
-
-    case ChatRoom.Msg(body) =>
+     	import MyJsonProtocol._
+     	// json parsing
+		val jsonAst = msg.parseJson
+		// spray.json.JsValue -> scala object  
+		val parsemsg =  jsonAst.convertTo[ChatRoom.RegisterSockJS]  
+		chatRoom ! parsemsg
+    
+    case ChatRoom.Msg(appid, body) =>
       log.debug("Socket Send Msg: " + body)
       respondSockJsText(body)
-      
-    case message:String =>
-      log.debug("sockJsChat string Send Msg: " + message)
-      respondSockJsText(message)
   }
 }
 
@@ -87,7 +104,8 @@ object ChatRoom {
   // * When there's a chat message, receive Msg
   case object Join
   case object WebHookJoin
-  case class  Msg(body: String)
+  case class RegisterSockJS(typeval :String, message : String)
+  case class Msg(appid : String, body: String)
 
   // Registry is used for looking up chat room actor by name.
   // For simplicity, this demo uses only one chat room (lobby chat room).
@@ -121,28 +139,25 @@ class ChatRoom extends Actor with Log {
 
   private var subscribers = Seq.empty[ActorRef]
   private var msgs        = Seq.empty[String]
-
-  def receive = {
-    case WebHookJoin =>
-     sender ! WebHookJoin
+  private val subscribersMap = scala.collection.mutable.Map[String,ActorRef]()
+//  private var subscribersMap = new scala.collection.mutable.Map[String, ActorRef]()
+  def receive = { 
     case Join =>
       val subscriber = sender
       subscribers = subscribers :+ sender
       context.watch(subscriber)
-      msgs foreach (sender ! Msg(_))
-   
-
+    case RegisterSockJS(typeval, appid) =>
+      val subscriber = sender
+      subscribersMap.put(appid, subscriber)
+      log.debug(subscriber +" : "+ appid + " : " + subscribersMap.toString)
+      
     //socket send와 관련됨..  
-    case m @ Msg(body) =>
+    case m @ Msg(appid, body) =>
+      val subscriber = subscribersMap.get(appid);
+      if(subscriber.isDefined)
+    	  subscriber.get ! m
+      
       log.debug("ChatRoom Send Msg: " + body + subscribers.length)
-     
-      msgs = Seq(body)
-      //if (msgs.length > MAX_MSGS) msgs = msgs.drop(1)
-      subscribers foreach (_ ! m)
-
-    case message : String =>
-      log.debug("ChatRoom receive: " + message)
-      subscribers foreach (_ ! message)
 
     case Terminated(subscriber) =>
       subscribers = subscribers.filterNot(_ == subscriber)

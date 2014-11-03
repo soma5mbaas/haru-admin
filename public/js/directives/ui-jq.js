@@ -23,7 +23,6 @@ angular.module('ui.jq', ['ui.load']).
   return {
     restrict: 'A',
     compile: function uiJqCompilingFunction(tElm, tAttrs) {
-
       if (!angular.isFunction(tElm[tAttrs.uiJq]) && !JQ_CONFIG[tAttrs.uiJq]) {
         throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
       }
@@ -43,13 +42,30 @@ angular.module('ui.jq', ['ui.load']).
           } else if (options) {
             linkOptions = [options];
           }
+
+
           return linkOptions;
         }
 
+
         // If change compatibility is enabled, the form input's "change" event will trigger an "input" event
         if (attrs.ngModel && elm.is('select,input,textarea')) {
+
           elm.bind('change', function() {
             elm.trigger('input');
+          });
+        }
+
+
+
+        if(attrs.uiJq == 'sortable'){
+          elm.bind('sortupdate', function(e, ui) {
+            var linkOptions = [];
+            linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
+            if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
+              linkOptions[0] = angular.extend({}, options, linkOptions[0]);
+            }
+            linkOptions[0].sortupdate(e, ui, elm);
           });
         }
 
@@ -57,6 +73,7 @@ angular.module('ui.jq', ['ui.load']).
         function callPlugin() {
           $timeout(function() {
             elm[attrs.uiJq].apply(elm, getOptions());
+
           }, 0, false);
         }
 

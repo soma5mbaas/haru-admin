@@ -113,6 +113,13 @@ angular.module('app')
                       'vendor/modules/angular-slider/angular-slider.min.js',
                       'vendor/modules/angular-slider/angular-slider.css'
                   ]
+              },
+              {
+                  name: 'sortable',
+                  files: [
+                      'vendor/modules/ng-sortable/ng-sortable.min.js',
+                      'vendor/modules/ng-sortable/ng-sortable.min.css'
+                  ]
               }
           ]
       });
