@@ -1,6 +1,6 @@
 app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
     var uploader = $scope.uploader = new FileUploader({
-        url: 'http://172.16.101.195:3000/files',
+        url: 'http://stage.haru.io:10500/files',
         headers : {'Application-Id':$scope.user.currentproject.applicationkey}
     });
 

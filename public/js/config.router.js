@@ -637,7 +637,7 @@ angular.module('app')
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
-                              return $ocLazyLoad.load([
+                              return $ocLazyLoad.load(['textAngular',
                                   'js/app/notice/notice.js',
                                   'js/app/notice/notice-service.js'
                               ]);
@@ -675,7 +675,16 @@ angular.module('app')
               })
               .state('app.helpcenter.faq.list', {
                   url: '/list/{fold}',
-                  templateUrl: 'tpl/faq/faq.list.html'
+                  templateUrl: 'tpl/faq/faq.list.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function ($ocLazyLoad) {
+                              return $ocLazyLoad.load([
+                                  'js/app/faq/faq.js',
+                                  'js/app/faq/faq-service.js',
+                              ]);
+                          }]
+                  }
 
               })
               .state('app.helpcenter.faq.new', {
@@ -694,7 +703,7 @@ angular.module('app')
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
-                              return $ocLazyLoad.load([
+                              return $ocLazyLoad.load(['textAngular',
                                   'js/app/qna/qna.js',
                                   'js/app/qna/qna-service.js'
                               ]);

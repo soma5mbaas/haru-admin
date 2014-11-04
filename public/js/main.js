@@ -55,7 +55,7 @@ angular.module('app')
 
       // angular translate
       $scope.lang = { isopen: false };
-      $scope.langs = {en:'English', de_DE:'German', it_IT:'Italian'};
+      $scope.langs = {en:'English', ko_KR:'Korean'}; //de_DE:'German', it_IT:'Italian', };
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
       $scope.setLang = function(langKey, $event) {
         // set the current lang
@@ -90,6 +90,8 @@ angular.module('app')
             $scope.user.projects = data.projects;
             $scope.$broadcast('loadproject', data.projects);
             //console.log($scope.user.currentproject);
+          }, function(error){
+            console.log(error);
           });
         }
 
@@ -111,7 +113,7 @@ angular.module('app')
             $scope.user.projects = data.projects;
             $scope.$broadcast('loadproject', data.projects);
           }, function(data){
-            //	console.log(data);
+            console.log(data);
           });
 
           $localStorage.auth = {'token':data.authResponse.accessToken, 'provider':'FACEBOOK'};

@@ -1,7 +1,6 @@
 /**
  * Created by pheadra on 10/31/14.
  */
-console.log('tnoic');
 app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', function($scope, notices, $modal, $log, $state) {
     $scope.htmlVariable = 'test';
 

@@ -107,7 +107,7 @@
 		          if ( response.data ) {
 		        	deferred.resolve(response.data);
 		          } else {
-		        	deferred.reject(response.data);
+		        	deferred.reject(response);
 		          }
 		        }, function(x) {
 		    	  deferred.reject({error:'Server Error'});
@@ -142,7 +142,8 @@
 		    	  if ( response.data ) {
 		    		deferred.resolve(response.data);
 		          } else {
-		        	deferred.reject(response.data);
+					console.log(response);
+		        	deferred.reject(response);
 		          }
 		       }, function(x) {
 		    	  deferred.reject({error:'Server Error'});
