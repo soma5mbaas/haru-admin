@@ -343,6 +343,16 @@ angular.module('app')
                       }]
                   }
               })
+              .state('access.project', {
+                  url: '/project',
+                  templateUrl: 'tpl/page_project.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                          function( uiLoad ){
+                              return uiLoad.load( ['js/controllers/projectsform.js'] );
+                          }]
+                  }
+              })
               .state('access.forgotpwd', {
                   url: '/forgotpwd',
                   templateUrl: 'tpl/page_forgotpwd.html'
@@ -571,7 +581,11 @@ angular.module('app')
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
-                              return $ocLazyLoad.load(['js/controllers/chart.js']);
+                              return $ocLazyLoad.load([
+                                  'js/directives/hcPie.js',
+                                  'js/controllers/chart.js',
+                              'js/app/monetization/monetization.js'
+                              ]);
                           }]
                   }
               })
@@ -612,11 +626,27 @@ angular.module('app')
               })
               .state('app.setting.email', {
                   url: '/email',
-                  templateUrl: 'tpl/setting/page_email.html'
+                  templateUrl: 'tpl/setting/page_email.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['textAngular',
+                                  'js/app/setting/email.js'
+                              ]);
+                          }]
+                  }
               })
               .state('app.setting.collorators', {
                   url: '/collorators',
-                  templateUrl: 'tpl/setting/page_collorators.html'
+                  templateUrl: 'tpl/setting/page_collorators.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function ($ocLazyLoad) {
+                              return $ocLazyLoad.load([
+                                  'js/app/setting/collorator.js'
+                              ]);
+                          }]
+                  }
               })
               // helpcenter
               .state('app.helpcenter', {
@@ -724,6 +754,49 @@ angular.module('app')
                               ]);
                           }]
                   }
+              })
+              .state('app.overview', {
+                  url: '/overview',
+                  templateUrl: 'tpl/document/overview.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'tpl/document/overview.css'                              ]);
+                          }]
+                  }
+              })
+              .state('app.quickstart', {
+                  url: '/quickstart',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.android', {
+                  url: '/android',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.ios', {
+                  url: '/ios',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.rest', {
+                  url: '/rest',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.sdkdownloads', {
+                  url: '/sdkdownloads',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.apilibraries', {
+                  url: '/apilibraries',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.tutorials', {
+                  url: '/tutorials',
+                  templateUrl: 'tpl/docs.html'
+              })
+              .state('app.videos', {
+                  url: '/videos',
+                  templateUrl: 'tpl/docs.html'
               })
       }
     ]

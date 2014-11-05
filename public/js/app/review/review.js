@@ -15,6 +15,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', function($scope, reviews) {
             console.log(result);
         }, function(result){
             console.log(result);
+            getNoticeList($scope.market);
         });
     }
     getNoticeList($scope.market);

@@ -8,7 +8,7 @@ app.controller('QNACtrl', ['$scope', 'qnas', function($scope, qnas) {
 
     var getQuestionList = function() {
         qnas.getQuestionList($scope.user.currentproject.applicationkey).then(function (result) {
-            $scope.questions =result;
+            $scope.questions =result.return;
 
             console.log(result);
         });

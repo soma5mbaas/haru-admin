@@ -1,0 +1,123 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:300,400,800);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700,800,300&subset=latin,latin-ext);
+
+.gt-feature-title {
+    font-weight: 800;
+    font-family: Raleway;
+    text-transform: uppercase;
+    letter-spacing:1px;
+}
+
+.gt-feature-content {
+    text-transform: none;
+    font-weight: normal;
+    font-family: open sans;
+    letter-spacing: 0;
+    font-size: 400px;
+}
+
+.gt-feature:hover .gt-feature-title {
+    color: #47b4d3 !important;
+    text-decoration: none;
+}
+
+.gt-feature:hover .gt-feature-oval{
+    background: #47b4d3;
+}
+
+.gt-feature:hover .gt-feature-oval {
+    border-color: #47b4d3;
+}
+
+.gt-feature:hover .gt-feature-oval i {
+    color: #fff;
+}
+
+.gt-feature:hover .gt-feature-content {
+    opacity: 1;
+}
+
+h4.section-title span {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 0 10px;
+    border-radius: 9px;
+    background: #333;
+    color: #fff;
+    display: inline-block;
+}
+
+
+
+.clear {
+    clear: both;
+}
+
+.h30 { height: 30px; }
+.h50 { height: 50px; }
+.h80 { height: 50px; }
+
+.gt-feature {
+    display: block;
+    padding: 25px 0;
+    clear: both;
+    cursor: pointer;
+    position: relative;
+}
+
+.gt-feature-right {
+    text-align: right;
+}
+
+.gt-feature-right .gt-feature-content {
+    position: absolute;
+    left: 0;
+    right: 80px;
+    font-size: 15px;
+    color: #333333;
+    opacity: 1;
+}
+
+.gt-feature-left .gt-feature-content {
+    position: absolute;
+    right: 0;
+    left: 80px;
+}
+
+.gt-feature-left {
+    text-align: left;
+}
+
+.gt-feature-oval {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #000;
+    line-height: 60px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 50%;
+    display: block;
+}
+
+.gt-feature-right a.gt-feature-oval {
+    float: right;
+    margin-left: 20px;
+}
+
+.gt-feature-left a.gt-feature-oval {
+    float: left;
+    margin-right: 20px;
+}
+
+.gt-feature-title {
+    font-size: 18px;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+.gt-feature-content {
+    font-size: 15px;
+    color: #333;
+    display: block;
+    letter-spacing: 1px;
+}

@@ -76,6 +76,8 @@ app.controller('PushListCtrl', ['$scope', 'pushs', '$stateParams', 'pushlists', 
 app.controller('PushDetailCtrl', ['$scope', 'pushs', '$stateParams', function($scope, pushs, $stateParams) {
     pushs.get($stateParams.mailId).then(function(mail){
         $scope.mail = mail;
+    }, function (error) {
+        console.log(error);
     })
 }]);
 

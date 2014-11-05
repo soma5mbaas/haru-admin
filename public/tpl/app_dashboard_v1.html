@@ -40,7 +40,7 @@
             <div class="col-xs-6">
               <div class="panel padder-v item">
                 <div class="h1 text-info font-thin h1">521</div>
-                <span class="text-muted text-xs">New items</span>
+                <span class="text-muted text-xs">Users</span>
                 <div class="top text-right w-full">
                   <i class="fa fa-caret-down text-warning m-r-sm"></i>
                 </div>
@@ -58,7 +58,7 @@
             <div class="col-xs-6">
               <a href class="block panel padder-v bg-info item">
                 <span class="text-white font-thin h1 block">432</span>
-                <span class="text-muted text-xs">Comments</span>
+                <span class="text-muted text-xs">Request</span>
                 <span class="top text-left">
                   <i class="fa fa-caret-up text-warning m-l-sm"></i>
                 </span>
@@ -92,10 +92,10 @@
               <input type="checkbox" ng-model="showSpline">
               <i></i>
             </label>
-            <h4 class="font-thin m-t-none m-b text-muted">Latest Campaign</h4>
+            <h4 class="font-thin m-t-none m-b text-muted">Latest Requests</h4>
             <div ui-jq="plot" ui-refresh="showSpline" ui-options="
               [
-                { data: {{d0_1}}, label:'TV', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } },
+                { data: {{d0_1}}, label:'API', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } },
                 { data: {{d0_2}}, label:'Mag', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } }
               ], 
               {
@@ -118,8 +118,8 @@
       <div class="panel hbox hbox-auto-xs no-border">
         <div class="col wrapper">
           <i class="fa fa-circle-o text-info m-r-sm pull-right"></i>
-          <h4 class="font-thin m-t-none m-b-none text-primary-lt">Managed Services</h4>
-          <span class="m-b block text-sm text-muted">Service report of this year (updated 1 hour ago)</span>
+          <h4 class="font-thin m-t-none m-b-none text-primary-lt">User Services</h4>
+          <span class="m-b block text-sm text-muted">Service report of this Month (updated 1 hour ago)</span>
           <div ui-jq="plot" ui-options="
             [
               { data: {{d4}}, lines: { show: true, lineWidth: 1, fill:true, fillColor: { colors: [{opacity: 0.2}, {opacity: 0.8}] } } }
@@ -141,17 +141,17 @@
           <div class="">
             <div class="">
               <span class="pull-right text-primary">60%</span>
-              <span>Consulting</span>
+              <span>DAU</span>
             </div>
             <progressbar value="60" class="progress-xs m-t-sm bg-white" animate="true" type="primary"></progressbar>
             <div class="">
               <span class="pull-right text-info">35%</span>
-              <span>Online tutorials</span>
+              <span>Sleep User</span>
             </div>
             <progressbar value="35" class="progress-xs m-t-sm bg-white" animate="true" type="info"></progressbar>
             <div class="">
               <span class="pull-right text-warning">25%</span>
-              <span>EDU management</span>
+              <span>Return User</span>
             </div>
             <progressbar value="25" class="progress-xs m-t-sm bg-white" animate="true" type="warning"></progressbar>
           </div>

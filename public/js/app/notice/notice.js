@@ -8,9 +8,9 @@ app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', f
 
     var getNoticeList = function() {
         notices.getNotice($scope.user.currentproject.applicationkey).then(function (result) {
-            $scope.notices =result;
+            $scope.notices =result.return;
 
-            console.log(result);
+
         });
     }
     getNoticeList();

@@ -10,8 +10,8 @@ app.controller('FAQCtrl', ['$scope', 'faqs', function($scope, faqs) {
   var colorlist = ['#7266ba', '#fad733', '#27c24c', '#23b7e5'];
 
   $scope.faqcategory = [];
-  faqs.getFaqCategory($scope.user.currentproject.applicationkey).then(function(result){
-    console.log(result);
+  faqs.getFaqCategory($scope.user.currentproject.applicationkey).then(function(faqresult){
+    var result = faqresult.return;
 
     $scope.faqcategory.push(
         {
@@ -80,20 +80,21 @@ app.controller('FAQCtrl', ['$scope', 'faqs', function($scope, faqs) {
 
 
 app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope, faqs, $stateParams) {
-  var fold = $stateParams.fold
-  console.log(fold);
+
   if($stateParams.fold == ''){
     $scope.fold = 'All'
   } else {
     $scope.fold = $stateParams.fold;
   }
+  console.log( $scope.fold);
 
   $scope.faqlists = [];
   faqs.getFaqList($scope.user.currentproject.applicationkey, $scope.fold).then(function(result){
-    if(result == 'null'){
+    console.log(result.return )
+    if(result.return === null){
       $scope.faqlists = [];
     } else {
-      $scope.faqlists = result;
+      $scope.faqlists = result.return;
     }
     console.log($scope.faqlists);
   });
