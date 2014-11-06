@@ -22,6 +22,5 @@ angular.module('app', [
     'infinite-scroll',
     'ngClipboard',
     'toaster',
-    'ng-socket',
-    'highcharts-ng'
+    'ng-socket'
 ]);

@@ -575,15 +575,13 @@ angular.module('app')
                           }]
                   }
               })
-              .state('app.analytics', {
-                  url: '/analytics',
-                  templateUrl: 'tpl/app_analytics.html',
+              .state('app.monetization', {
+                  url: '/monetization',
+                  templateUrl: 'tpl/monetization/app_monetization.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load([
-                                  'js/directives/hcPie.js',
-                                  'js/controllers/chart.js',
                               'js/app/monetization/monetization.js'
                               ]);
                           }]
