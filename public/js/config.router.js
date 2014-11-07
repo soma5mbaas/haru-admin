@@ -580,11 +580,19 @@ angular.module('app')
                   templateUrl: 'tpl/monetization/app_monetization.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
-                          function( $ocLazyLoad ){
-                              return $ocLazyLoad.load([
-                              'js/app/monetization/monetization.js'
-                              ]);
+                          function( $ocLazyLoad){
+                           //   return $ocLazyLoad.load('ui.select').then(
+                             //     function(){
+                                      return $ocLazyLoad.load([ 'vendor/libs/moment.min.js',
+                                          'vendor/modules/ng-bs-daterangepicker/daterangepicker.js',
+                                          'vendor/modules/ng-bs-daterangepicker/daterangepicker-bs3.css',
+                                          'js/app/monetization/monetization.js',
+                                          'js/app/monetization/monetization.css'
+                                      ]);
+                               //   }
+                              //);
                           }]
+
                   }
               })
               //app setting
@@ -760,7 +768,8 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load([
-                                  'tpl/document/overview.css'                              ]);
+                                  'tpl/document/overview.css'
+                              ]);
                           }]
                   }
               })

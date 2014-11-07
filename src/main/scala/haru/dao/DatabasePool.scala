@@ -19,20 +19,25 @@ trait DatabasePool {
     
     ds.setDriverClass(Driver)
     ds.setJdbcUrl(Url)
+    ds.setInitialPoolSize(10)
     ds.setMinPoolSize(10)
     ds.setAcquireIncrement(10)
     ds.setMaxPoolSize(100)
 
-    ds.setMaxStatements(180)
-    ds.setMaxStatementsPerConnection(100)
 
-    ds.setMaxIdleTime(1000);
-    ds.setMaxIdleTimeExcessConnections(500)
+    //ds.setMaxIdleTime(1000);
+    //ds.setMaxIdleTimeExcessConnections(500)
     
     ds.setNumHelperThreads(6)
     ds.setUser(DBUser)
     ds.setPassword(DBPassword)
- 
+    ds.setPreferredTestQuery("select 1 from dual")
+    ds.setBreakAfterAcquireFailure(false)
+    ds.setIdleConnectionTestPeriod(100)
+   
+    //ds.setTestConnectionOnCheckin(false)
+    //ds.setTestConnectionOnCheckout(true)
+    
     Database.forDataSource(ds)
   }
 }

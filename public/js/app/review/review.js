@@ -8,17 +8,17 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', function($scope, reviews) {
 
     $scope.market = 'playGoogle';
 
-    var getNoticeList = function(market) {
-        reviews.getReviewList($scope.user.currentproject.applicationkey, market).then(function (result) {
+    var getNoticeList = function(market, page, limit) {
+        reviews.getReviewList($scope.user.currentproject.applicationkey, market, page, limit).then(function (result) {
             $scope.reviews =result;
 
             console.log(result);
         }, function(result){
             console.log(result);
-            getNoticeList($scope.market);
+            //getNoticeList($scope.market);
         });
     }
-    getNoticeList($scope.market);
+    getNoticeList($scope.market, 0, 10);
 
 
     $scope.reviewReflash = function(market){

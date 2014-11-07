@@ -28,6 +28,36 @@ import spray.json._
 import DefaultJsonProtocol._ 
 
 
+
+@GET("/crawler/webhook")
+class CrawlerWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatRoom {
+  import ChatRoom._
+ 
+  def execute() {
+    val appid = param[String]("appid")
+    val messagetype = param[String]("messagetype")
+    val body = paramo[String]("Body")
+    
+    
+    val message = JSONArray("message" :: JSONObject (Map ("appid" -> appid, "type" -> messagetype)) :: Nil) .toString()
+    registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
+    context.become(WebHookRegister(appid, message))
+  }
+
+  private def WebHookRegister(appid:String, message:String): Actor.Receive = {
+    case msg: Registry.FoundOrCreated =>
+      val chatRoom = msg.ref
+      chatRoom !  Msg(appid, message)
+      respondJson("{success:true}") 
+  }
+  
+  
+  def onJoinChatRoom(chatRoom: ActorRef) = {
+    case ChatRoom.Msg(appid, body) =>
+      log.debug("Socket Send Msg: " + body)
+  }
+}
+
 @GET("/qna/webhook")
 class QnAWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatRoom {
   import ChatRoom._

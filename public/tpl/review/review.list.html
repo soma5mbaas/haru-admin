@@ -5,9 +5,19 @@
         </div>
         <div class="wrapper bg-white b-b">
             <ul class="nav nav-pills nav-sm">
-                <li ng-class="{active: market=='playGoogle'}" ng-click="reviewReflash('playGoogle')"><a href>Play Store</a></li>
-                <li ng-class="{active: market=='amazon'}" ng-click="reviewReflash('amazon')"><a href>Amazon AppStore</a></li>
-                <li ng-class="{active: market=='ios'}" ng-click="reviewReflash('ios')"><a href>iOS AppStore</a></li>
+                <li ng-class="{active: market=='playGoogle'}" ng-click="reviewReflash('playGoogle')"><a href>Korean</a></li>
+                <li ng-class="{active: market=='amazon'}" ng-click="reviewReflash('amazon')"><a href>Japanese</a></li>
+                <li ng-class="{active: market=='English'}" ng-click="reviewReflash('English')"><a href>English</a></li>
+                <li ng-class="{active: market=='Chinese'}" ng-click="reviewReflash('Chinese')"><a href>Chinese</a></li>
+                <li ng-class="{active: market=='France'}" ng-click="reviewReflash('France')"><a href>France</a></li>
+            </ul>
+        </div>
+
+        <div class="wrapper bg-white b-b">
+            <ul class="nav nav-pills nav-sm">
+                <li ><a href class=""><img src="/img/play_logo_x2.png" width="70px;"></a></li>
+                <li ><a href class=""><img src="/img/amazon_gray.png" width="70px;"></a></li>
+                <li ><a href class=""><img src="/img/market360.png" width="70px;"></a></li>
             </ul>
         </div>
         <div class="wrapper">
@@ -17,15 +27,25 @@
                         <div class="tl-content panel padder b-a block">
                             <span class="arrow right pull-up visible-left"></span>
                             <div class="text-lt m-b-sm"><span class="h3 font-bold">{{review.title}}</span>
-                                <span class="m-l-sm" >({{review.name}}, {{review.date |  date:"yyyy.MM.dd HH:mm:ss"}})</span>
+                                <span class="m-l-sm" ></span>
                                 <div ng-init="xx = review.rating" class="m-b text-lg pull-right">
-                                    <rating ng-model="xx" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'"></rating> <b>({{xx}})</b>
+
+                                    <rating ng-model="xx" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'" readonly="true"></rating> <b>({{xx}})</b>
                                 </div>
 
                             </div>
-                            <div class="panel-body pull-in b-t b-light">
-                                <p ta-bind ng-model="review.body">{{review.body}}</p>
+                            <div class="panel-body pull-in b-t b-light  ">
+                                <blockquote ng-class="{'b-l-success' : review.market == 'playGoogle', 'b-l-primary' : review.market == 'amazon', 'b-l-info' : review.market == 'market360'}" >
+                                    <p ng-bind="review.body"></p>
+                                    <small>{{review.name}}, {{review.date |  date:"yyyy.MM.dd HH:mm"}}</small>
+                                </blockquote>
+                                <div class="pull-right" ng-switch on="review.market">
+                                    <img src="/img/play_logo_x2.png" width="70px;" ng-switch-when="playGoogle">
+                                    <img src="/img/amazon_gray.png" width="70px;" ng-switch-when="amazon">
+                                    <img src="/img/market360.png" width="70px;" ng-switch-when="market360">
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </li>

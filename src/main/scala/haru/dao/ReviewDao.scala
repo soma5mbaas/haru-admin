@@ -9,13 +9,13 @@ import Q.interpolation
 
 object ReviewDao extends DatabasePool {
 
-  def findReviewList(appid: String, market:String): List[Map[String, Any]] = databasePool withSession {
+  def findReviewList(appid: String, market:String, page:Int, count:Int): List[Map[String, Any]] = databasePool withSession {
     implicit session =>
       /// TODO 만약없다면 exception??
       val query = sql"""
       select applicationid, commentid, market, imagesource, name, date, rating, title, body 
       from Reviews 
-      where applicationid=$appid  and  market = $market order by date desc
+      where applicationid=$appid  and  market = $market and body != ''  order by date desc limit $page, $count
        """.as[(String, String, String, String, String, Long, Int, String, String)]
 
       val reviewlist = query.list
@@ -26,3 +26,4 @@ object ReviewDao extends DatabasePool {
       return reviews
   }
 }
+// push_table.filter(p => p.appid === appid).sortBy(_.sendtime.desc).drop(page * limit).take(limit).run

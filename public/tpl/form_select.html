@@ -6,27 +6,21 @@
     <fieldset>
       <div class="form-group">
         <label class="col-sm-3 control-label text-left">Address</label>
-        <div class="col-sm-6">
-
           <ui-select ng-model="address.selected"
                      theme="bootstrap"
                      ng-disabled="disabled"
                      reset-search-input="false"
-                     style="width: 300px;">
-            <ui-select-match placeholder="Enter an address...">{{$select.selected.formatted_address}}</ui-select-match>
+                     style="width: 200px;">
+            <ui-select-match placeholder="국가를 지정해주세요.">{{$select.selected.formatted_address}}</ui-select-match>
             <ui-select-choices repeat="address in addresses track by $index"
                      refresh="refreshAddresses($select.search)"
                      refresh-delay="0">
-              <div ng-bind-html="address.formatted_address | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
-          <span class="help-block">{{address.selected.formatted_address}}</span>
-        </div>
       </div>
       <div class="form-group">
         <label class="col-sm-3 control-label text-left">Default</label>
         <div class="col-sm-6">
-
           <ui-select ng-model="person.selected" theme="bootstrap">
             <ui-select-match placeholder="Select or search a person in the list...">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="item in people | filter: $select.search">

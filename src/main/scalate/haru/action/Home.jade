@@ -17,7 +17,6 @@ html(lang="en" data-ng-app="app")
     link(type="text/css" rel="stylesheet" media="all" href={publicUrl("css/font.css")})
     link(type="text/css" rel="stylesheet" media="all" href={publicUrl("css/app.css")})
     link(type="text/css" rel="stylesheet" media="all" href={publicUrl("vendor/modules/angularjs-toaster/toaster.css")})
-
   body(ng-controller="AppCtrl")
     #app.app(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view="")
     <!-- jQuery -->
@@ -73,6 +72,7 @@ html(lang="en" data-ng-app="app")
     script(src={publicUrl("js/directives/ui-shift.js")})
     script(src={publicUrl("js/directives/ui-toggleclass.js")})
     script(src={publicUrl("js/directives/ui-validate.js")})
+    script(src={publicUrl("js/directives/haru-focus.js")})
     script(src={publicUrl("js/controllers/bootstrap.js")})
     <!-- Lazy load ng -->
     != jsForView

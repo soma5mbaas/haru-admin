@@ -4,8 +4,8 @@
 app.factory('reviews', ['$http', '$q', function ($http, $q) {
     var factory = {};
 
-    factory.getReviewList = function(applicationkey, market) {
-        var param = {'appid': applicationkey, 'market': market};
+    factory.getReviewList = function(applicationkey, market, page, limit) {
+        var param = {'appid': applicationkey, 'market': market, 'page':page, 'limit':limit};
 
         var url = '/reviews/list';
         var deferred = $q.defer();

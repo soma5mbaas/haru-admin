@@ -65,7 +65,7 @@ XitrumPackage.copy("config", "public", "script")
 libraryDependencies ++= List(
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "org.mariadb.jdbc" % "mariadb-java-client" % "1.1.7",
-  "c3p0" % "c3p0" % "0.9.1.2",
+   "com.mchange" % "c3p0" % "0.9.2.1",
   "com.typesafe.slick" %% "slick" % "2.1.0",
   "joda-time" % "joda-time" % "2.5",
   "org.joda" % "joda-convert" % "1.7",

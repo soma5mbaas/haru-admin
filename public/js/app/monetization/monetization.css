@@ -1,0 +1,78 @@
+.pill.red{
+    border-left: 3px solid #dd4437;
+}
+.pill.yellow{
+    border-left: 3px solid #f4b400;
+}
+.pill.add {
+    border-left-width: 0px;
+    box-shadow: none;
+    color: #999;
+    font-size: 16px;
+    line-height: 35px;
+    margin-right: 0;
+    padding-left: 3px;
+}
+.pill.add:hover {
+    border-left-width: 3px;
+
+}
+
+.pill.blue {
+    border-left: 3px solid #3f85f2;
+}
+.pill .keyword {
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.pill .term-description {
+    color: #666;
+    font-size: 11px;
+    margin-top: 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.pill .remove-btn {
+    color: #ccc;
+    display: none;
+    font-size: 16px;
+    position: absolute;
+    right: 13px;
+    top: 7px;
+}
+
+.pill .term-content {
+    padding: 13px 30px 13px 17px;
+    position: relative;
+}
+.pill{
+    font: 13px Arial,sans-serif;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    cursor: pointer;
+    float: left;
+    height: 70px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+.pill:hover{
+    box-shadow: 3px 3px 2px rgba(0,0,0,0.15);
+    color: #000;
+}
+.pill:hover .remove-btn{
+    display : block;
+    font-size: 18px;
+}
+.pill:hover .remove-btn:hover{
+    display : block;
+    font-weight: bold;
+    font-color: #fff;
+}
+.pill input{border:none;color:#333;font-family:Arial,Helvetica,sans-serif;font-size:18px;outline:none;padding:8px 0;width:100%}
+.pill select{border:none;color:#333;font-family:Arial,Helvetica,sans-serif;font-size:18px;outline:none;padding:8px 0;width:100%}
+.search{width:100%; height:100%;}
+.search-query{width:100px;height:100%;}

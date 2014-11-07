@@ -120,7 +120,26 @@ angular.module('app')
                       'vendor/modules/ng-sortable/ng-sortable.min.js',
                       'vendor/modules/ng-sortable/ng-sortable.min.css'
                   ]
+              },
+              {
+                  name: 'daterangepicker',
+                  files: [
+                      'vendor/libs/moment.min.js',
+                      'vendor/modules/ng-bs-daterangepicker/daterangepicker.js',
+                      'vendor/modules/ng-bs-daterangepicker/daterangepicker-bs3.css',
+                      'vendor/modules/ng-bs-daterangepicker/ng-bs-daterangepicker.min.js'
+                  ]
+              },
+              {
+                  name: 'imagePicker',
+                  files: [
+                      'vendor/libs/moment.min.js',
+                      'vendor/modules/ng-bs-daterangepicker/daterangepicker.js',
+                      'vendor/modules/ng-bs-daterangepicker/daterangepicker-bs3.css',
+                      'vendor/modules/ng-bs-daterangepicker/ng-bs-daterangepicker.min.js'
+                  ]
               }
+
           ]
       });
   }])
