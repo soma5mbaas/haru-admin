@@ -1,6 +1,15 @@
 app.controller('DatabrowserCtrl', ['$rootScope', '$scope', 'databrowsers', '$window', '$state', '$stateParams','$modal', '$log',
     function($rootScope, $scope, databrowsers, $window, $state, $stateParams, $modal, $log) {
 
+        if(isEmpty($scope.user.currentproject)){
+            $window.alert('project를 선택해 주십시오!!!');
+
+            console.log($scope.user.currentproject, $state.current.name);
+            $state.go('app.projects');
+        }
+        function isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
 
 
         if ($scope.user == undefined || $scope.user.currentproject == undefined) {

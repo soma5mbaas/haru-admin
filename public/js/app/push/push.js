@@ -1,4 +1,16 @@
-app.controller('PushCtrl', ['$scope', function($scope) {
+app.controller('PushCtrl', ['$scope', '$state', '$window', function($scope, $state, $window) {
+
+    if(isEmpty($scope.user.currentproject)){
+        $window.alert('project를 선택해 주십시오!!!');
+
+        console.log($scope.user.currentproject, $state.current.name);
+        $state.go('app.projects');
+    }
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+
+
     $scope.folds = [
         {name: 'All', filter:''},
         {name: 'Everyone', filter:'Everyone'},
@@ -36,7 +48,7 @@ app.controller('PushCtrl', ['$scope', function($scope) {
 }]);
 
 app.controller('PushListCtrl', ['$scope', 'pushs', '$stateParams', 'pushlists', function($scope, pushs, $stateParams, pushlists) {
-    var fold = $stateParams.fold
+    var fold = $stateParams.fold;
 
     //0:everyone, 1:unique, 2:channels, 3:segments
     var filter ={};

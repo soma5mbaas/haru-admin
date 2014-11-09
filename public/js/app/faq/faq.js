@@ -1,4 +1,14 @@
-app.controller('FAQCtrl', ['$scope', 'faqs', function($scope, faqs) {
+app.controller('FAQCtrl', ['$scope', 'faqs', '$state', '$window', function($scope, faqs, $state, $window) {
+  if(isEmpty($scope.user.currentproject)){
+    $window.alert('project를 선택해 주십시오!!!');
+
+    console.log($scope.user.currentproject, $state.current.name);
+    $state.go('app.projects');
+  }
+  function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+  }
+
 
   $scope.labels = [
     {name: 'Angular', filter:'angular', color:'#23b7e5'},
@@ -47,7 +57,7 @@ app.controller('FAQCtrl', ['$scope', 'faqs', function($scope, faqs) {
       console.log(result);
     });
     $scope.newLabel.name = '';
-  }
+  };
 
 
   $scope.labelClass = function(label) {
@@ -90,7 +100,6 @@ app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope
 
   $scope.faqlists = [];
   faqs.getFaqList($scope.user.currentproject.applicationkey, $scope.fold).then(function(result){
-    console.log(result.return )
     if(result.return === null){
       $scope.faqlists = [];
     } else {
@@ -99,10 +108,6 @@ app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope
     console.log($scope.faqlists);
   });
 
-
-  function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-  }
 }]);
 /*
 

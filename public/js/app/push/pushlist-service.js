@@ -6,17 +6,12 @@ app.factory('pushlists', ['$http', function ($http) {
         this.after = '';
         this.next = 0;
         this.appid = appid;
-        console.log(appid);
-
     };
-
-
 
     Reddit.prototype.nextPage = function() {
         if (this.busy) return;
         this.busy = true;
 
-        console.log(this.appid);
         var limit = 50;
         var csrftoken = $('meta[name=csrf-token]').attr('content');
         var data = {'csrf-token':csrftoken,'limit':limit, 'page':this.next, 'appid':this.appid};
@@ -26,7 +21,6 @@ app.factory('pushlists', ['$http', function ($http) {
             params:data,
             headers:{'Content-Type': 'application/x-www-form-urlencoded'}})
             .then(function(response) {
-                console.log(response.data);
                 var items = response.data;
                 for (var i = 0; i < items.length; i++) {
                     this.items.push(items[i]);

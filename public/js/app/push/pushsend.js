@@ -22,9 +22,10 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
-        'tags': ['tag1', 'tag2', 'tag3', 'tag4']  // Can be empty list.
+        'tags': ['channel1', 'channel2', 'channel3', 'channel4']  // Can be empty list.
     };
 
+    // segments
     $scope.segmenttype= ['DeviceType', 'TimeZone', 'Channels', 'createdAt', 'updatedAt','AppName', 'AppIdentifier', 'AndroidVersion', 'HaruVersion', 'AppVersion'];
     $scope.segmentcondition= ['Equals', 'NotEquals'];
 
@@ -38,6 +39,19 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
 
     $scope.close = function(index) {
         $scope.segments.splice(index, 1);
+    };
+
+    // message key/value
+    $scope.messagekvs = [
+        { key: '', value: ''}
+    ];
+
+    $scope.addMessagekvs = function() {
+        $scope.messagekvs.push(  { key: '', value: ''});
+    };
+
+    $scope.messagekbClose = function(index) {
+        $scope.messagekvs.splice(index, 1);
     };
 
 
@@ -99,6 +113,28 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
             $scope.jsonmessage  = $scope.message;
         }
     });
+    $scope.$watch('messagekvs',function(newVal){
+        if(newVal.length != 1 || newVal[0].key != '') {
+            var str = '';
+            str= "{";
+            newVal.forEach(function(elem, index, array){
+                console.log(elem.key, elem.value);
+                if(elem.key != ''){
+                    str += "'" +elem.key + "':'" + elem.value + "', ";
+                }
+            });
+            console.log(str);
+            str = str.substring(0, str.length-2);
+            console.log(str);
+
+            str += "}";
+            $scope.jsonmessage = str;
+            console.log($scope.jsonmessage);
+        }
+
+
+    }, true);
+
 
 
     $scope.sendpush = function(){
@@ -110,7 +146,7 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
             wherevalue = '';
             pushsendtype = 0;
         } else if ($scope.sendtype == 'Unique' ) {
-            wherevalue[$scope.uniquetype] = $scope.uniquevalue
+            wherevalue[$scope.uniquetype] = $scope.uniquevalue;
             pushsendtype = 1;
         } else if ($scope.sendtype == 'Channels' ) {
             wherevalue = $scope.list_of_string;
@@ -121,9 +157,8 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
         }
         var swherevalue = JSON.stringify(wherevalue);
         console.log(swherevalue);
+        console.log($scope.jsonmessage);
 
-
-        console.log($scope.jsonmessage)
         var sendtimeparam = '';
         if($scope.sendtime == 'Now'){
             sendtimeparam =  new Date().getTime();

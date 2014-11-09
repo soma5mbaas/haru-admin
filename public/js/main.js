@@ -8,7 +8,7 @@ angular.module('app')
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
-      isSmartDevice( $window ) && angular.element($window.document.body).addClass('smart');
+      isSmartDevice($window) && angular.element($window.document.body).addClass('smart');
 
       // config
       $scope.app = {
@@ -17,13 +17,13 @@ angular.module('app')
         // for chart colors
         color: {
           primary: '#7266ba',
-          info:    '#23b7e5',
+          info: '#23b7e5',
           success: '#27c24c',
           warning: '#fad733',
-          danger:  '#f05050',
-          light:   '#e8eff0',
-          dark:    '#3a3f51',
-          black:   '#1c2b36'
+          danger: '#f05050',
+          light: '#e8eff0',
+          dark: '#3a3f51',
+          black: '#1c2b36'
         },
         settings: {
           themeID: 1,
@@ -36,16 +36,16 @@ angular.module('app')
           asideDock: false,
           container: false
         }
-      }
+      };
 
       // save settings to local storage
-      if ( angular.isDefined($localStorage.settings) ) {
+      if (angular.isDefined($localStorage.settings)) {
         $scope.app.settings = $localStorage.settings;
       } else {
         $localStorage.settings = $scope.app.settings;
       }
-      $scope.$watch('app.settings', function(){
-        if( $scope.app.settings.asideDock  &&  $scope.app.settings.asideFixed ){
+      $scope.$watch('app.settings', function () {
+        if ($scope.app.settings.asideDock && $scope.app.settings.asideFixed) {
           // aside dock and fixed must set the header fixed.
           $scope.app.settings.headerFixed = true;
         }
@@ -54,10 +54,10 @@ angular.module('app')
       }, true);
 
       // angular translate
-      $scope.lang = { isopen: false };
-      $scope.langs = {en:'English', ko_KR:'Korean'}; //de_DE:'German', it_IT:'Italian', };
+      $scope.lang = {isopen: false};
+      $scope.langs = {en: 'English', ko_KR: 'Korean'}; //de_DE:'German', it_IT:'Italian', };
       $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
-      $scope.setLang = function(langKey, $event) {
+      $scope.setLang = function (langKey, $event) {
         // set the current lang
         $scope.selectLang = $scope.langs[langKey];
         // You can change the language during runtime
@@ -65,12 +65,11 @@ angular.module('app')
         $scope.lang.isopen = !$scope.lang.isopen;
       };
 
-      function isSmartDevice( $window )
-      {
-          // Adapted from http://www.detectmobilebrowsers.com
-          var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
-          // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
-          return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
+      function isSmartDevice($window) {
+        // Adapted from http://www.detectmobilebrowsers.com
+        var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
+        // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
+        return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
 
       // initalize object
@@ -79,7 +78,7 @@ angular.module('app')
       $scope.user.projects = {};
       $scope.user.currentproject = {};
 
-      if($localStorage.auth &&
+      if ($localStorage.auth &&
           $localStorage.auth.token !== '') {
         var authtoken = $localStorage.auth.token;
         var csrftoken = $('meta[name=csrf-token]').attr('content');
@@ -90,71 +89,71 @@ angular.module('app')
             $scope.user.projects = data.projects;
             $scope.$broadcast('loadproject', data.projects);
             //console.log($scope.user.currentproject);
-          }, function(error){
+          }, function (error) {
             console.log(error);
           });
         }
 
-        if($sessionStorage.currentproject != undefined){
-          $scope.user.currentproject =  crypt.decrypt($sessionStorage.currentproject);
+        if ($sessionStorage.currentproject != undefined) {
+          $scope.user.currentproject = crypt.decrypt($sessionStorage.currentproject);
         }
       }
 
-      $rootScope.$on('Facebook:statusChange', function(ev, data) {
+      $rootScope.$on('Facebook:statusChange', function (ev, data) {
         //console.log('Facebook Status: ', JSON.stringify(data));
 
         if (data.status == 'connected') {
           var token = $('meta[name=csrf-token]').attr('content');
-          UserService.FacebookMe(token, data.authResponse.accessToken).then(function(data){
+          UserService.FacebookMe(token, data.authResponse.accessToken).then(function (data) {
             //console.log(data);
 
             //$scope.user = {};
             $scope.user.authuser = data.user;
             $scope.user.projects = data.projects;
             $scope.$broadcast('loadproject', data.projects);
-          }, function(data){
+          }, function (data) {
             console.log(data);
           });
 
-          $localStorage.auth = {'token':data.authResponse.accessToken, 'provider':'FACEBOOK'};
-          if($state.current.name == 'access.signin') {
+          $localStorage.auth = {'token': data.authResponse.accessToken, 'provider': 'FACEBOOK'};
+          if ($state.current.name == 'access.signin') {
             $state.go('app.projects');
           }
         }
       });
 
-      $rootScope.$on('GooglePlus:statusChange', function(ev, data) {
+      $rootScope.$on('GooglePlus:statusChange', function (ev, data) {
         //  console.log('Google Status: ', data);
 
         if (data.status == 'connected') {
           csrftoken = $('meta[name=csrf-token]').attr('content');
-          UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
+          UserService.GoogleMe(csrftoken, data.access_token).then(function (data) {
             $scope.user.authuser = data.user;
             $scope.user.projects = data.projects;
             $scope.$broadcast('loadproject', data.projects);
-            if(data.projects.length == 0){
+            if (data.projects.length == 0) {
               $state.go('access.project');
             }
-          }, function(data){
+          }, function (data) {
             console.log(data);
           });
 
-          $localStorage.auth = {'token':data.access_token, 'provider':'GOOGLE'};
+          $localStorage.auth = {'token': data.access_token, 'provider': 'GOOGLE'};
         } else if (data.status == 'loggin') {
           csrftoken = $('meta[name=csrf-token]').attr('content');
-          UserService.GoogleMe(csrftoken, data.access_token).then(function(data){
+          UserService.GoogleMe(csrftoken, data.access_token).then(function (data) {
             $scope.user.authuser = data.user;
             $scope.user.projects = data.projects;
             $scope.$broadcast('loadproject', data.projects);
-            if(data.projects.length == 0){
+            if (data.projects.length == 0) {
               $state.go('access.project');
             }
-          }, function(data){
+          }, function (data) {
             console.log(data);
           });
 
-          $localStorage.auth = {'token':data.access_token, 'provider':'GOOGLE'};
-          if($state.current.name == 'access.signin') {
+          $localStorage.auth = {'token': data.access_token, 'provider': 'GOOGLE'};
+          if ($state.current.name == 'access.signin') {
             $state.go('app.projects');
           }
         }
@@ -162,20 +161,20 @@ angular.module('app')
 
 
       /*check facebook sdk load complete*/
-      $scope.$watch(function() {
+      $scope.$watch(function () {
             return UserService.FacebookIsReady();
           },
-          function(newVal) {
+          function (newVal) {
             if (newVal)
               $scope.facebookReady = true;
           }
       );
 
       /*check googleplus sdk load complete*/
-      $scope.$watch(function() {
+      $scope.$watch(function () {
             return UserService.GooglePlusIsReady();
           },
-          function(newVal) {
+          function (newVal) {
             if (newVal)
               $scope.googleplusReady = true;
           }
@@ -183,13 +182,13 @@ angular.module('app')
 
 
       $scope.Logout = Logout;
-      $scope.$on('Logout', function(event) {
+      $scope.$on('Logout', function (event) {
         event.stopPropagation();
 
         Logout();
       });
 
-      function Logout () {
+      function Logout() {
         UserService.Logout($scope.user.authuser.provider);
         $scope.user.authuser = {};
         $scope.user.projects = {};
@@ -204,15 +203,15 @@ angular.module('app')
 
 
       // select project
-      $scope.selectproject = function(index){
-        if($scope.user.projects.length >= index){
+      $scope.selectproject = function (index) {
+        if ($scope.user.projects.length >= index) {
           $scope.user.currentproject = $scope.user.projects[index];
 
-          $sessionStorage.currentproject = crypt.encrypt( $scope.user.currentproject);
+          $sessionStorage.currentproject = crypt.encrypt($scope.user.currentproject);
 
           $socket.send("change", $scope.user.currentproject.applicationkey);
         }
-      }
+      };
 
 
       $scope.toaster = {
@@ -221,32 +220,32 @@ angular.module('app')
         text: 'Message'
       };
 
-      $scope.pop = function(){
+      $scope.pop = function () {
         toaster.pop($scope.toaster.type, $scope.toaster.title, $scope.toaster.text);
       };
 
 
-      $socket.on("open", function(event, data){
+      $socket.on("open", function (event, data) {
         // process the data here
         //console.log(event, data);
-        if($scope.user.currentproject != undefined && $scope.user.currentproject.applicationkey != undefined && $scope.user.currentproject.applicationkey != ''){
+        if ($scope.user.currentproject != undefined && $scope.user.currentproject.applicationkey != undefined && $scope.user.currentproject.applicationkey != '') {
           $socket.send("messgae", $scope.user.currentproject.applicationkey);
         }
       });
 
-      $socket.on("close", function(event, data){
+      $socket.on("close", function (event, data) {
         // process the data here
         console.log(event, data);
       });
 
-      $socket.on("message", function(event, data){
+      $socket.on("message", function (event, data) {
         // process the data here
         console.log(event, data);
 
-        if (data.appid == $scope.user.currentproject.applicationkey ) {
+        if (data.appid == $scope.user.currentproject.applicationkey) {
           console.log(data.appid);
 
-          if(data.type == 'crawler') {
+          if (data.type == 'crawler') {
             toaster.pop('note', '리뷰 수집', '리뷰 수집이 완료되었습니다.');
           } else if (data.type == 'qna') {
             toaster.pop('note', 'Q&A', '질문...');
@@ -257,4 +256,9 @@ angular.module('app')
         }
 
       });
+
+
+
+
+
     }]);

@@ -35,16 +35,17 @@
             <div ng-show="term.edit" class="search ng-isolate-scope padder" >
               <select name="account" class="form-control m-b" style="height:100%;"
                       selectfocus="isfocus"
-                      ng-change="selectAction(term)"
-                      ng-options="value.id as value.label for value in myOptions"
-                      ng-init="myOption = myOptions[0].label"
+                      ng-change="selectAction(term, myOption)"
+                      ng-options="value.nation as value.nation for value in selectnation"
+                      ng-init="myOption = selectnation[0]"
                       ng-model="myOption"
+                      ng-blur="selectblur(myOption)"
                       >
               </select>
             </div>
           </div>
 
-          <div class="pill add add-term red" ng-click="addTerm()">
+          <div class="pill add add-term red" ng-click="addTerm()" ng-hide="selectnation.length == 0">
             <div class="term-content">
               <span>+</span>
               Add Nation

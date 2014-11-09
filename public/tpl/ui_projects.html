@@ -1,9 +1,12 @@
 <div class="bg-light lter b-b wrapper-md">
-    <h1 class="m-n font-thin h3">Widgets</h1>
+    <a href ui-sref="access.project">
+      <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
+      <button class="btn  btn-sm btn-danger  btn-addon" ng-click="open('sm')"><i class="fa fa-plus"></i>Create Class</button>
+    </a>
 </div>
 <div class="wrapper-md" ng-controller="ProjectsController">
 <div class="row"  ng-repeat="project in user.projects track by $index" ng-if="$index % 3 == 0">
-    <div class="col-lg-4"  ng-repeat="project in user.projects.slice($index, $index+3) ">
+    <div class="col-lg-4 animated fadeInRight"  ng-repeat="project in user.projects.slice($index, $index+3) ">
         <div class="panel" >
             <div class="panel-body">
                 <div class="clearfix ">

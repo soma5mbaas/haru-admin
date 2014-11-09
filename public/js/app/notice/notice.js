@@ -1,7 +1,18 @@
 /**
  * Created by pheadra on 10/31/14.
  */
-app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', function($scope, notices, $modal, $log, $state) {
+app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', '$window',
+                      function($scope, notices, $modal, $log, $state, $window) {
+    if(isEmpty($scope.user.currentproject)){
+        $window.alert('project를 선택해 주십시오!!!');
+
+        console.log($scope.user.currentproject, $state.current.name);
+        $state.go('app.projects');
+    }
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+
     $scope.htmlVariable = 'test';
 
     $scope.notices = [];
@@ -12,7 +23,7 @@ app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', f
 
 
         });
-    }
+    };
     getNoticeList();
 
 

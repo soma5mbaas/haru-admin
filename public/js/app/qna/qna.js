@@ -2,7 +2,18 @@
  * Created by pheadra on 10/31/14.
  */
 
-app.controller('QNACtrl', ['$scope', 'qnas', function($scope, qnas) {
+app.controller('QNACtrl', ['$scope', 'qnas', '$state', '$window', function($scope, qnas, $state, $window) {
+
+    if(isEmpty($scope.user.currentproject)){
+        $window.alert('project를 선택해 주십시오!!!');
+
+        console.log($scope.user.currentproject, $state.current.name);
+        $state.go('app.projects');
+    }
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+
     $scope.questions = [];
     $scope.comment = [];
 
@@ -12,7 +23,7 @@ app.controller('QNACtrl', ['$scope', 'qnas', function($scope, qnas) {
 
             console.log(result);
         });
-    }
+    };
     getQuestionList();
 
     $scope.deleteQna = function(index){
