@@ -11,7 +11,6 @@ app.factory('dashboards', ['$http', '$q', function ($http, $q) {
         $http({url:url,
             method:'GET',
             params:param,
-            data:data,
             headers:{'Application-Id':applicationkey, 'Content-Type': 'application/x-www-form-urlencoded'}})
             .then(function(response) {
                 deferred.resolve(response.data);
