@@ -28,7 +28,6 @@ object SchemaDao {
           val schema = client.hgetall[String, String](key);
           return schema;
         }
-
     }
   }
 

@@ -25,18 +25,32 @@ class GetReviewsList extends Api2 {
   }
 }
 
-@GET("/reviews/statistics")
-class GetReviewsStatistics extends Api2 {
-  import ChatRoom._
+@GET("/reviews/info")
+class GetReviewsinfo extends Api2 {
 
   def execute() {
     val appid = param[String]("appid")
+  
     val reviews = ReviewDao.findReviewStatistics(appid)
-    val reviewsconunt = ReviewDao.findReviewCount(appid)
-    val reviewssummery = ReviewDao.findReviewSummery(appid)
-    val reviewsgraph = ReviewDao.findReviewGraph(appid)
+
+    val reviewdata = Map("reviews" -> reviews)
+    respondJson(reviewdata)
+  }
+}
+
+
+@GET("/reviews/statistics")
+class GetReviewsStatistics extends Api2 {
+
+  def execute() {
+    val appid = param[String]("appid")
+    val code = param[String]("code")
+
+    val reviewsconunt = ReviewDao.findReviewCount(appid, code)
+    val reviewsgraph = ReviewDao.findReviewGraph(appid, code)
+    val reviewssummery = ReviewDao.findReviewSummery(appid, code)
     
-    val reviewdata = Map("reviewscount" -> reviewsconunt, "reviews" -> reviews, "summery" -> reviewssummery, "graph"->reviewsgraph)
+    val reviewdata = Map("reviewscount" -> reviewsconunt, "graph"->reviewsgraph, "summery" -> reviewssummery)
     respondJson(reviewdata)
   }
 }

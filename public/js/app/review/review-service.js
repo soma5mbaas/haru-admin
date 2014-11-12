@@ -40,8 +40,8 @@ app.factory('reviews', ['$http', '$q', function ($http, $q) {
             }.bind(this));
     };
 
-    factory.getReviewStatistics = function(csrf, applicationkey) {
-        var param = {'csrf-token':csrf, 'appid': applicationkey};
+    factory.getReviewStatistics = function(csrf, applicationkey, code) {
+        var param = {'csrf-token':csrf, 'appid': applicationkey, 'code':code};
 
         var url = '/reviews/statistics';
         var deferred = $q.defer();
@@ -57,6 +57,21 @@ app.factory('reviews', ['$http', '$q', function ($http, $q) {
         return deferred.promise;
     };
 
+    factory.getReviewInfo = function(csrf, applicationkey) {
+        var param = {'csrf-token':csrf, 'appid': applicationkey};
 
+        var url = '/reviews/info';
+        var deferred = $q.defer();
+        $http({url:url,
+            method:'GET',
+            params:param,
+            headers:{'Application-Id':applicationkey}})
+            .then(function(response) {
+                deferred.resolve(response.data);
+            }, function(x) {
+                deferred.reject({ error: "Server Error" });
+            });
+        return deferred.promise;
+    };
     return factory;
 }]);

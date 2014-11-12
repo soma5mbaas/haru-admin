@@ -45,7 +45,6 @@
                     <div class="m-l-xs m-t-xs m-b-sm font-bold">Count</div>
                     <div class="text-center">
                         <div class="inline">
-
                             <div ui-jq="plot"  ui-refresh="graphreflash" ui-options="
                           [
                             { data: {{lineofcount}}, points: { show: true, radius: 4}, splines: { show: true, tension: 0.45, lineWidth:3, fill: 0 } }
@@ -58,7 +57,7 @@
                               position: 'bottom',
                               ticks: {{lineticks}}
                             },
-                            yaxis:{ font: { color: '#ccc' } },
+                            yaxis:{ font: { color: '#ccc' }, min:0  },
                             grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
                             tooltip: true,
                             tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 0, y: 20 } }
@@ -82,7 +81,7 @@
                             colors: ['{{app.color.info}}', '{{app.color.success}}', '{{app.color.primary}}'],
                             series: { shadowSize: 1 },
                             xaxis:{ font: { color: '#ccc' },  position: 'bottom',ticks: {{pnticks}} },
-                            yaxis:{ font: { color: '#ccc' } },
+                            yaxis:{ font: { color: '#ccc' }, min:0 },
                             grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
                             tooltip: true,
                             tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 0, y: 20 } }

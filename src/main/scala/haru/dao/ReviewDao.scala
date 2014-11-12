@@ -43,7 +43,7 @@ object ReviewDao extends DatabasePool {
       return reviews
   }
 
-  def findReviewStatistics(appid: String): List[Map[String, Any]] = databasePool withSession {
+  def findReviewStatistics(appid: String ): List[Map[String, Any]] = databasePool withSession {
     implicit session =>
       /// TODO 만약없다면 exception??
       val query = sql"""
@@ -59,12 +59,12 @@ object ReviewDao extends DatabasePool {
       return reviews
   }
 
-  def findReviewCount(appid: String): List[Map[String, Any]] = databasePool withSession {
+  def findReviewCount(appid: String, code :String ): List[Map[String, Any]] = databasePool withSession {
     implicit session =>
       /// TODO 만약없다면 exception??
       val query = sql"""
       select SUBSTRING(strdate, 6, 6) strdate, count(strdate) from Reviews 
-      where applicationid = $appid and  strdate >= ADDDATE(DATE(NOW()), -7) group by strdate order by strdate; 
+      where applicationid = $appid and  strdate >= ADDDATE(DATE(NOW()), -7) and location=$code group by strdate order by strdate
        """.as[(String, Int)]
 
       val reviewlist = query.list
@@ -75,11 +75,11 @@ object ReviewDao extends DatabasePool {
       return reviews
   }
 
-  def findReviewSummery(appid: String): Map[String, Any] = databasePool withSession {
+  def findReviewSummery(appid: String, code :String ): Map[String, Any] = databasePool withSession {
     implicit session =>
       val query = sql"""
       select (select count(strdate) from Reviews where applicationid =$appid and strdate = DATE(NOW())) daily, count(rating) count, avg(rating) rating
-      from Reviews where applicationid = $appid
+      from Reviews where applicationid = $appid  and location=$code
        """.as[(Int, Int, Double)]
 
       val reviewlist = query.list
@@ -90,11 +90,11 @@ object ReviewDao extends DatabasePool {
       }
   }
 
-  def findReviewGraph(appid: String): Map[String, Any] = databasePool withSession {
+  def findReviewGraph(appid: String, code :String ): Map[String, Any] = databasePool withSession {
     implicit session =>
       // Rating 갯수 
       val ratingquery = sql"""
-      select rating, count(rating) from Reviews where applicationid =  $appid group by rating order by rating desc
+      select rating, count(rating) from Reviews where applicationid =  $appid  and location=$code group by rating order by rating desc
        """.as[(Int, Int)]
 
       val rating = ratingquery.list
@@ -105,7 +105,9 @@ object ReviewDao extends DatabasePool {
 
       // 긍정댓글 갯수 
       val negativequery = sql"""
-      select SUBSTRING(strdate, 6, 6)  strdate, count(*) negative from Reviews where applicationid =  $appid and  strdate >= ADDDATE(DATE(NOW()), -14) and rating <= 2 group by strdate
+      select SUBSTRING(strdate, 6, 6)  strdate, count(*) negative 
+      from Reviews where applicationid = $appid and strdate >= ADDDATE(DATE(NOW()), -14) and location=$code and rating <= 2 
+      group by strdate
        """.as[(String, Int)]
 
       val negative = negativequery.list
@@ -116,7 +118,9 @@ object ReviewDao extends DatabasePool {
 
       // 부정댓글 갯수 
       val positivequery = sql"""
-      select  SUBSTRING(strdate, 6, 6)  strdate, count(*) positive from Reviews where applicationid =  $appid and  strdate >= ADDDATE(DATE(NOW()), -14) and rating >= 4 group by strdate
+      select  SUBSTRING(strdate, 6, 6)  strdate, count(*) positive 
+      from Reviews where applicationid =  $appid and strdate >= ADDDATE(DATE(NOW()), -14)  and location=$code and rating >= 4 
+      group by strdate
        """.as[(String, Int)]
       //select strdate, count(*) positive from Reviews where applicationid = '934b90c0-20e5-40f4-94e7-31c05840ec83' and  strdate >= ADDDATE(DATE(NOW()), -14) and rating >= 4 group by strdate;
 

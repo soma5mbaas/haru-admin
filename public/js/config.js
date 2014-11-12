@@ -2,6 +2,7 @@
 
 var app =  
 angular.module('app')
+  .constant('server_url', 'http://api.haru.io')
   .config(
     [        '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'FacebookProvider', 'GooglePlusProvider','cryptProvider','$socketProvider',
     function ($controllerProvider,   $compileProvider,   $filterProvider,   $provide,  FacebookProvider,   GooglePlusProvider, cryptProvider, $socketProvider) {
@@ -24,8 +25,6 @@ angular.module('app')
         app.service    = $provide.service;
         app.constant   = $provide.constant;
         app.value      = $provide.value;
-
-
     }
   ])
   .config(['$translateProvider', function($translateProvider){

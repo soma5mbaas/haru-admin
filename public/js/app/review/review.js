@@ -116,11 +116,10 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         $scope.reflash = false;
 
         var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
-        reviews.getReviewStatistics(csrf, applicationkey).then(function (result) {
-            console.log('getReviewStatistics');
+        reviews.getReviewInfo(csrf, applicationkey).then(function (result) {
+            console.log(result);
 
             Reviewstatistics = result.reviews;
-            $scope.summery = result.summery;
 
             if (Reviewstatistics.length > 0) {
                 // 첫번째 언어 추출
@@ -149,70 +148,81 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
                 }
             });
 
-
-            // 1번째 그래프
-            /* x축 만들기 */
-
-            /* x축을 기준으로 데이터 만들기 */
-            var lineofcountdata = [];
-            lineticks.forEach(function(elem, index){
-                var count = 0;
-                for(i = 0; i < result.reviewscount.length; i++ ){
-                    if(elem[1] == result.reviewscount[i].date){
-                        count = result.reviewscount[i].count;
-                        break;
-                    }
-                }
-                lineofcountdata.push([index +1, count]);
-            });
-            $scope.lineofcount = lineofcountdata;
-
-            // 2번째 그래프
-            var pnticks = [];
-            for(i = 1; i <= 8; i++){
-                pnticks.push([i * 10, moment().subtract(8 - i, 'days').format('MM-DD')]);
-            }
-            $scope.pnticks = pnticks;
-
-            var negativedatas = [];
-            var positivedatas = [];
-
-            var negative = result.graph.negative;
-            var positive = result.graph.positive;
-            pnticks.forEach(function(elem, index){
-                var positivecount = 0;
-                for(i = 0; i < positive.length; i++ ){
-                    if(elem[1] == positive[i].date){
-                        positivecount = positive[i].count;
-                        break;
-                    }
-                }
-                positivedatas.push([(index +1) * 10, positivecount]);
-
-                var negativecount = 0;
-                for(i = 0; i < negative.length; i++ ){
-                    if(elem[1] == negative[i].date){
-                        negativecount = negative[i].count;
-                        break;
-                    }
-                }
-                negativedatas.push([(index +1) *10, negativecount]);
-
-            });
-            $scope.positivedatas = positivedatas;
-            $scope.negativedatas = negativedatas;
-
-            console.log(JSON.stringify(positivedatas));
-            console.log(JSON.stringify(negativedatas));
-
-
-            // 3번째 그래프
-            $scope.ratingcircle = result.graph.rating;
-            $scope.graphreflash = true;
+            getReviewgraph($scope.code);
         }, function (result) {
             console.log(result);
         });
 
+        var indexrefresh = 0;
+        var getReviewgraph = function(code) {
+            var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
+
+            reviews.getReviewStatistics(csrf, applicationkey, code).then(function (result) {
+                console.log(result);
+                $scope.summery = result.summery;
+
+                // 1번째 그래프
+                /* x축 만들기 */
+
+                /* x축을 기준으로 데이터 만들기 */
+                var lineofcountdata = [];
+                lineticks.forEach(function (elem, index) {
+                    var count = 0;
+                    for (i = 0; i < result.reviewscount.length; i++) {
+                        if (elem[1] == result.reviewscount[i].date) {
+                            count = result.reviewscount[i].count;
+                            break;
+                        }
+                    }
+                    lineofcountdata.push([index + 1, count]);
+                });
+                $scope.lineofcount = lineofcountdata;
+
+                // 2번째 그래프
+                var pnticks = [];
+                for (i = 1; i <= 8; i++) {
+                    pnticks.push([i * 10, moment().subtract(8 - i, 'days').format('MM-DD')]);
+                }
+                $scope.pnticks = pnticks;
+
+                var negativedatas = [];
+                var positivedatas = [];
+
+                var negative = result.graph.negative;
+                var positive = result.graph.positive;
+                pnticks.forEach(function (elem, index) {
+                    var positivecount = 0;
+                    for (i = 0; i < positive.length; i++) {
+                        if (elem[1] == positive[i].date) {
+                            positivecount = positive[i].count;
+                            break;
+                        }
+                    }
+                    positivedatas.push([(index + 1) * 10, positivecount]);
+
+                    var negativecount = 0;
+                    for (i = 0; i < negative.length; i++) {
+                        if (elem[1] == negative[i].date) {
+                            negativecount = negative[i].count;
+                            break;
+                        }
+                    }
+                    negativedatas.push([(index + 1) * 10, negativecount]);
+
+                });
+                $scope.positivedatas = positivedatas;
+                $scope.negativedatas = negativedatas;
+
+                console.log(JSON.stringify(positivedatas));
+                console.log(JSON.stringify(negativedatas));
+
+                // 3번째 그래프
+                $scope.ratingcircle = result.graph.rating;
+                $scope.graphreflash = indexrefresh++;
+            }, function (error) {
+                console.log(error);
+            });
+        }
 
 
         $scope.d = [[1, 6.5], [2, 6.5], [3, 7], [4, 8], [5, 7.5], [6, 7], [7, 6.8], [8, 7], [9, 7.2], [10, 7], [11, 6.8], [12, 7]];
@@ -226,7 +236,6 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         $scope.d1_2 = [[10, 50], [20, 60], [30, 90], [40, 35]];
 
 
-
         $scope.currentmarket = '';
         $scope.reviewMarketReflash = function (market) {
             $scope.currentmarket = market.name;
@@ -238,6 +247,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         $scope.reviewReflash = function (lang) {
             $scope.language = lang.language;
             $scope.code = lang.code;
+            getReviewgraph($scope.code);
             $scope.markets = [];
             Reviewstatistics.forEach(function (elem) {
 

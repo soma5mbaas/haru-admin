@@ -1,4 +1,4 @@
-app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', function($scope, $http, dashboards, $window) {
+app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$state', function($scope, $http, dashboards, $window, $state) {
 
   if(isEmpty($scope.user.currentproject)){
     $window.alert('project를 선택해 주십시오!!!');
@@ -10,6 +10,8 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', fun
     return Object.keys(obj).length === 0;
   }
 
+  $scope.apirequestdatas = [];
+  $scope.pushrequestdatas = [];
 
   if(!isEmpty($scope.user.currentproject)) {
     var lineticks = [];
