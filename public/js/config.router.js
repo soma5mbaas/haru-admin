@@ -31,7 +31,7 @@ angular.module('app')
                   resolve: {
                     deps: ['$ocLazyLoad',
                       function( $ocLazyLoad ){
-                        return $ocLazyLoad.load(['js/controllers/chart.js']);
+                        return $ocLazyLoad.load(['vendor/libs/moment.min.js', 'js/app/dashboard/dashboard.js', 'js/app/dashboard/dashboard-service.js']);
                     }]
                   }
               })

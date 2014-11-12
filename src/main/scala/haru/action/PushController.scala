@@ -35,7 +35,7 @@ class PushRegister extends Api2{
     val expirationtime = param[Long]("expirationtime")
     val status = param[Int]("status")
       
-    val id = PushDao.insertPush(appid, pushtype, Some(wherevalue), message, messagetype, totalcount, DateTimeZone.forID(sendtimezone).getID(),sendtime, expirationtime, status);
+    val id = PushDao.insertPush(appid, pushtype, Some(wherevalue), message, messagetype, totalcount, DateTimeZone.forID(sendtimezone).getID(), sendtime, expirationtime, status);
     
 
     sendPushActor(id._1, appid, message)

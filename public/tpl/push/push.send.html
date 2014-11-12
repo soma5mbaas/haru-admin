@@ -155,8 +155,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 visible-lg">
-            <img src="/img/pushphone.png" width ="100%" />
+        <div class="col-lg-4 visible-lg" style="background-size: 380px 100%;background: url(/img/lock_400.png) no-repeat;height:672px;">
+            <div class="padder-v" style="padding-top:281px;padding-left:110px;">
+                <span class="font-bold block" >{{user.currentproject.title}}</span>
+                <span class="" > {{ message | limitTo: 22 }}{{message.length > 22 ? '...' : ''}}</span>
+            </div>
+
+           <!-- <img src="/img/lock_400.png" width ="100%" />-->
         </div>
     </div>
 </div>

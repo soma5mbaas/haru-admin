@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- / main header -->
-    <div class="wrapper-md" ng-controller="FlotChartDemoCtrl">
+    <div class="wrapper-md" ng-controller="DashboardCtrl">
       <!-- stats -->
       <div class="row">
         <div class="col-md-5">
@@ -88,26 +88,51 @@
         </div>
         <div class="col-md-7">
           <div class="panel wrapper">
+            <div class="btn-group pull-right" ng-init="messagetype = '0'">
+              <label class="btn btn-sm btn-info"    ng-model="messagetype" btn-radio="'0'"><i class="fa fa-check text-active"></i> API</label>
+              <label class="btn btn-sm btn-primary"    ng-model="messagetype" btn-radio="'1'"><i class="fa fa-check text-active"></i> Push</label>
+            </div>
+            <!--
             <label class="i-switch bg-warning pull-right" ng-init="showSpline=true">
               <input type="checkbox" ng-model="showSpline">
               <i></i>
+
             </label>
+            -->
             <h4 class="font-thin m-t-none m-b text-muted">Latest Requests</h4>
-            <div ui-jq="plot" ui-refresh="showSpline" ui-options="
+            <div ui-jq="plot" ui-refresh="messagetype" ui-options="
               [
-                { data: {{d0_1}}, label:'API', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } },
-                { data: {{d0_2}}, label:'Push', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } }
-              ], 
+                { data: {{apirequestdatas}}, label:'API', points: { show: true, radius: 1},  splines: { show: true, tension: 0.4, lineWidth: 1, fill: 0.8 }},
+              ],
               {
                 colors: ['{{app.color.info}}', '{{app.color.primary}}'],
                 series: { shadowSize: 3 },
-                xaxis:{ font: { color: '#a1a7ac' } },
-                yaxis:{ font: { color: '#a1a7ac' }, max:20 },
-                grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#dce5ec' },
+                xaxis:{ font: { color: '#a1a7ac' },
+                 ticks: {{lineticks}}},
+                yaxis:{ font: { color: '#a1a7ac' }},
+                legend: { color: '#000000'  },
+                grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#808080' },
                 tooltip: true,
-                tooltipOpts: { content: 'Visits of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 10, y: -25 } }
+                tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 10, y: -25 } }
               }
-            " style="height:246px" >
+            " style="height:246px"  ng-show="messagetype == 0"> </div>
+
+              <div ui-jq="plot" ui-refresh="messagetype" ui-options="
+              [
+                 { data: {{pushrequestdatas}}, label:'push', points: { show: true, radius: 1},  splines: { show: true, tension: 0.4, lineWidth: 1, fill: 0.8}}
+              ],
+               {
+                colors: ['{{app.color.primary}}'],
+                series: { shadowSize: 3 },
+                xaxis:{ font: { color: '#a1a7ac' },
+                 ticks: {{lineticks}}},
+                yaxis:{ font: { color: '#a1a7ac' }},
+                legend: { color: '#000000'  },
+                grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#808080' },
+                tooltip: true,
+                tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 10, y: -25 } }
+              }
+            " style="height:246px"  ng-show="messagetype == 1">
             </div>
           </div>
         </div>

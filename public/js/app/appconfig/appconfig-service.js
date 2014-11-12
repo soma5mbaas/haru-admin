@@ -3,7 +3,7 @@ app.factory('appConfigs', ['$http', '$q', function ($http, $q) {
 
     factory.getParams = function(applicationkey) {
 
-        var url = 'http://stage.haru.io:10100/1/config';
+        var url = 'http://api.haru.io/1/config';
         var deferred = $q.defer();
         $http({url:url,
             method:'GET',
@@ -18,7 +18,7 @@ app.factory('appConfigs', ['$http', '$q', function ($http, $q) {
     };
 
     factory.AddParam = function(applicationkey, data) {
-        var url = 'http://stage.haru.io:10200/1/config';
+        var url = 'http://api.haru.io/1/config';
         var deferred = $q.defer();
         $http({url:url,
             method:'POST',
@@ -35,7 +35,7 @@ app.factory('appConfigs', ['$http', '$q', function ($http, $q) {
 
     };
     factory.updateParam = function(applicationkey, data) {
-        var url = 'http://stage.haru.io:10200/1/config';
+        var url = 'http://api.haru.io/1/config';
 
         var deferred = $q.defer();
         $http({url:url,
@@ -53,7 +53,7 @@ app.factory('appConfigs', ['$http', '$q', function ($http, $q) {
     };
 
     factory.deleteParam = function(applicationkey, data) {
-        var url = 'http://stage.haru.io:10200/1/config';
+        var url = 'http://api.haru.io/1/config';
         var deferred = $q.defer();
         $http({url:url,
             method:'DELETE',

@@ -7,6 +7,7 @@ import java.sql.SQLIntegrityConstraintViolationException
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
 import Q.interpolation
 
+
 object ReviewDao extends DatabasePool {
 
   def findReviewList(appid: String, lang: String, page: Int, count: Int): List[Map[String, Any]] = databasePool withSession {
