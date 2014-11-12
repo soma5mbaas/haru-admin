@@ -1,12 +1,10 @@
 package haru.action
 
 import scala.reflect.runtime.universe
-
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClientBuilder
 import org.joda.time.DateTimeZone
-
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorSystem
@@ -17,6 +15,8 @@ import xitrum.Log
 import xitrum.annotation.GET
 import xitrum.annotation.POST
 
+import spray.json._
+import DefaultJsonProtocol._
 
 @POST("push/register")
 class PushRegister extends Api2{
@@ -60,12 +60,19 @@ class PushList extends Api2 {
   }
 }
 
+
+
+case class PushTotal(total :Int)
+object PushtotalProtocol extends DefaultJsonProtocol {
+  implicit val pushTotalformat = jsonFormat(PushTotal, "total")
+}
+
 case class PushMessage(id:Int, appid: String, message : String)
 class PushActor extends Actor with ActorLogging {
   def receive = {
     case PushMessage(id, appid, message) ⇒ 
     	Log.info("Actor receive")
-    	val url = "http://stage.haru.io:10300/push";
+    	val url = "http://stage.haru.io:10200/1/push";
     	val post = new HttpPost(url)
 	    post.addHeader("Application-Id", appid)
 	    post.addHeader("Content-Type","application/json")
@@ -75,8 +82,23 @@ class PushActor extends Actor with ActorLogging {
 	    // send the post request
 	    val client = HttpClientBuilder.create().build();
 	    val response = client.execute(post)
+	    val entity = response.getEntity()
+	    System.out.println(response.getStatusLine());
 	    
-	    PushDao.updateStatus(id, 1)
+	     var content = ""
+		if (entity != null) {
+			val inputStream = entity.getContent()
+			content = scala.io.Source.fromInputStream(inputStream).getLines.mkString
+			println(content);
+			inputStream.close
+		}
+		client.close();
+		
+		import PushtotalProtocol._
+		val jsoncontent = content.parseJson
+		val contentjson = jsoncontent.convertTo[PushTotal]
+		
+	    PushDao.updateStatus(id, 1, contentjson.total)
     
   }
 }

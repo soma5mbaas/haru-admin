@@ -26,6 +26,7 @@
     "APPREVIEWS" : "App Reviews",
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
+    "SETTING" : "Setting",
     "WIDGETS" : "Widgets",
     "components" : {
       "COMPONENTS" : "Documents",

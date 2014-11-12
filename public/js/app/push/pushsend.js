@@ -187,7 +187,7 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
                         sendtimeparam,
                         0).then(function(result){
 
-            $state.go('app.push.list');
+            //$state.go('app.push.list');
         }, function(data) {
             $scope.authError = data.error;
         });

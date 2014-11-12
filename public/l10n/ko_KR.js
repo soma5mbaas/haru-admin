@@ -4,21 +4,21 @@
     "UPLOAD" : "Upload",
     "new" : {
       "NEW" : "New",
-      "PROJECT" : "Projects",
+      "PROJECT" : "프로젝트",
       "TASK" : "Task",
       "USER" : "User",
       "EMAIL" : "Email"
     },
-    "NOTIFICATIONS" : "Notifications"
+    "NOTIFICATIONS" : "알람"
   }
 },
 "aside" : {
   "nav" : {
-    "HEADER" : "앱관리",
+    "HEADER" : "앱 관리",
     "DASHBOARD" : "대시보드",
     "DATABROSER" : "데이터 브라우저",
     "PUSH" : "모바일 푸시",
-    "MONETIZATION" : "Monetization",
+    "MONETIZATION" : "수익관리",
     "HELPCENTER" : "고객관리",
     "NOTICE" : "공지사항",
     "QNA" : "질문사항",
@@ -26,9 +26,10 @@
     "APPREVIEWS" : "앱 리뷰",
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
+    "SETTING" : "설정",
     "WIDGETS" : "Widgets",
     "components" : {
-      "COMPONENTS" : "Documents",
+      "COMPONENTS" : "문서",
       "ui_kits" : {
         "UI_KITS" : "UI Kits",
         "BUTTONS" : "Buttons",

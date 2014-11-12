@@ -59,7 +59,7 @@ Map.prototype = {
 
 app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
     function($scope,   reviews,   $state,   $window) {
-
+        console.log('test');
         function isEmpty(obj) {
             return Object.keys(obj).length === 0;
         }
@@ -106,8 +106,16 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         $scope.ratingcircle = [];
         $scope.lineofcount = [];
         $scope.lineticks = [];
+        $scope.positivedatas = [];
+        $scope.negativedatas = [];
+        var lineticks = [];
+        for(i = 1; i <= 8; i++){
+            lineticks.push([i, moment().subtract(8 - i, 'days').format('MM-DD')]);
+        }
+        $scope.lineticks = lineticks;
+
         reviews.getReviewStatistics(applicationkey).then(function (result) {
-            //console.log(result);
+            console.log('getReviewStatistics');
 
             Reviewstatistics = result.reviews;
             $scope.summery = result.summery;
@@ -142,11 +150,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
 
             // 1번째 그래프
             /* x축 만들기 */
-            var lineticks = [];
-            for(i = 1; i <= 8; i++){
-                lineticks.push([i, moment().subtract(8 - i, 'days').format('MM-DD')]);
-            }
-            $scope.lineticks = lineticks;
+
             /* x축을 기준으로 데이터 만들기 */
             var lineofcountdata = [];
             lineticks.forEach(function(elem, index){
@@ -170,6 +174,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
 
             var negativedatas = [];
             var positivedatas = [];
+
             var negative = result.graph.negative;
             var positive = result.graph.positive;
             pnticks.forEach(function(elem, index){
@@ -190,6 +195,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
                     }
                 }
                 negativedatas.push([(index +1) *10, negativecount]);
+
             });
             $scope.positivedatas = positivedatas;
             $scope.negativedatas = negativedatas;
@@ -200,6 +206,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
 
             // 3번째 그래프
             $scope.ratingcircle = result.graph.rating;
+
         }, function (result) {
             console.log(result);
         });

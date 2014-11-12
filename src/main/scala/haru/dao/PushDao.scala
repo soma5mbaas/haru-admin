@@ -59,8 +59,8 @@ object PushDao extends DatabasePool {
       push_table.filter(p => p.appid === appid).sortBy(_.sendtime.desc).drop(page * limit).take(limit).run
   }
   
-   def updateStatus(id : Int, status:Int) = databasePool withSession {
+   def updateStatus(id : Int, status:Int, total : Int) = databasePool withSession {
     implicit session => 
-      push_table.filter(_.id === id).map(p => (p.status)).update((status))
+      push_table.filter(_.id === id).map(p => (p.status, p.totalcount)).update((status, total))
   }
 }
