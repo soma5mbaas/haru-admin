@@ -525,7 +525,7 @@ angular.module('app')
                   }
               })
               .state('app.databrowser.list', {
-                  url: '/inbox/{fold}',
+                  url: '/datalist/{fold}',
                   templateUrl: 'tpl/databrowser/databrowser.list.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
@@ -704,7 +704,7 @@ angular.module('app')
                           function ($ocLazyLoad) {
                               return $ocLazyLoad.load([
                                   'js/app/faq/faq.js',
-                                  'js/app/faq/faq-service.js',
+                                  'js/app/faq/faq-service.js'
                               ]);
                           }]
                   }
@@ -717,7 +717,7 @@ angular.module('app')
                           function ($ocLazyLoad) {
                               return $ocLazyLoad.load([
                                   'js/app/faq/faq.js',
-                                  'js/app/faq/faq-service.js',
+                                  'js/app/faq/faq-service.js'
                               ]);
                           }]
                   }
@@ -746,8 +746,6 @@ angular.module('app')
                           }]
                   }
               })
-
-
               .state('app.helpcenter.review', {
                   url: '/review',
                   templateUrl: 'tpl/review/review.list.html',
@@ -755,8 +753,10 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load([
+                                  'tpl/review/review.css',
                                   'js/app/review/review.js',
-                                  'js/app/review/review-service.js'
+                                  'js/app/review/review-service.js',
+                                  'vendor/libs/moment.min.js'
                               ]);
                           }]
                   }

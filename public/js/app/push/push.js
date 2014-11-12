@@ -90,11 +90,11 @@ app.controller('PushDetailCtrl', ['$scope', 'pushs', '$stateParams', function($s
         $scope.mail = mail;
     }, function (error) {
         console.log(error);
-    })
+    });
 }]);
 
 angular.module('app').directive('labelColor', function(){
     return function(scope, $el, attrs){
         $el.css({'color': attrs.color});
-    }
+    };
 });

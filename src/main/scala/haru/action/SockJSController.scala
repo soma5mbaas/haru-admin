@@ -25,33 +25,29 @@ import xitrum.annotation.GET
 import xitrum.annotation.SOCKJS
 
 import spray.json._
-import DefaultJsonProtocol._ 
-
-
+import DefaultJsonProtocol._
 
 @GET("/crawler/webhook")
 class CrawlerWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatRoom {
   import ChatRoom._
- 
+
   def execute() {
     val appid = param[String]("appid")
     val messagetype = param[String]("messagetype")
     val body = paramo[String]("Body")
-    
-    
-    val message = JSONArray("message" :: JSONObject (Map ("appid" -> appid, "type" -> messagetype)) :: Nil) .toString()
+
+    val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype)) :: Nil).toString()
     registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
     context.become(WebHookRegister(appid, message))
   }
 
-  private def WebHookRegister(appid:String, message:String): Actor.Receive = {
+  private def WebHookRegister(appid: String, message: String): Actor.Receive = {
     case msg: Registry.FoundOrCreated =>
       val chatRoom = msg.ref
-      chatRoom !  Msg(appid, message)
-      respondJson("{success:true}") 
+      chatRoom ! Msg(appid, message)
+      respondJson("{success:true}")
   }
-  
-  
+
   def onJoinChatRoom(chatRoom: ActorRef) = {
     case ChatRoom.Msg(appid, body) =>
       log.debug("Socket Send Msg: " + body)
@@ -61,27 +57,25 @@ class CrawlerWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateC
 @GET("/qna/webhook")
 class QnAWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatRoom {
   import ChatRoom._
- 
+
   def execute() {
     val appid = param[String]("appid")
     val messagetype = param[String]("messagetype")
     val title = paramo[String]("title")
     val body = paramo[String]("Body")
-    
-    
-    val message = JSONArray("message" :: JSONObject (Map ("appid" -> appid, "type" -> messagetype)) :: Nil) .toString()
+
+    val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype)) :: Nil).toString()
     registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
     context.become(WebHookRegister(appid, message))
   }
 
-  private def WebHookRegister(appid:String, message:String): Actor.Receive = {
+  private def WebHookRegister(appid: String, message: String): Actor.Receive = {
     case msg: Registry.FoundOrCreated =>
       val chatRoom = msg.ref
-      chatRoom !  Msg(appid, message)
-      respondJson("{success:true}") 
+      chatRoom ! Msg(appid, message)
+      respondJson("{success:true}")
   }
-  
-  
+
   def onJoinChatRoom(chatRoom: ActorRef) = {
     case ChatRoom.Msg(appid, body) =>
       log.debug("Socket Send Msg: " + body)
@@ -91,7 +85,7 @@ class QnAWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatR
 object MyJsonProtocol extends DefaultJsonProtocol {
   implicit object RegisterSockJSJSONFormat extends RootJsonFormat[ChatRoom.RegisterSockJS] {
     def write(c: ChatRoom.RegisterSockJS) =
-      JsArray(JsString(c.typeval), JsString(c.message ))
+      JsArray(JsString(c.typeval), JsString(c.message))
 
     def read(value: JsValue) = value match {
       case JsArray(Vector(JsString(typeval), JsString(message))) =>
@@ -102,31 +96,30 @@ object MyJsonProtocol extends DefaultJsonProtocol {
 }
 
 @SOCKJS("sockJsChat")
-class SockJsChatActor extends SockJsAction  with LookupOrCreateChatRoom {
+class SockJsChatActor extends SockJsAction with LookupOrCreateChatRoom {
   def execute() {
+    log.debug("sockJsChat")
     joinChatRoom()
   }
 
   def onJoinChatRoom(chatRoom: ActorRef) = {
     case SockJsText(msg) =>
-     	import MyJsonProtocol._
-     	// json parsing
-		val jsonAst = msg.parseJson
-		// spray.json.JsValue -> scala object  
-		val parsemsg =  jsonAst.convertTo[ChatRoom.RegisterSockJS]  
-		chatRoom ! parsemsg
-    
+      log.debug(msg)
+      import MyJsonProtocol._
+      
+      val jsonAst = msg.parseJson
+      val parsemsg = jsonAst.convertTo[ChatRoom.RegisterSockJS]
+      chatRoom ! parsemsg
+
     case ChatRoom.Msg(appid, body) =>
       log.debug("Socket Send Msg: " + body)
       respondSockJsText(body)
   }
 }
 
-
-
 object ChatRoom {
-  val MAX_MSGS   = 20
-  val ROOM_NAME  = "chatRoom"
+  val MAX_MSGS = 20
+  val ROOM_NAME = "chatRoom"
   val PROXY_NAME = "chatRoomProxy"
 
   // Subscribers:
@@ -134,8 +127,8 @@ object ChatRoom {
   // * When there's a chat message, receive Msg
   case object Join
   case object WebHookJoin
-  case class RegisterSockJS(typeval :String, message : String)
-  case class Msg(appid : String, body: String)
+  case class RegisterSockJS(typeval: String, message: String)
+  case class Msg(appid: String, body: String)
 
   // Registry is used for looking up chat room actor by name.
   // For simplicity, this demo uses only one chat room (lobby chat room).
@@ -168,10 +161,10 @@ class ChatRoom extends Actor with Log {
   import ChatRoom._
 
   private var subscribers = Seq.empty[ActorRef]
-  private var msgs        = Seq.empty[String]
-  private val subscribersMap = scala.collection.mutable.Map[String,ActorRef]()
-//  private var subscribersMap = new scala.collection.mutable.Map[String, ActorRef]()
-  def receive = { 
+  private var msgs = Seq.empty[String]
+  private val subscribersMap = scala.collection.mutable.Map[String, ActorRef]()
+  //  private var subscribersMap = new scala.collection.mutable.Map[String, ActorRef]()
+  def receive = {
     case Join =>
       val subscriber = sender
       subscribers = subscribers :+ sender
@@ -179,14 +172,14 @@ class ChatRoom extends Actor with Log {
     case RegisterSockJS(typeval, appid) =>
       val subscriber = sender
       subscribersMap.put(appid, subscriber)
-      log.debug(subscriber +" : "+ appid + " : " + subscribersMap.toString)
-      
+      log.debug(subscriber + " : " + appid + " : " + subscribersMap.toString)
+
     //socket send와 관련됨..  
     case m @ Msg(appid, body) =>
       val subscriber = subscribersMap.get(appid);
-      if(subscriber.isDefined)
-    	  subscriber.get ! m
-      
+      if (subscriber.isDefined)
+        subscriber.get ! m
+
       log.debug("ChatRoom Send Msg: " + body + subscribers.length)
 
     case Terminated(subscriber) =>

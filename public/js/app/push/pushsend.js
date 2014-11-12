@@ -129,6 +129,7 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
 
             str += "}";
             $scope.jsonmessage = str;
+
             console.log($scope.jsonmessage);
         }
 

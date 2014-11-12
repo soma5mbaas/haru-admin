@@ -8,9 +8,11 @@
         <div class="panel panel-default">
           <div class="panel-heading font-bold">Spline</div>
           <div class="panel-body">
+            <div id="placeholder" class="demo-placeholder"></div>
+
             <div ui-jq="plot" ui-options="
               [
-                { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 } }
+                { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth:3, fill: 0 } }
               ], 
               {
                 colors: ['{{app.color.info}}'],
@@ -38,8 +40,9 @@
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
               [
-                { data: {{d0_1}}, label: 'Unique Visits', points: { show: true } }, 
-                { data: {{d0_2}}, label: 'Page Views', bars: { show: true, barWidth: 0.6, fillColor: { colors: [{ opacity: 0.2 }, { opacity: 0.4}] } } }
+
+                { data: {{d0_1}}, label: 'Unique Visits', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } }  },
+                { data: {{d0_2}}, label: 'Page Views', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }
               ],
               {                
                 colors: [ '{{app.color.info}}','{{app.color.success}}' ],
@@ -61,7 +64,7 @@
           <div class="panel-heading font-bold">Order bar</div>
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
-              [ 
+              [
                 { label: 'A', data: {{d1_1}} },
                 { label: 'B', data: {{d1_2}} },
                 { label: 'C', data: {{d1_3}} }
@@ -128,7 +131,7 @@
           <div class="panel-heading font-bold">Donut Pie</div>
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
-              {{d3}},
+              {{flotpiedata}},
               {
                 series: { pie: { show: true, innerRadius: 0.5, stroke: { width: 0 }, label: { show: true, threshold: 0.05 } } },
                 colors: ['{{app.color.primary}}','{{app.color.info}}','{{app.color.success}}','{{app.color.warning}}','{{app.color.danger}}'],
@@ -196,7 +199,7 @@
           </div>
           <div class="row m-b">
             <div class="col-xs-6">
-              <div ng-init="data4 = [ [2, 8], [4, 6], [6, 4], [8, 2], [10, 0], [8, 2], [6, 4], [4, 6], [2,8] ]" ui-jq="sparkline" ui-options="{{data4}}, {type:'bar', height:112, barWidth:6, barSpacing:10, stackedBarColor:['{{app.color.success}}', '#d7e5e8']}" class="sparkline inline"></div>
+              <div ng-init="data4 = [ [2, 12], [4, 6], [6, 4], [8, 2], [10, 0], [8, 2], [6, 4], [4, 6], [2,8] ]" ui-jq="sparkline" ui-options="{{data4}}, {type:'bar', height:112, barWidth:6, barSpacing:10, stackedBarColor:['{{app.color.success}}', '#d7e5e8']}" class="sparkline inline"></div>
             </div>
             <div class="col-xs-6">
               Revenue

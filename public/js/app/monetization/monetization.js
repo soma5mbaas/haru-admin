@@ -16,11 +16,13 @@ app.controller('MonetizationTitleCtrl', ['$scope', '$http', 'limitToFilter',  fu
     var removenation = $scope.qTerms.splice(index, 1);
     console.log(removenation);
     $scope.selectnation.push(removenation[0]);
-  }
+  };
+
   $scope.addTerm = function(){
     console.log('addTerm');
     $scope.qTerms.push({nation:"", area:"", edit:true});
-  }
+  };
+
   $scope.selectblur = function(myOption){
     for(i = 0; i< $scope.qTerms.length; i++){
       if($scope.qTerms[i].nation === ''){
@@ -49,12 +51,16 @@ app.controller('MonetizationTitleCtrl', ['$scope', '$http', 'limitToFilter',  fu
 
   $scope.myOption = '';
 
+
+  $scope.date = moment().subtract(7, 'days').format('YYYY-MM-DD') + " ~ " + moment().format('YYYY-MM-DD');
 }]);
 
 
 
+app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter',  function($scope, $http, limitToFilter) {
+  //ng-init="date ='07/15/2014 - 07/15/2014'"
 
-  app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter',  function($scope, $http, limitToFilter) {
+
 
   $scope.totalrevenue = [ [1,6.5],[2,6.5],[3,7],[4,8],[5,7.5],[6,7],[7,6.8],[8,7],[9,7.2],[10,7],[11,6.8],[12,7],[13,7], [14,7] ];
 
@@ -115,19 +121,21 @@ app.controller('MonetizationTitleCtrl', ['$scope', '$http', 'limitToFilter',  fu
   $scope.d4 = $scope.getRandomData();
 
 
-  $scope.myDateRange = { "startDate": "2013-09-19T15:00:00.000Z", "endDate": "2013-09-24T15:00:00.000Z" };
+  //$scope.myDateRange = { "startDate": "2013-09-19T15:00:00.000Z", "endDate": "2013-09-24T15:00:00.000Z" };
 
+
+
+  //console.log(angular.element(document.querySelector('meta[name=csrf-token]')).context.content);
+
+  angular.element(document.querySelector('#reservation')).daterangepicker({
+    format: 'YYYY-MM-DD',
+    startDate: moment().subtract(7, 'days').format('YYYY-MM-DD'),
+    endDate: moment().format('YYYY-MM-DD')
+  }, $scope.change);
 
   $scope.change = function(start, end, label) {
     console.log(start.toISOString(), end.toISOString(), label);
   };
-
-  angular.element(document.querySelector('#reservation')).daterangepicker({
-
-  }, function(start, end, label) {
-    console.log(start.toISOString(), end.toISOString(), label);
-  });
-
 
 
 

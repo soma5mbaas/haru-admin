@@ -1,28 +1,142 @@
+
 <div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="ReviewCtrl">
     <div class="col  bg-light dk b-r bg-auto">
         <div class="wrapper b-b bg">
             <span class="h3">Review</span>
         </div>
         <div class="wrapper bg-white b-b">
-            <ul class="nav nav-pills nav-sm">
-                <li ng-class="{active: market=='playGoogle'}" ng-click="reviewReflash('playGoogle')"><a href>Korean</a></li>
-                <li ng-class="{active: market=='amazon'}" ng-click="reviewReflash('amazon')"><a href>Japanese</a></li>
-                <li ng-class="{active: market=='English'}" ng-click="reviewReflash('English')"><a href>English</a></li>
-                <li ng-class="{active: market=='Chinese'}" ng-click="reviewReflash('Chinese')"><a href>Chinese</a></li>
-                <li ng-class="{active: market=='France'}" ng-click="reviewReflash('France')"><a href>France</a></li>
-            </ul>
+            <div class="row">
+                <div class="col-sm-7" >
+                    <span class="h4 review-title">Language</span>
+                    <ul class="nav nav-pills nav-sm m-t-sm">
+                        <li ng-class="{active: code==location.code}" ng-click="reviewReflash(location)"  ng-repeat="location in locations track by $index"><a href>{{location.language}}</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-5 b-l">
+                    <span class="h4 review-title">App store</span>
+                    <ul class="nav nav-pills nav-sm m-t-sm">
+                        <li  ng-class="{active: currentmarket==market.name}" ng-click="reviewMarketReflash(market)" ng-repeat="market in markets track by $index"><a href class=""><img ng-src="{{market.src}}" width="70px;"></a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+        <div class="panel b-t" >
+            <div class="panel-heading b-b b-light" ng-init="isCollapsed = false" ng-click="isCollapsed = !isCollapsed">
+                <div class="row">
 
-        <div class="wrapper bg-white b-b">
-            <ul class="nav nav-pills nav-sm">
-                <li ><a href class=""><img src="/img/play_logo_x2.png" width="70px;"></a></li>
-                <li ><a href class=""><img src="/img/amazon_gray.png" width="70px;"></a></li>
-                <li ><a href class=""><img src="/img/market360.png" width="70px;"></a></li>
-            </ul>
+                <div class="col-sm-1">
+                    <span>Summery</span>
+                </div>
+                <div class="col-sm-2 b-l m-l">
+                    <span >Daily : {{summery.daily}}</span>
+                </div>
+                    <div class="col-sm-2">
+                        <span>Total : {{summery.count}}</span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span class="text-info">Rating : {{summery.rating}} / 5.0</span>
+                    </div>
+
+                    <button class="btn btn-default btn-xs pull-right m-r" >Detail <i class="icon icon-arrow-down"></i></button>
+                </div>
+            </div>
+            <div collapse="isCollapsed" class="panel-body">
+                <div class="col-sm-4 b-light">
+                    <div class="m-l-xs m-t-xs m-b-sm font-bold">Count</div>
+                    <div class="text-center">
+                        <div class="inline">
+
+                            <div ui-jq="plot" ui-options="
+                          [
+                            { data: {{lineofcount}}, points: { show: true, radius: 4}, splines: { show: true, tension: 0.45, lineWidth:3, fill: 0 } }
+                          ],
+                          {
+                            colors: ['{{app.color.info}}'],
+                            series: { shadowSize: 3 },
+                            xaxis:{
+                              font: { color: '#ccc' },
+                              position: 'bottom',
+                              ticks: {{lineticks}}
+                            },
+                            yaxis:{ font: { color: '#ccc' } },
+                            grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
+                            tooltip: true,
+                            tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                          }
+                        " style="width:280px;height:160px;">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 b-l b-light">
+                    <div class="m-l-xs m-t-xs m-b-sm font-bold">Positive, Negative</div>
+                    <div class="text-center">
+                        <div class="inline">
+                            <div ui-jq="plot" ui-options="
+                          [
+                            { label: 'positive', data: {{positivedatas}} },
+                            { label: 'negative', data: {{negativedatas}} },
+                          ],
+                          {
+                            bars: { show: true, fill: true, lineWidth: 1, order: 1, fillColor: { colors: [{ opacity: 0.5 }, { opacity: 0.9}] } },
+                            colors: ['{{app.color.info}}', '{{app.color.success}}', '{{app.color.primary}}'],
+                            series: { shadowSize: 1 },
+                            xaxis:{ font: { color: '#ccc' },  position: 'bottom',ticks: {{pnticks}} },
+                            yaxis:{ font: { color: '#ccc' } },
+                            grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
+                            tooltip: true,
+                            tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                          }
+                        " style="width:280px;height:160px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 b-l b-light">
+                    <div class=" m-t-xs m-b-sm font-bold">Rating</div>
+                    <div class="text-center">
+                        <div class=" ">
+                            <div ui-jq="plot" ui-options="
+                          {{ratingcircle}},
+                          {
+                            series: { pie: { show: true,  stroke: { width: 0 }, label: { show: true} } },
+                            colors: ['{{app.color.info}}','{{app.color.success}}','{{app.color.primary}}', '{{app.color.warning}}','{{app.color.danger}}'],
+                            grid: { hoverable: true, borderWidth: 0, color: '#ccc' },
+                             tooltip: true,
+                            tooltipOpts: { content: '%x.0 point is %y.0',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                          }
+                        " style="width:280px;height:160px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-sm-4 b-l b-light">
+                    <div class="m-l-xs m-t-xs m-b-sm font-bold">Analysis</div>
+                    <div class="text-center">
+                        <div class="inline">
+                            <div ui-jq="easyPieChart" ui-options="{
+                         percent: 65,
+                         lineWidth: 50,
+                         trackColor: '{{app.color.light}}',
+                         barColor: '{{app.color.info}}',
+                         scaleColor: false,
+                         size: 100,
+                         rotate: 90,
+                         lineCap: 'butt',
+                         animate: 2000
+                       }">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>-->
+            </div>
         </div>
+      <!--  <div class="wrapper bg-white b-b animated fadeInDown" >
+
+        </div>-->
+
         <div class="wrapper">
-            <ul class="list-group" style="list-style:none;">
-                <li class="m-b" ng-repeat="review in reviews track by $index">
+            <ul class="list-group" style="list-style:none;" infinite-scroll='reddit.nextPage()' infinite-scroll-disabled='reddit.busy' infinite-scroll-distance='2'>
+                <li class="m-b"  ng-repeat='review in reddit.items  | filter:filterdata track by $index'>
                     <div class="b-info">
                         <div class="tl-content panel padder b-a block">
                             <span class="arrow right pull-up visible-left"></span>
@@ -49,6 +163,7 @@
                         </div>
                     </div>
                 </li>
+
             </ul>
         </div>
     </div>
