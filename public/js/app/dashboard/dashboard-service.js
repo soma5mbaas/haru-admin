@@ -3,15 +3,17 @@
  */
 app.factory('dashboards', ['$http', '$q', function ($http, $q) {
     var factory = {};
-    factory.getDashboardData = function(applicationkey) {
+    factory.getDashboardData = function(csrf, applicationkey) {
         var param = {'appid': applicationkey};
+        var data = {'csrf-token':csrf};
 
         var url = '/dashboard';
         var deferred = $q.defer();
         $http({url:url,
             method:'GET',
             params:param,
-            headers:{'Application-Id':applicationkey}})
+            data:data,
+            headers:{'Application-Id':applicationkey, 'Content-Type': 'application/x-www-form-urlencoded'}})
             .then(function(response) {
                 deferred.resolve(response.data);
             }, function(x) {

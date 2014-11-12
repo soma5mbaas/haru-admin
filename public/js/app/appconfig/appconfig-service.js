@@ -2,7 +2,6 @@ app.factory('appConfigs', ['$http', '$q', function ($http, $q) {
     var factory = {};
 
     factory.getParams = function(applicationkey) {
-
         var url = 'http://api.haru.io/1/config';
         var deferred = $q.defer();
         $http({url:url,
