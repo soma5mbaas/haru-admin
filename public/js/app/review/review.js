@@ -114,7 +114,9 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         }
         $scope.lineticks = lineticks;
         $scope.reflash = false;
-        reviews.getReviewStatistics(applicationkey).then(function (result) {
+
+        var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
+        reviews.getReviewStatistics(csrf, applicationkey).then(function (result) {
             console.log('getReviewStatistics');
 
             Reviewstatistics = result.reviews;

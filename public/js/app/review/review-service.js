@@ -40,8 +40,8 @@ app.factory('reviews', ['$http', '$q', function ($http, $q) {
             }.bind(this));
     };
 
-    factory.getReviewStatistics = function(applicationkey) {
-        var param = {'appid': applicationkey};
+    factory.getReviewStatistics = function(csrf, applicationkey) {
+        var param = {'csrf-token':csrf, 'appid': applicationkey};
 
         var url = '/reviews/statistics';
         var deferred = $q.defer();

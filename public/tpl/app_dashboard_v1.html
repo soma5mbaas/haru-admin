@@ -109,13 +109,13 @@
                 series: { shadowSize: 3 },
                 xaxis:{ font: { color: '#a1a7ac' },
                  ticks: {{lineticks}}},
-                yaxis:{ font: { color: '#a1a7ac' }},
+                yaxis:{ font: { color: '#a1a7ac' }, min:0},
                 legend: { color: '#000000'  },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#808080' },
                 tooltip: true,
                 tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 10, y: -25 } }
               }
-            " style="height:246px"  ng-show="messagetype == 0"> </div>
+            " style="width:516px;height:246px"  ng-show="messagetype == 0"> </div>
 
               <div ui-jq="plot" ui-refresh="messagetype" ui-options="
               [
@@ -126,13 +126,13 @@
                 series: { shadowSize: 3 },
                 xaxis:{ font: { color: '#a1a7ac' },
                  ticks: {{lineticks}}},
-                yaxis:{ font: { color: '#a1a7ac' }},
+                yaxis:{ font: { color: '#a1a7ac' }, min:0},
                 legend: { color: '#000000'  },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#808080' },
                 tooltip: true,
                 tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 10, y: -25 } }
               }
-            " style="height:246px"  ng-show="messagetype == 1">
+            " style="width:516px;height:246px"  ng-show="messagetype == 1">
             </div>
           </div>
         </div>
