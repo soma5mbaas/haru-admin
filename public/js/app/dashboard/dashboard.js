@@ -1,4 +1,4 @@
-app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', function($scope, $http, dashboards) {
+app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', function($scope, $http, dashboards, $window) {
 
   if(isEmpty($scope.user.currentproject)){
     $window.alert('project를 선택해 주십시오!!!');
