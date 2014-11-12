@@ -113,7 +113,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
             lineticks.push([i, moment().subtract(8 - i, 'days').format('MM-DD')]);
         }
         $scope.lineticks = lineticks;
-
+        $scope.reflash = false;
         reviews.getReviewStatistics(applicationkey).then(function (result) {
             console.log('getReviewStatistics');
 
@@ -206,7 +206,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
 
             // 3번째 그래프
             $scope.ratingcircle = result.graph.rating;
-
+            $scope.graphreflash = true;
         }, function (result) {
             console.log(result);
         });

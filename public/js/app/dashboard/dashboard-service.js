@@ -4,8 +4,7 @@
 app.factory('dashboards', ['$http', '$q', function ($http, $q) {
     var factory = {};
     factory.getDashboardData = function(csrf, applicationkey) {
-        var param = {'appid': applicationkey};
-        var data = {'csrf-token':csrf};
+        var param = {'csrf-token':csrf, 'appid': applicationkey};
 
         var url = '/dashboard';
         var deferred = $q.defer();

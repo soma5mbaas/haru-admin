@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="panel b-t" >
-            <div class="panel-heading b-b b-light" ng-init="isCollapsed = false" ng-click="isCollapsed = !isCollapsed">
+            <div class="panel-heading b-b b-light" ng-init="isCollapsed = true" ng-click="isCollapsed = !isCollapsed">
                 <div class="row">
 
                 <div class="col-sm-1">
@@ -46,7 +46,7 @@
                     <div class="text-center">
                         <div class="inline">
 
-                            <div ui-jq="plot" ui-options="
+                            <div ui-jq="plot"  ui-refresh="graphreflash" ui-options="
                           [
                             { data: {{lineofcount}}, points: { show: true, radius: 4}, splines: { show: true, tension: 0.45, lineWidth:3, fill: 0 } }
                           ],
@@ -72,7 +72,7 @@
                     <div class="m-l-xs m-t-xs m-b-sm font-bold">Positive, Negative</div>
                     <div class="text-center">
                         <div class="inline">
-                            <div ui-jq="plot" ui-options="
+                            <div ui-jq="plot" ui-refresh="graphreflash" ui-options="
                           [
                             { label: 'positive', data: {{positivedatas}} },
                             { label: 'negative', data: {{negativedatas}} }
@@ -95,7 +95,7 @@
                     <div class=" m-t-xs m-b-sm font-bold">Rating</div>
                     <div class="text-center">
                         <div class=" ">
-                            <div ui-jq="plot" ui-options="
+                            <div ui-jq="plot" ui-refresh="graphreflash" ui-options="
                           {{ratingcircle}},
                           {
                             series: { pie: { show: true,  stroke: { width: 0 }, label: { show: true} } },
