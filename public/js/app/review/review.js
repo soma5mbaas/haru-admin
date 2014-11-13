@@ -73,7 +73,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         if(isEmpty($scope.user.currentproject)){
             $window.alert('project를 선택해 주십시오!!!');
 
-            console.log($scope.user.currentproject, $state.current.name);
+            //console.log($scope.user.currentproject, $state.current.name);
             $state.go('app.projects');
         }
 
@@ -117,7 +117,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
 
         var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
         reviews.getReviewInfo(csrf, applicationkey).then(function (result) {
-            console.log(result);
+            //console.log(result);
 
             Reviewstatistics = result.reviews;
 
@@ -158,7 +158,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
             var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
 
             reviews.getReviewStatistics(csrf, applicationkey, code).then(function (result) {
-                console.log(result);
+                //console.log(result);
                 $scope.summery = result.summery;
 
                 // 1번째 그래프
@@ -213,8 +213,8 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
                 $scope.positivedatas = positivedatas;
                 $scope.negativedatas = negativedatas;
 
-                console.log(JSON.stringify(positivedatas));
-                console.log(JSON.stringify(negativedatas));
+                //console.log(JSON.stringify(positivedatas));
+                //console.log(JSON.stringify(negativedatas));
 
                 // 3번째 그래프
                 $scope.ratingcircle = result.graph.rating;
@@ -223,18 +223,6 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
                 console.log(error);
             });
         }
-
-
-        $scope.d = [[1, 6.5], [2, 6.5], [3, 7], [4, 8], [5, 7.5], [6, 7], [7, 6.8], [8, 7], [9, 7.2], [10, 7], [11, 6.8], [12, 7]];
-
-        $scope.d0_1 = [[0, 7], [1, 6.5], [2, 12.5], [3, 7], [4, 9], [5, 6], [6, 11], [7, 6.5], [8, 8], [9, 7]];
-
-        $scope.d0_2 = [[0, 4], [1, 4.5], [2, 7], [3, 4.5], [4, 3], [5, 3.5], [6, 6], [7, 3], [8, 4], [9, 3]];
-
-        $scope.d1_1 = [[10, 120], [20, 70], [30, 70], [40, 60]];
-
-        $scope.d1_2 = [[10, 50], [20, 60], [30, 90], [40, 35]];
-
 
         $scope.currentmarket = '';
         $scope.reviewMarketReflash = function (market) {
@@ -260,6 +248,4 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
             $scope.reddit = new reviews(applicationkey, $scope.code, $scope.currentmarket);
             $scope.reddit.nextPage();
         }
-
-
     }]);

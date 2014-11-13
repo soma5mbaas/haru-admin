@@ -17,6 +17,7 @@
     "HEADER" : "앱 관리",
     "DASHBOARD" : "대시보드",
     "DATABROSER" : "데이터 브라우저",
+    "IMAGEUPLOAD" : "이미지",
     "PUSH" : "모바일 푸시",
     "MONETIZATION" : "수익관리",
     "HELPCENTER" : "고객관리",
@@ -26,8 +27,15 @@
     "APPREVIEWS" : "앱 리뷰",
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
-    "SETTING" : "설정",
     "WIDGETS" : "Widgets",
+    "setting" : {
+        "SETTING" : "설정",
+        "GENERAL" : "일반",
+        "APPCONFIG" : "앱 컨피그",
+        "KEYS" : "키 관리",
+        "EMAIL" : "이메일",
+        "COLLORATORS" : "협업"
+      },
     "components" : {
       "COMPONENTS" : "문서",
       "ui_kits" : {

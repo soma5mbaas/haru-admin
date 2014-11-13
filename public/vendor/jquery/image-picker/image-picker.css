@@ -26,4 +26,7 @@ ul.thumbnails.image_picker_selector {
       ul.thumbnails.image_picker_selector li .thumbnail img {
         -webkit-user-drag: none; }
     ul.thumbnails.image_picker_selector li .thumbnail.selected {
-      background: #0088cc; }
+      border-color: #0088cc;
+      border-style: solid;
+      border-width: 2px;
+    }

@@ -539,6 +539,25 @@ angular.module('app')
                           }]
                   }
               })
+              // app.imageupload
+              .state('app.imageupload', {
+                  url: '/imageupload',
+                  templateUrl: 'tpl/imageupload/form_imageupload.html',
+                  // use resolve to load other dependences
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load(['angularFileUpload',
+                              'vendor/jquery/image-picker/image-picker.min.js',
+                              'vendor/jquery/image-picker/image-picker.css']).then(
+                                  function(){
+                                      return $ocLazyLoad.load('js/app//imageupload/imageupload.js');
+                                  }
+                              );
+                          }]
+                  }
+              })
+
               // push
               .state('app.push', {
                   abstract: true,
@@ -779,15 +798,15 @@ angular.module('app')
               })
               .state('app.android', {
                   url: '/android',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/android_docs.html'
               })
               .state('app.ios', {
                   url: '/ios',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/iphone_docs.html'
               })
               .state('app.rest', {
                   url: '/rest',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/rest_docs.html'
               })
               .state('app.sdkdownloads', {
                   url: '/sdkdownloads',
@@ -803,7 +822,7 @@ angular.module('app')
               })
               .state('app.videos', {
                   url: '/videos',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/youtube_docs.html'
               })
       }
     ]

@@ -17,6 +17,7 @@
     "HEADER" : "App Managements",
     "DASHBOARD" : "Dashboard",
     "DATABROSER" : "Data Broswser",
+    "IMAGEUPLOAD" : "Image",
     "PUSH" : "Push",
     "MONETIZATION" : "Monetization",
     "HELPCENTER" : "Help Center",
@@ -26,8 +27,15 @@
     "APPREVIEWS" : "App Reviews",
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
-    "SETTING" : "Setting",
     "WIDGETS" : "Widgets",
+    "setting" : {
+        "SETTING" : "Setting",
+        "GENERAL" : "General",
+        "APPCONFIG" : "App Config",
+        "KEYS" : "Keys",
+        "EMAIL" : "Email",
+        "COLLORATORS" : "Collorators"
+      },
     "components" : {
       "COMPONENTS" : "Documents",
       "ui_kits" : {

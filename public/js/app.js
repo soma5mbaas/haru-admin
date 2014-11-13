@@ -22,5 +22,6 @@ angular.module('app', [
     'infinite-scroll',
     'ngClipboard',
     'toaster',
-    'ng-socket'
+    'ng-socket',
+    'youtube-embed'
 ]);

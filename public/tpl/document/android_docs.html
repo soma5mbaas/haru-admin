@@ -1,0 +1,2376 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  <!-- .aside -->
+  <div class="col w w-auto-xs bg-light inherit dk b-r">
+    <div class="wrapper-md b-b">
+      <a class="btn btn-link pull-right m-t-n-xs m-r-n-sm visible-sm visible-xs" ui-toggle-class="show" data-target="#nav-docs">
+        <i class="fa fa-bars"></i>
+      </a>
+      <span class="h4">Documents</span>
+    </div>
+    <div class="hidden-sm hidden-xs" id="nav-docs">
+      <ul class="nav">
+        <li class="padder b-b l-h-2x bg text-info"><em>Build</em></li>
+        <li><a ui-scroll="node-req">Requirements</a></li>
+        <li><a ui-scroll="bower">Bower</a></li>
+        <li><a ui-scroll="grunt">Grunt</a></li>      
+        <li><a ui-scroll="dev-server">Local Server</a></li>
+
+        <li class="padder b-b l-h-2x bg text-success"><em>CSS</em></li>
+        <li><a ui-scroll="bootstrap">Bootstrap</a></li>
+        <li><a ui-scroll="icons">Icons</a></li>
+        <li><a ui-scroll="animate">Animate</a></li>
+        <li><a ui-scroll="colors">Colors</a></li>
+        <li><a ui-scroll="layout">Layout</a></li>
+        <li><a ui-scroll="utilities">Utilities</a></li>
+
+        <li ui-scroll="core" class="padder b-b b-t l-h-2x bg text-danger"><em>Core</em></li>        
+        <li><a ui-scroll="ui-router">ui-router</a></li>
+        <li><a ui-scroll="ui-load">ui-load</a></li>
+        <li><a ui-scroll="ui-jq">ui-jq</a></li>
+        <li><a ui-scroll="ui-module">ui-module</a></li>
+        <li><a ui-scroll="ui-validate">ui-validate</a></li>
+
+        <li ui-scroll="directives" class="padder b-b b-t l-h-2x bg text-primary"><em>Directives</em></li>
+        <li><a ui-scroll="ui-toggle-class">ui-toggle-class</a></li>
+        <li><a ui-scroll="ui-shift">ui-shift</a></li>
+        <li><a ui-scroll="ui-scroll">ui-scroll</a></li>
+        <li><a ui-scroll="ui-fullscreen">ui-fullscreen</a></li>
+
+        <li ui-scroll="plugins" class="padder b-b b-t l-h-2x bg text-info"><em>Plugins</em></li>
+        <li><a ui-scroll="plugins">Plugins docs</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- /.aside -->
+  <div class="col">
+    <div class="clearfix padder-md">
+      <a href="#" name="top"></a><a href="#" class="section section_minor " name="top_anchor"></a>
+      <h1>Android Guide</h1>
+
+      <p>If you haven't installed the SDK yet, please <a href="/apps/quickstart#android/native/blank">head over to the QuickStart guide</a> to get our SDK up and running in Eclipse. You can also check out our <a href="/docs/android/api">API Reference</a> for more detailed information about our SDK.</p>
+
+      <h2>Introduction</h2>
+
+      <p>The Parse platform provides a complete backend solution for your mobile application. Our goal is to totally eliminate the need for writing server code or maintaining servers.</p>
+
+      <p>If you're familiar with web frameworks like Ruby on Rails, we've taken many of the same principles and applied them to our platform. In particular, our SDK is ready to use out of the box with minimal configuration on your part.</p>
+
+      <h3>Apps</h3>
+
+      <p>On Parse, you create an App for each of your mobile applications. Each App has its own application id and client key that you apply to your SDK install. Your account on Parse can accommodate multiple Apps. This is useful even if you have one application, since you can deploy different versions for test and production.</p>
+
+      <a href="#" name="objects"></a><a href="#" class="section section_minor " name="objects_anchor"></a>
+      <h2>Objects</h2>
+
+      <a href="#" name="objects-classes"></a><a href="#" class="section section_minor " name="objects-classes_anchor"></a>
+      <h3>The ParseObject</h3>
+
+      <p>Storing data on Parse is built around the <code>ParseObject</code>. Each <code>ParseObject</code> contains key-value pairs of JSON-compatible data. This data is schemaless, which means that you don't need to specify ahead of time what keys exist on each <code>ParseObject</code>. You simply set whatever key-value pairs you want, and our backend will store it.</p>
+
+      <p>For example, let's say you're tracking high scores for a game. A single <code>ParseObject</code> could contain:</p>
+
+      <div class="code parseTheme"><pre class="brush: javascript;">score: 1337, playerName: &quot;Sean Plott&quot;, cheatMode: false</pre></div>
+      <p>Keys must be alphanumeric strings. Values can be strings, numbers, booleans, or even arrays and objects - anything that can be JSON-encoded.</p>
+
+      <p>Each <code>ParseObject</code> has a class name that you can use to distinguish different sorts of data. For example, we could call the high score object a <code>GameScore</code>. We recommend that you NameYourClassesLikeThis and nameYourKeysLikeThis, just to keep your code looking pretty.</p>
+
+      <a href="#" name="objects-saving"></a><a href="#" class="section section_minor " name="objects-saving_anchor"></a>
+      <h3>Saving Objects</h3>
+
+      <p>Let's say you want to save the <code>GameScore</code> described above to the Parse Cloud. The interface is similar to a <code>Map</code>, plus the <code>saveInBackground</code> method:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+gameScore.put(&quot;score&quot;, 1337);
+gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
+gameScore.put(&quot;cheatMode&quot;, false);
+gameScore.saveInBackground();</pre></div>
+      <p>After this code runs, you will probably be wondering if anything really happened. To make sure the data was saved, you can look at the Data Browser in your app on Parse. You should see something like this:</p>
+
+      <div class="code parseTheme"><pre class="brush: objc;">objectId: &quot;xWMyZ4YEGZ&quot;, score: 1337, playerName: &quot;Sean Plott&quot;, cheatMode: false,
+createdAt:&quot;2011-06-10T18:33:42Z&quot;, updatedAt:&quot;2011-06-10T18:33:42Z&quot;</pre></div>
+      <p>There are two things to note here. You didn't have to configure or set up a new Class called <code>GameScore</code> before running this code. Your Parse app lazily creates this Class for you when it first encounters it.</p>
+
+      <p>There are also a few fields you don't need to specify that are provided as a convenience. <code>objectId</code> is a unique identifier for each saved object. <code>createdAt</code> and <code>updatedAt</code> represent the time that each object was created and last modified in the cloud. Each of these fields is filled in by Parse, so they don't exist on a <code>ParseObject</code> until a save operation has completed.</p>
+
+      <a href="#" name="objects-retrieving"></a><a href="#" class="section section_minor " name="objects-retrieving_anchor"></a>
+      <h3>Retrieving Objects</h3>
+
+      <p>Saving data to the cloud is fun, but it's even more fun to get that data out again. If you have the <code>objectId</code>, you can retrieve the whole <code>ParseObject</code> using a <code>ParseQuery</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject object, ParseException e) {
+    if (e == null) {
+      // object will be your game score
+    } else {
+      // something went wrong
+    }
+  }
+});</pre></div>
+      <p>To get the values out of the <code>ParseObject</code>, there's a <code>getX</code> method for each data type:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">int score = gameScore.getInt(&quot;score&quot;);
+String playerName = gameScore.getString(&quot;playerName&quot;);
+boolean cheatMode = gameScore.getBoolean(&quot;cheatMode&quot;);</pre></div>
+      <p>If you don't know what type of data you're getting out, you can call <code>get(key)</code>, but then you probably have to cast it right away anyways. In most situations you should use the typed accessors like <code>getString</code>.</p>
+
+      <p>The three special values have their own accessors:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">String objectId = gameScore.getObjectId();
+Date updatedAt = gameScore.getUpdatedAt();
+Date createdAt = gameScore.getCreatedAt();</pre></div>
+      <p>If you need to refresh an object you already have with the latest data that
+        is in the cloud, you can call the <code>fetchInBackground</code> method like so:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">myObject.fetchInBackground(new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject object, ParseException e) {
+    if (e == null) {
+      // Success!
+    } else {
+      // Failure!
+    }
+  }
+});</pre></div>
+      <p>The code in the <code>GetCallback</code> will be run on the main thread.</p>
+
+      <a href="#" name="objects-pinning"></a><a href="#" class="section section_minor " name="objects-pinning_anchor"></a>
+      <h3>The Local Datastore</h3>
+
+      <p>Parse also lets you store objects in a <a href="#localdatastore">local datastore</a> on the Android device itself. You can use this for data that doesn't need to be saved to the cloud, but this is especially useful for temporarily storing data so that it can be synced later. To enable the datastore, call <code>Parse.enableLocalDatastore()</code> in your <code>Application</code> constructor before calling <code>Parse.initialize()</code>. Once the local datastore is enabled, you can store an object by pinning it.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+gameScore.put(&quot;score&quot;, 1337);
+gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
+gameScore.put(&quot;cheatMode&quot;, false);
+gameScore.pinInBackground();</pre></div>
+      <p>As with saving, this recursively stores every object and file that <code>gameScore</code> points to, if it has been fetched from the cloud. Whenever you save changes to the object, or fetch new changes from Parse, the copy in the datastore will be automatically updated, so you don't have to worry about it.</p>
+
+      <h4>Retrieving Objects from the Local Datastore</h4>
+
+      <p>Storing an object is only useful if you can get it back out. To get the data for a specific object, you can use a <code>ParseQuery</code> just like you would while on the network, but using the <code>fromLocalDatastore</code> method to tell it where to get the data.
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.fromLocalDatastore();
+query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject object, ParseException e) {
+    if (e == null) {
+      // object will be your game score
+    } else {
+      // something went wrong
+    }
+  }
+});</pre></div>
+      <p>If you already have an instance of the object, you can instead use the <code>fetchFromLocalDatastoreInBackground</code> method.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject object = ParseObject.createWithoutData(&quot;GameScore&quot;, &quot;xWMyZ4YEGZ&quot;);
+object.fetchFromLocalDatastoreInBackground(new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject object, ParseException e) {
+    if (e == null) {
+      // object will be your game score
+    } else {
+      // something went wrong
+    }
+  }
+});</pre></div>
+      <h4>Unpinning Objects</h4>
+
+      <p> When you are done with the object and no longer need to keep it on the device, you can release it with <code>unpinInBackground</code>.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">gameScore.unpinInBackground();</pre></div>
+      <a href="#" name="objects-offline"></a><a href="#" class="section section_minor " name="objects-offline_anchor"></a>
+      <h3>Saving Objects Offline</h3>
+
+      <p>Most save functions execute immediately, and inform your app when the save is complete. If you don't need to know when the save has finished, you can use <code>saveEventually</code> instead. The advantage is that if the user currently doesn't have a network connection, <code>saveEventually</code> will store the update on the device until a network connection is re-established. If your app is closed before the connection is back, Parse will try again the next time the app is opened. All calls to <code>saveEventually</code> (and <code>deleteEventually</code>) are executed in the order they are called, so it is safe to call <code>saveEventually</code> on an object multiple times. If you have the local datastore enabled, then any object you <code>saveEventually</code> will be pinned as long as that save is in progress. That makes it easy to retrieve your local changes while waiting for the network to be available.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+gameScore.put(&quot;score&quot;, 1337);
+gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
+gameScore.put(&quot;cheatMode&quot;, false);
+gameScore.saveEventually();</pre></div>
+      <a href="#" name="objects-updating"></a><a href="#" class="section section_minor " name="objects-updating_anchor"></a>
+      <h3>Updating Objects</h3>
+
+      <p>Updating an object is simple. Just set some new data on it and call one of the save methods. Assuming you have saved the object and have the <code>objectId</code>, you can retrieve the <code>ParseObject</code> using a <code>ParseQuery</code> and update its data:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+
+// Retrieve the object by id
+query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject gameScore, ParseException e) {
+    if (e == null) {
+      // Now let&#x27;s update it with some new data. In this case, only cheatMode and score
+      // will get sent to the Parse Cloud. playerName hasn&#x27;t changed.
+      gameScore.put(&quot;score&quot;, 1338);
+      gameScore.put(&quot;cheatMode&quot;, true);
+      gameScore.saveInBackground();
+    }
+  }
+});</pre></div>
+      <p>Parse automatically figures out which data has changed so only "dirty" fields will be transmitted during a save. You don't need to worry about squashing data in the cloud that you didn't intend to update.</p>
+
+      <h4>Counters</h4>
+
+      <p>The above example contains a common use case. The "score" field is a counter that we'll need to continually update with the player's latest score. Using the above method works but it's cumbersome and can lead to problems if you have multiple clients trying to update the same counter.</p>
+
+      <p>To help with storing counter-type data, Parse provides methods that atomically increment (or decrement) any number field. So, the same update can be rewritten as:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">gameScore.increment(&quot;score&quot;);
+gameScore.saveInBackground();</pre></div>
+      <p>You can also increment by any amount using <code>increment(key, amount)</code>.</p>
+
+      <h4>Arrays</h4>
+
+      <p>To help with storing array data, there are three operations that can be used to atomically change an array field:</p>
+
+      <ul class="text">
+        <li><code>add</code> and <code>addAll</code> append the given objects to the end of an array field.</li>
+        <li><code>addUnique</code> and <code>addAllUnique</code> add only the given objects which aren't already contained in an array field to that field. The position of the insert is not guaranteed.</li>
+        <li><code>removeAll</code> removes all instances of the given objects from an array field.</li>
+      </ul>
+
+      <p>For example, we can add items to the set-like "skills" field like so:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">gameScore.addAllUnique(&quot;skills&quot;, Arrays.asList(&quot;flying&quot;, &quot;kungfu&quot;));
+gameScore.saveInBackground();</pre></div>
+      <p>Note that it is not currently possible to atomically add and remove items from an array in the same save.
+        You will have to call <code>save</code> in between every different kind of array operation.</p>
+
+      <a href="#" name="objects-deleting"></a><a href="#" class="section section_minor " name="objects-deleting_anchor"></a>
+      <h3>Deleting Objects</h3>
+
+      <p>To delete an object from the Parse Cloud:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">myObject.deleteInBackground();</pre></div>
+      <p>If you want to run a callback when the delete is confirmed, you can provide a <code>DeleteCallback</code> to the <code>deleteInBackground</code> method. If you want to block the calling thread, you can use the <code>delete</code> method.
+
+      <p>You can delete a single field from an object with the <code>remove</code> method:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// After this, the playerName field will be empty
+myObject.remove(&quot;playerName&quot;);
+
+// Saves the field deletion to the Parse Cloud
+myObject.saveInBackground();</pre></div>
+      <a href="#" name="objects-pointers"></a><a href="#" class="section section_minor " name="objects-pointers_anchor"></a>
+      <h3>Relational Data</h3>
+
+      <p>Objects can have relationships with other objects. To model this behavior, any <code>ParseObject</code> can be used as a value in other <code>ParseObject</code>s. Internally, the Parse framework will store the referred-to object in just one place, to maintain consistency.</p>
+
+      <p>For example, each <code>Comment</code> in a blogging app might correspond to one <code>Post</code>. To create a new <code>Post</code> with a single <code>Comment</code>, you could write:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Create the post
+ParseObject myPost = new ParseObject(&quot;Post&quot;);
+myPost.put(&quot;title&quot;, &quot;I&#x27;m Hungry&quot;);
+myPost.put(&quot;content&quot;, &quot;Where should we go for lunch?&quot;);
+
+// Create the comment
+ParseObject myComment = new ParseObject(&quot;Comment&quot;);
+myComment.put(&quot;content&quot;, &quot;Let&#x27;s do Sushirrito.&quot;);
+
+// Add a relation between the Post and Comment
+myComment.put(&quot;parent&quot;, myPost);
+
+// This will save both myPost and myComment
+myComment.saveInBackground();</pre></div>
+      <p>You can also link objects using just their <code>objectId</code>s like so:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Add a relation between the Post with objectId &quot;1zEcyElZ80&quot; and the comment
+myComment.put(&quot;parent&quot;, ParseObject.createWithoutData(&quot;Post&quot;, &quot;1zEcyElZ80&quot;));</pre></div>
+      <p>By default, when fetching an object, related <code>ParseObject</code>s are not fetched.  These objects' values cannot be retrieved until they have been fetched like so:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">fetchedComment.getParseObject(&quot;post&quot;)
+    .fetchIfNeededInBackground(new GetCallback&lt;ParseObject&gt;() {
+        public void done(ParseObject post, ParseException e) {
+          String title = post.getString(&quot;title&quot;);
+          // Do something with your new title variable
+        }
+    });</pre></div><p>You can also model a many-to-many relation using the <code>ParseRelation</code> object.  This works similar to <code>List<ParseObject></code>, except that you don't need to download all the <code>ParseObject</code>s in a relation at once.  This allows <code>ParseRelation</code> to scale to many more objects than the <code>List<ParseObject></code> approach.  For example, a <code>User</code> may have many <code>Post</code>s that they might like.  In this case, you can store the set of <code>Post</code>s that a <code>User</code> likes using <code>getRelation</code>.  In order to add a post to the list, the code would look something like:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser user = ParseUser.getCurrentUser();
+ParseRelation&lt;ParseObject&gt; relation = user.getRelation(&quot;likes&quot;);
+relation.add(post);
+user.saveInBackground();</pre></div>    <p>You can remove a post from the <code>ParseRelation</code> with something like:</p>
+      <div class="code parseTheme"><pre class="brush: java;">relation.remove(post);</pre></div>
+      <p>By default, the list of objects in this relation are not downloaded.  You can get the list of <code>Post</code>s by calling <code>findInBackground</code> on the <code>ParseQuery</code> returned by <code>getQuery</code>.  The code would look like:</p>
+      <div class="code parseTheme"><pre class="brush: java;">relation.getQuery().findInBackground(new FindCallback&lt;ParseObject&gt;() {
+    void done(List&lt;ParseObject&gt; results, ParseException e) {
+      if (e != null) {
+        // There was an error
+      } else {
+        // results have all the Posts the current user liked.
+      }
+    }
+});</pre></div>
+      <p>If you want only a subset of the <code>Post</code>s you can add extra constraints to the <code>ParseQuery</code> returned by <code>getQuery</code>.  The code would look something like:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = relation.getQuery();
+// Add other query constraints.</pre></div>    <p> For more details on <code>ParseQuery</code>, please look at the <a href="#queries">query portion of this guide</a>.  A <code>ParseRelation</code> behaves similar to a <code>List<ParseObject></code> for querying purposes, so any queries you can do on lists of objects (other than <code>include</code>) you can do on <code>ParseRelation</code>.</p>
+
+      <a href="#" name="objects-types"></a><a href="#" class="section section_minor " name="objects-types_anchor"></a>
+      <h3>Data Types</h3>
+
+      <p>So far we've used values with type <code>String</code>, <code>int</code>, <code>bool</code>, and <code>ParseObject</code>. Parse also supports <code>java.util.Date</code>, <code>byte[]</code>, and <code>JSONObject.NULL</code>.</p>
+
+      <p>You can nest <code>JSONObject</code> and <code>JSONArray</code> objects to store more structured data within a single <code>ParseObject</code>.</p>
+
+      <p>Some examples:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">int myNumber = 42;
+String myString = &quot;the number is &quot; + myNumber;
+Date myDate = new Date();
+
+JSONArray myArray = new JSONArray();
+myArray.put(myString);
+myArray.put(myNumber);
+
+JSONObject myObject = new JSONObject();
+myObject.put(&quot;number&quot;, myNumber);
+myObject.put(&quot;string&quot;, myString);
+
+byte[] myData = { 4, 8, 16, 32 };
+
+ParseObject bigObject = new ParseObject(&quot;BigObject&quot;);
+bigObject.put(&quot;myNumber&quot;, myNumber);
+bigObject.put(&quot;myString&quot;, myString);
+bigObject.put(&quot;myDate&quot;, myDate);
+bigObject.put(&quot;myData&quot;, myData);
+bigObject.put(&quot;myArray&quot;, myArray);
+bigObject.put(&quot;myObject&quot;, myObject);
+bigObject.put(&quot;myNull&quot;, JSONObject.NULL);
+bigObject.saveInBackground();</pre></div>
+      <p>We do not recommend storing large pieces of binary data like images or documents using <code>byte[]</code> fields on <code>ParseObject</code>. <code>ParseObjects</code>s should not exceed 128 kilobytes in size. To store more, we recommend you use <code>ParseFile</code>. See the <a href="#files">guide section</a> for more details.<p>
+
+      <p>For more information about how Parse handles data, check out our documentation on <a href="/docs/data">Data & Security</a>.</p>
+
+      <a href="#" name="queries"></a><a href="#" class="section section_major " name="queries_anchor"></a>
+      <h2>Queries</h2>
+
+      <a href="#" name="queries-basic"></a><a href="#" class="section section_minor " name="queries-basic_anchor"></a>
+      <h3>Basic Queries</h3>
+
+      <p>In many cases, <code>getInBackground</code> isn't powerful enough to specify which objects you want to retrieve. The <code>ParseQuery</code> offers different ways to retrieve a list of objects rather than just a single object.</p>
+
+      <p>The general pattern is to create a <code>ParseQuery</code>, put conditions on it, and then retrieve a <code>List</code> of matching <code>ParseObject</code>s using the <code>findInBackground</code> method with a <code>FindCallback</code>. For example, to retrieve scores with a particular <code>playerName</code>, use the <code>whereEqualTo</code> method to constrain the value for a key:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.whereEqualTo(&quot;playerName&quot;, &quot;Dan Stemkoski&quot;);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+    public void done(List&lt;ParseObject&gt; scoreList, ParseException e) {
+        if (e == null) {
+            Log.d(&quot;score&quot;, &quot;Retrieved &quot; + scoreList.size() + &quot; scores&quot;);
+        } else {
+            Log.d(&quot;score&quot;, &quot;Error: &quot; + e.getMessage());
+        }
+    }
+});</pre></div>
+      <p><code>findInBackground</code> works similarly to <code>getInBackground</code> in that it assures the network request is done on a background thread, and runs its callback in the main thread.</p>
+
+      <a href="#" name="queries-constraints"></a><a href="#" class="section section_minor " name="queries-constraints_anchor"></a>
+      <h3>Query Constraints</h3>
+
+      <p>There are several ways to put constraints on the objects found by a <code>ParseQuery</code>. You can filter out objects with a particular key-value pair with <code>whereNotEqualTo</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">query.whereNotEqualTo(&quot;playerName&quot;, &quot;Michael Yabuti&quot;);</pre></div>
+      <p>You can give multiple constraints, and objects will only be in the results if they match all of the constraints.  In other words, it's like an AND of constraints.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">query.whereNotEqualTo(&quot;playerName&quot;, &quot;Michael Yabuti&quot;);
+query.whereGreaterThan(&quot;playerAge&quot;, 18);</pre></div>
+      <p>You can limit the number of results with <code>setLimit</code>. By default, results are limited to 100, but anything from 1 to 1000 is a valid limit:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">query.setLimit(10); // limit to at most 10 results</pre></div>
+      <p>If you want exactly one result, a more convenient alternative may be to use <code>getFirst</code> or <code>getFirstBackground</code> instead of using <code>find</code>.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.whereEqualTo(&quot;playerEmail&quot;, &quot;dstemkoski@example.com&quot;);
+query.getFirstInBackground(new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject object, ParseException e) {
+    if (object == null) {
+      Log.d(&quot;score&quot;, &quot;The getFirst request failed.&quot;);
+    } else {
+      Log.d(&quot;score&quot;, &quot;Retrieved the object.&quot;);
+    }
+  }
+});</pre></div>
+      <p>You can skip the first results with <code>setSkip</code>. This can be useful for pagination:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">query.setSkip(10); // skip the first 10 results</pre></div>
+      <p>For sortable types like numbers and strings, you can control the order in which results are returned:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Sorts the results in ascending order by the score field
+query.orderByAscending(&quot;score&quot;);
+
+// Sorts the results in descending order by the score field
+query.orderByDescending(&quot;score&quot;);</pre></div>
+      <p>You can add more sort keys to the query as follows:</p>
+      <div class="code parseTheme"><pre class="brush: java;">// Sorts the results in ascending order by the score field if the previous sort keys are equal.
+query.addAscendingOrder(&quot;score&quot;);
+
+// Sorts the results in descending order by the score field if the previous sort keys are equal.
+query.addDescendingOrder(&quot;score&quot;);</pre></div>
+      <p>For sortable types, you can also use comparisons in queries:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Restricts to wins &lt; 50
+query.whereLessThan(&quot;wins&quot;, 50);
+
+// Restricts to wins &lt;= 50
+query.whereLessThanOrEqualTo(&quot;wins&quot;, 50);
+
+// Restricts to wins &gt; 50
+query.whereGreaterThan(&quot;wins&quot;, 50);
+
+// Restricts to wins &gt;= 50
+query.whereGreaterThanOrEqualTo(&quot;wins&quot;, 50);</pre></div>
+      <p>If you want to retrieve objects matching several different values, you can use <code>whereContainedIn</code>, providing a collection of acceptable values. This is often useful to replace multiple queries with a single query. For example, if you want to retrieve scores made by any player in a particular list:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">String[] names = {&quot;Jonathan Walsh&quot;, &quot;Dario Wunsch&quot;, &quot;Shawn Simon&quot;};
+query.whereContainedIn(&quot;playerName&quot;, Arrays.asList(names));</pre></div>
+      <p>If you want to retrieve objects that do not match any of several values you can use <code>whereKey:notContainedIn:</code>, providing an array of acceptable values.  For example, if you want to retrieve scores from players besides those in a list:</p>
+      <div class="code parseTheme"><pre class="brush: java;">String[] names = {&quot;Jonathan Walsh&quot;, &quot;Dario Wunsch&quot;, &quot;Shawn Simon&quot;};
+query.whereNotContainedIn(&quot;playerName&quot;, Arrays.asList(names));</pre></div>
+
+      <p>If you want to retrieve objects that have a particular key set, you can use <code>whereExists</code>. Conversely, if you want to retrieve objects without a particular key set, you can use <code>whereDoesNotExist</code>.
+
+      <div class="code parseTheme"><pre class="brush: java;">// Finds objects that have the score set
+query.whereExists(&quot;score&quot;);
+
+// Finds objects that don&#x27;t have the score set
+query.whereDoesNotExist(&quot;score&quot;);</pre></div>    <p>You can use the <code>whereMatchesKeyInQuery</code> method to get objects where a key matches the value of a key in a set of objects resulting from another query.  For example, if you have a class containing sports teams and you store a user's hometown in the user class, you can issue one query to find the list of users whose hometown teams have winning records.  The query would look like:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; teamQuery = ParseQuery.getQuery(&quot;Team&quot;);
+teamQuery.whereGreaterThan(&quot;winPct&quot;, 0.5);
+ParseQuery&lt;ParseUser&gt; userQuery = ParseUser.getQuery();
+userQuery.whereMatchesKeyInQuery(&quot;hometown&quot;, &quot;city&quot;, teamQuery);
+userQuery.findInBackground(new FindCallback&lt;ParseUser&gt;() {
+  void done(List&lt;ParseUser&gt; results, ParseException e) {
+    // results has the list of users with a hometown team with a winning record
+  }
+});</pre></div>
+      <p>Conversely, to get objects where a key does not match the value of a key in a set of objects resulting from another query, use <code>whereDoesNotMatchKeyInQuery</code>. For example, to find users whose hometown teams have losing records:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseUser&gt; losingUserQuery = ParseUser.getQuery();
+losingUserQuery.whereDoesNotMatchKeyInQuery(&quot;hometown&quot;, &quot;city&quot;, teamQuery);
+losingUserQuery.findInBackground(new FindCallback&lt;ParseUser&gt;() {
+  void done(List&lt;ParseUser&gt; results, ParseException e) {
+    // results has the list of users with a hometown team with a losing record
+  }
+});</pre></div>
+      <p>You can restrict the fields returned by calling <code>selectKeys</code> with a collection of keys. To retrieve documents that contain only the <code>score</code> and <code>playerName</code> fields (and also special built-in fields such as <code>objectId</code>, <code>createdAt</code>, and <code>updatedAt</code>):</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.selectKeys(Arrays.asList(&quot;playerName&quot;, &quot;score&quot;));;
+List&lt;ParseObject&gt; results = query.find();</pre></div>
+      <p>The remaining fields can be fetched later by calling one of the <code>fetchIfNeeded</code> variants on the returned objects:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject object = results.get(0);
+object.fetchIfNeededInBackground(new GetCallback&lt;ParseObject&gt;() {
+  public void done(ParseObject object, ParseException e) {
+    // all fields of the object will now be available here.
+  }
+});</pre></div>
+      <a href="#" name="queries-arrays"></a><a href="#" class="section section_minor " name="queries-arrays_anchor"></a>
+      <h3>Queries on Array Values</h3>
+      <p>If a key contains an array value, you can search for objects where the key's array value contains 2 by:</p>
+      <div class="code parseTheme"><pre class="brush: java;">// Find objects where the array in arrayKey contains the number 2.
+query.whereEqualTo(&quot;arrayKey&quot;, 2);</pre></div>
+      <p>You can also search for objects where the key's array value contains each of the values 2, 3, and 4 with the following:</p>
+      <div class="code parseTheme"><pre class="brush: java;">// Find objects where the array in arrayKey contains all of the numbers 2, 3, and 4.
+ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;Integer&gt;();
+numbers.add(2);
+numbers.add(3);
+numbers.add(4);
+query.whereContainsAll(&quot;arrayKey&quot;, numbers);</pre></div>
+      <a href="#" name="queries-strings"></a><a href="#" class="section section_minor " name="queries-strings_anchor"></a>
+      <h3>Queries on String Values</h3>
+
+      <p>Use <code>whereStartsWith</code> to restrict to string values that start with a particular string. Similar to a MySQL LIKE operator, this is indexed so it is efficient for large datasets:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Finds barbecue sauces that start with &quot;Big Daddy&#x27;s&quot;.
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;BarbecueSauce&quot;);
+query.whereStartsWith(&quot;name&quot;, &quot;Big Daddy&#x27;s&quot;);</pre></div>
+      <div class="callout_green">
+        If you're trying to implement a generic search feature, we recommend taking a look at this blog post: <a href="http://blog.parse.com/2013/03/19/implementing-scalable-search-on-a-nosql-backend/">Implementing Scalable Search on a NoSQL Backend</a>.
+      </div>
+
+      <a href="#" name="queries-relational"></a><a href="#" class="section section_minor " name="queries-relational_anchor"></a>
+      <h3>Relational Queries</h3>
+
+      <p>There are several ways to issue queries for relational data. If you want to retrieve objects where a field matches a particular <code>ParseObject</code>, you can use <code>whereEqualTo</code> just like for other data types. For example, if each <code>Comment</code> has a <code>Post</code> object in its <code>post</code> field, you can fetch comments for a particular <code>Post</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Assume ParseObject myPost was previously created.
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+query.whereEqualTo(&quot;post&quot;, myPost);
+
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+    // commentList now has the comments for myPost
+  }
+});</pre></div>    <p>If you want to retrieve objects where a field contains a <code>ParseObject</code> that matches a different query, you can use <code>whereMatchesQuery</code>. Note that the default limit of 100 and maximum limit of 1000 apply to the inner query as well, so with large data sets you may need to construct queries carefully to get the desired behavior. In order to find comments for posts containing images, you can do:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; innerQuery = ParseQuery.getQuery(&quot;Post&quot;);
+innerQuery.whereExists(&quot;image&quot;);
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+query.whereMatchesQuery(&quot;post&quot;, innerQuery);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+    // comments now contains the comments for posts with images.
+  }
+});</pre></div>  <p>If you want to retrieve objects where a field contains a <code>ParseObject</code> that does not match a different query, you can use <code>whereDoesNotMatchQuery</code>. In order to find comments for posts without images, you can do:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; innerQuery = ParseQuery.getQuery(&quot;Post&quot;);
+innerQuery.whereExists(&quot;image&quot;);
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+query.whereDoesNotMatchQuery(&quot;post&quot;, innerQuery);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+    // comments now contains the comments for posts without images.
+  }
+});</pre></div>
+
+      <p>In some situations, you want to return multiple types of related objects in one query. You can do this with the <code>include</code> method. For example, let's say you are retrieving the last ten comments, and you want to retrieve their related posts at the same time:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+
+// Retrieve the most recent ones
+query.orderByDescending(&quot;createdAt&quot;);
+
+// Only retrieve the last ten
+query.setLimit(10);
+
+// Include the post data with each comment
+query.include(&quot;post&quot;);
+
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+    // commentList now contains the last ten comments, and the &quot;post&quot;
+    // field has been populated. For example:
+    for (ParseObject comment : commentList) {
+      // This does not require a network access.
+      ParseObject post = comment.getParseObject(&quot;post&quot;);
+      Log.d(&quot;post&quot;, &quot;retrieved a related post&quot;);
+    }
+  }
+});</pre></div>
+      <p>You can also do multi level includes using dot notation.  If you wanted to include the post for a comment and the post's author as well you can do:</p>
+      <div class="code parseTheme"><pre class="brush: objc;">query.include(&quot;post.author&quot;);</pre></div>
+
+      <p>You can issue a query with multiple fields included by calling <code>include</code> multiple times. This functionality also works with ParseQuery helpers like <code>getFirst()</code> and <code>getInBackground()</code>.</p>
+
+
+      <a href="#" name="queries-fromlocaldatastore"></a><a href="#" class="section section_minor " name="queries-fromlocaldatastore_anchor"></a>
+      <h3>Querying the Local Datastore</h3>
+
+      <p>If you have enabled the local datastore by calling <code>Parse.enableLocalDatastore()</code> before your call to <code>Parse.initialize()</code>, then you can also query against the objects stored locally on the device. To do this, call the <code>fromLocalDatastore</code> method on the query.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">query.fromLocalDatastore();
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; scoreList, ParseException e) {
+    if (e == null) {
+      // Results were successfully found from the local datastore.
+    } else {
+      // There was an error.
+    }
+  }
+});</pre></div>
+      <p>You can query from the local datastore using exactly the same kinds of queries you use over the network. The results will include every object that matches the query that's been pinned to your device. The query even takes into account any changes you've made to the object that haven't yet been saved to the cloud. For example, if you call <code>deleteEventually</code>, on an object, it will no longer be returned from these queries.</p>
+
+      <a href="#" name="queries-caching"></a><a href="#" class="section section_minor " name="queries-caching_anchor"></a>
+      <h3>Caching Queries</h3>
+
+      <p>It's often useful to cache the result of a query on a device. This lets you show data when the user's device is offline, or when the app has just started and network requests have not yet had time to complete. The easiest way to do this is with the local datastore. When you pin objects, you can attach a label to the pin, which lets you manage a group of objects together. For example, to cache the results of the query above, you can call <code>pinAllInBackground</code> and give it a label.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">final String TOP_SCORES_LABEL = &quot;topScores&quot;;
+
+// Query for the latest objects from Parse.
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(final List&lt;ParseObject&gt; scoreList, ParseException e) {
+    if (e != null) {
+      // There was an error or the network wasn&#x27;t available.
+      return;
+    }
+
+    // Release any objects previously pinned for this query.
+    ParseObject.unpinAllInBackground(TOP_SCORES_LABEL, scoreList, new DeleteCallback() {
+      public void done(ParseException e) {
+        if (e != null) {
+          // There was some error.
+          return;
+        }
+
+        // Add the latest results for this query to the cache.
+        ParseObject.pinAllInBackground(TOP_SCORES_LABEL, scoreList);
+      }
+    });
+  }
+});</pre></div>
+      <p>Now when you do any query with <code>fromLocalDatastore</code>, these objects will be included in the results if they still match the query.</p>
+
+      <p>If you aren't using the local datastore, you can use the per-query cache for <code>ParseQuery</code> instead. The default query behavior doesn't use the cache, but you can enable caching with <code>setCachePolicy</code>. For example, to try the network and then fall back to cached data if the network is not available:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; scoreList, ParseException e) {
+    if (e == null) {
+      // Results were successfully found, looking first on the
+      // network and then on disk.
+    } else {
+      // The network was inaccessible and we have no cached data
+      // for this query.
+    }
+  }
+});</pre></div>
+      <p>Parse provides several different cache policies:</p>
+
+      <ul class="text">
+        <li>
+          <code>IGNORE_CACHE</code>
+          <br>
+          The query does not load from the cache or save results to the cache. <code>IGNORE_CACHE</code> is the default cache policy.
+        </li>
+        <li>
+          <code>CACHE_ONLY</code>
+          <br>
+          The query only loads from the cache, ignoring the network. If there are no cached results, that causes a <code>ParseException</code>.
+        </li>
+        <li>
+          <code>NETWORK_ONLY</code>
+          <br>
+          The query does not load from the cache, but it will save results to the cache.
+        </li>
+        <li>
+          <code>CACHE_ELSE_NETWORK</code>
+          <br>
+          The query first tries to load from the cache, but if that fails, it loads results from the network. If neither cache nor network succeed, there is a <code>ParseException</code>.
+        </li>
+        <li>
+          <code>NETWORK_ELSE_CACHE</code>
+          <br>
+          The query first tries to load from the network, but if that fails, it loads results from the cache. If neither network nor cache succeed, there is a <code>ParseException</code>.
+        </li>
+        <li>
+          <code>CACHE_THEN_NETWORK</code>
+          <br>
+          The query first loads from the cache, then loads from the network. In this case, the <code>FindCallback</code> will actually be called twice - first with the cached results, then with the network results. This cache policy can only be used asynchronously with <code>findInBackground</code>.
+        </li>
+      </ul>
+
+      <p>If you need to control the cache's behavior, you can use methods provided in ParseQuery to interact with the cache.  You can do the following operations on the cache:
+      <ul class="text">
+        <li>Check to see if there is a cached result for the query with:
+          <div class="code parseTheme"><pre class="brush: java;">boolean isInCache = query.hasCachedResult();</pre></div>       </li>
+        <li> Remove any cached results for a query with:
+          <div class="code parseTheme"><pre class="brush: java;">query.clearCachedResult();</pre></div>       </li>
+        <li>
+          Remove cached results for all queries with:
+          <div class="code parseTheme"><pre class="brush: java;">ParseQuery.clearAllCachedResults();</pre></div>       </li>
+        <li>Control the maximum age of a cached result with:
+          <div class="code parseTheme"><pre class="brush: java;">query.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));</pre></div>      </ul> </p>
+
+      <p>Query caching also works with ParseQuery helpers including <code>getFirst()</code> and <code>getInBackground()</code>.</p>
+
+      <a href="#" name="queries-counting"></a><a href="#" class="section section_minor " name="queries-counting_anchor"></a>
+      <h3>Counting Objects</h3>
+
+      <p>If you just need to count how many objects match a query, but you do not need to retrieve all the objects that match, you can use <code>count</code> instead of <code>find</code>. For example, to count how many games have been played by a particular player:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.whereEqualTo(&quot;playerName&quot;, &quot;Sean Plott&quot;);
+query.countInBackground(new CountCallback() {
+  public void done(int count, ParseException e) {
+    if (e == null) {
+      // The count request succeeded. Log the count
+      Log.d(&quot;score&quot;, &quot;Sean has played &quot; + count + &quot; games&quot;);
+    } else {
+      // The request failed
+    }
+  }
+});</pre></div>
+      <p>If you want to block the calling thread, you can also use the synchronous <code>query.count()</code> method.</p>
+
+      <p>For classes with over 1000 objects, count operations are limited by timeouts. They may routinely yield timeout errors or return results that are only approximately correct. Thus, it is preferable to architect your application to avoid this sort of count operation.</p>
+
+      <a href="#" name="queries-compound"></a><a href="#" class="section section_minor " name="queries-compound_anchor"></a>
+      <h3>Compound Queries</h3>
+      <p> If you want to find objects that match one of several queries, you can use <code>ParseQuery.or</code> method to construct a query that is an or of the queries passed in.  For instance if you want to find players who either have a lot of wins or a few wins, you can do:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; lotsOfWins = ParseQuery.getQuery(&quot;Player&quot;);
+lotsOfWins.whereGreaterThan(150);
+
+ParseQuery&lt;ParseObject&gt; fewWins = ParseQuery.getQuery(&quot;Player&quot;);
+fewWins.whereLessThan(5);
+
+List&lt;ParseQuery&lt;ParseObject&gt;&gt; queries = new ArrayList&lt;ParseQuery&lt;ParseObject&gt;&gt;();
+queries.add(lotsOfWins);
+queries.add(fewWins);
+
+ParseQuery&lt;ParseObject&gt; mainQuery = ParseQuery.or(queries);
+mainQuery.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+  public void done(List&lt;ParseObject&gt; results, ParseException e) {
+    // results has the list of players that win a lot or haven&#x27;t won much.
+  }
+});</pre></div>    <p>You can add additional constraints to the newly created <code>ParseQuery</code>
+      that act as an 'and' operator.</p>
+      <p>Note that we do not, however, support non-filtering constraints
+        (e.g. <code>setLimit</code>, <code>skip</code>, <code>orderBy...</code>, <code>include</code>)
+        in the subqueries of the compound query.</p>
+
+      <a href="#" name="subclasses"></a><a href="#" class="section section_minor " name="subclasses_anchor"></a>
+      <h2>Subclasses</h2>
+      <p>Parse is designed to get you up and running as quickly as possible. You can access all of your data using the <code>ParseObject</code> class and access any field with <code>get()</code>. In mature codebases, subclasses have many advantages, including terseness, extensibility, and support for autocomplete. Subclassing is completely optional, but can transform this code:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject shield = new ParseObject(&quot;Armor&quot;);
+shield.put(&quot;displayName&quot;, &quot;Wooden Shield&quot;);
+shield.put(&quot;fireproof&quot;, false);
+shield.put(&quot;rupees&quot;, 50);</pre></div>
+      <p>Into this:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">Armor shield = new Armor();
+shield.setDisplayName(&quot;Wooden Shield&quot;);
+shield.setFireproof(false);
+shield.setRupees(50);</pre></div>
+      <a href="#" name="subclasses-defining"></a><a href="#" class="section section_minor " name="subclasses-defining_anchor"></a>
+      <h3>Subclassing ParseObject</h3>
+      <p>To create a <code>ParseObject</code> subclass:
+      <ol>
+        <li>Declare a subclass which extends <code>ParseObject</code>.</li>
+        <li>Add a <code>@ParseClassName</code> annotation. Its value should be the string you would pass into the <code>ParseObject</code> constructor, and makes all future class name references unnecessary.</li>
+        <li>Ensure that your subclass has a public default (i.e. zero-argument) constructor. You must not modify any <code>ParseObject</code> fields in this constructor.</li>
+        <li>Call <code>ParseObject.registerSubclass(YourClass.class)</code> in your <code>Application</code> constructor before calling <code>Parse.initialize()</code>.</li>
+      </ol>
+      The following code sucessfully implements and registers the <code>Armor</code> subclass of <code>ParseObject</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Armor.java
+import com.parse.ParseObject;
+import com.parse.ParseClassName;
+
+@ParseClassName(&quot;Armor&quot;)
+public class Armor extends ParseObject {
+}
+
+// App.java
+import com.parse.Parse;
+import android.app.Application;
+
+public class App extends Application {
+  @Override
+  public void onCreate() {
+    super.onCreate();
+
+    ParseObject.registerSubclass(Armor.class);
+    Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
+  }
+}</pre></div>
+      <a href="#" name="subclasses-properties"></a><a href="#" class="section section_minor " name="subclasses-properties_anchor"></a>
+      <h3>Accessors, Mutators, and Methods</h3>
+      <p>Adding methods to your <code>ParseObject</code> subclass helps encapsulate logic about the class. You can keep all your logic about a subject in one place rather than using separate classes for business logic and storage/transmission logic.</p>
+
+      <p>You can add accessors and mutators for the fields of your <code>ParseObject</code> easily. Declare the getter and setter for the field as you normally would, but implement them in terms of <code>get()</code> and <code>put()</code>. The following example creates a <code>displayName</code> field in the <code>Armor</code> class:
+
+      <div class="code parseTheme"><pre class="brush: java;">// Armor.java
+@ParseClassName(&quot;Armor&quot;)
+public class Armor extends ParseObject {
+  public String getDisplayName() {
+    return getString(&quot;displayName&quot;);
+  }
+  public void setDisplayName(String value) {
+    put(&quot;displayName&quot;, value);
+  }
+}</pre></div>
+      <p>You can now access the displayName field using <code>armor.getDisplayName()</code> and assign to it using <code>armor.setDisplayName("Wooden Sword")</code>. This allows your IDE to provide autocompletion as you develop your app and allows typos to be caught at compile-time.</p>
+
+      <p>Accessors and mutators of various types can be easily defined in this manner using the various forms of <code>get()</code> such as <code>getInt()</code>, <code>getParseFile()</code>, or <code>getMap()</code>.</p>
+
+      <p>If you need more complicated logic than simple field access, you can declare your own methods as well:</p>
+      <div class="code parseTheme"><pre class="brush: java;">public void takeDamage(int amount) {
+  // Decrease the armor&#x27;s durability and determine whether it has broken
+  increment(&quot;durability&quot;, -amount);
+  if (getDurability() &lt; 0) {
+    setBroken(true);
+  }
+}</pre></div>
+      <a href="#" name="subclasses-initializing"></a><a href="#" class="section section_minor " name="subclasses-initializing_anchor"></a>
+      <h3>Initializing Subclasses</h3>
+      <p>You should create new instances of your subclasses using the constructors you have defined. Your subclass must define a public default constructor that does not modify fields of the <code>ParseObject</code>, which will be used throughout the Parse SDK to create strongly-typed instances of your subclass.</p>
+
+      <p>To create a reference to an existing object, use <code>ParseObject.createWithoutData()</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">Armor armorReference = ParseObject.createWithoutData(Armor.class, armor.getObjectId());</pre></div>
+      <a href="#" name="subclasses-queries"></a><a href="#" class="section section_minor " name="subclasses-queries_anchor"></a>
+      <h3>Queries</h3>
+      <p>You can get a query for objects of a particular subclass using the static method <code>ParseQuery.getQuery()</code>. The following example queries for armors that the user can afford:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Armor&gt; query = ParseQuery.getQuery(Armor.class);
+query.whereLessThanOrEqualTo(&quot;rupees&quot;, ParseUser.getCurrentUser().get(&quot;rupees&quot;));
+query.findInBackground(new FindCallback&lt;Armor&gt;() {
+  @Override
+  public void done(List&lt;Armor&gt; results, ParseException e) {
+    for (Armor a : results) {
+      // ...
+    }
+  }
+});</pre></div>
+      <a href="#" name="files"></a><a href="#" class="section section_major " name="files_anchor"></a>
+      <h2>Files</h2>
+
+      <a href="#" name="files-classes"></a><a href="#" class="section section_minor " name="files-classes_anchor"></a>
+      <h3>The ParseFile</h3>
+
+      <p><code>ParseFile</code> lets you store application files in the cloud that would otherwise be too large or cumbersome to fit into a regular <code>ParseObject</code>. The most common use case is storing images but you can also use it for documents, videos, music, and any other binary data (up to 10 megabytes).</p>
+
+      <p>Getting started with <code>ParseFile</code> is easy. First, you'll need to have the data in <code>byte[]</code> form and then create a <code>ParseFile</code> with it. In this example, we'll just use a string:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">byte[] data = &quot;Working at Parse is great!&quot;.getBytes();
+ParseFile file = new ParseFile(&quot;resume.txt&quot;, data);</pre></div>
+      <p>Notice in this example that we give the file a name of <code>resume.txt</code>. There's two things to note here:
+      <ul class="text">
+        <li>You don't need to worry about filename collisions. Each upload gets a unique identifier so there's no problem with uploading multiple files named <code>resume.txt</code>.</li>
+        <li>It's important that you give a name to the file that has a file extension. This lets Parse figure out the file type and handle it accordingly. So, if you're storing PNG images, make sure your filename ends with <code>.png</code>.</li>
+      </ul>
+
+      <p>Next you'll want to save the file up to the cloud. As with <code>ParseObject</code>, there are many variants of the <code>save</code> method you can use depending on what sort of callback and error handling suits you.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">file.saveInBackground();</pre></div>
+      <p>Finally, after the save completes, you can associate a <code>ParseFile</code> onto a <code>ParseObject</code> just like any other piece of data:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject jobApplication = new ParseObject(&quot;JobApplication&quot;);
+jobApplication.put(&quot;applicantName&quot;, &quot;Joe Smith&quot;);
+jobApplication.put(&quot;applicantResumeFile&quot;, file);
+jobApplication.saveInBackground();</pre></div>
+      <p>Retrieving it back involves calling one of the <code>getData</code> variants on the <code>ParseObject</code>. Here we retrieve the resume file off another JobApplication object:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseFile applicantResume = (ParseFile)anotherApplication.get(&quot;applicantResumeFile&quot;);
+applicantResume.getDataInBackground(new GetDataCallback() {
+  public void done(byte[] data, ParseException e) {
+    if (e == null) {
+      // data has the bytes for the resume
+    } else {
+      // something went wrong
+    }
+  }
+});</pre></div>
+      <p>Just like on <code>ParseObject</code>, you will most likely want to use the background version of <code>getData</code>.</p>
+
+      <a href="#" name="files-progress"></a><a href="#" class="section section_minor " name="files-progress_anchor"></a>
+      <h3>Progress</h3>
+      <p>It's easy to get the progress of both uploads and downloads using ParseFile by passing a ProgressCallback to <code>saveInBackground</code> and <code>getDataInBackground</code>. For example:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">byte[] data = &quot;Working at Parse is great!&quot;.getBytes();
+ParseFile file = new ParseFile(&quot;resume.txt&quot;, data);
+
+file.saveInBackground(new SaveCallback() {
+  public void done(ParseException e) {
+    // Handle success or failure here ...
+  }
+}, new ProgressCallback() {
+  public void done(Integer percentDone) {
+    // Update your progress spinner here. percentDone will be between 0 and 100.
+  }
+});</pre></div>
+      <p>You can delete files that are referenced by objects using the <a href="/docs/rest#files-deleting">
+        REST API</a>. You will need to provide the master key in order to be allowed to delete a file.</p>
+
+      <p>If your files are not referenced by any object in your app, it is not possible to delete them through
+        the REST API. You may request a cleanup of unused files in your app's Settings page. Keep in mind that
+        doing so may break functionality which depended on accessing unreferenced files through their URL property.
+        Files that are currently associated with an object will not be affected.</p>
+
+      <a href="#" name="analytics"></a><a href="#" class="section section_minor " name="analytics_anchor"></a>
+      <h2>Analytics</h2>
+
+      <p>Parse provides a number of hooks for you to
+        get a glimpse into the ticking heart of your app.
+        We understand that it's important to understand
+        what your app is doing, how frequently, and when.</p>
+
+      <p>While this section will cover different ways to instrument your app
+        to best take advantage of Parse's analytics backend,
+        developers using Parse to store and retrieve data can
+        already take advantage of metrics on Parse.</p>
+
+      <p>Without having to implement any client-side logic,
+        you can view real-time graphs and breakdowns
+        (by device type, Parse class name, or REST verb)
+        of your API Requests in your app's dashboard and
+        save these graph filters to quickly access just the data you're interested in.</p>
+
+      <a href="#" name="analytics-appopens"></a><a href="#" class="section section_minor " name="analytics-appopens_anchor"></a>
+      <h3>App-Open / Push Analytics</h3>
+
+      <p>Our initial analytics hook allows you to track your application being launched.
+        By adding the following line to the <code>onCreate</code> method of your main <code>Activity</code>,
+        you'll begin to collect data on when and how often your application is opened.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseAnalytics.trackAppOpened(getIntent());</pre></div>
+      <p>Graphs and breakdowns of your statistics are accessible from your app's Dashboard.</p>
+
+      <p>Further analytics are available around push notification delivery
+        and open rates. Take a look at the <a href="/docs/push_guide#receiving-tracking/Android">Tracking Pushes and App Opens subsection</a>
+        of our Push Guide for more detailed information
+        on handling notification payloads and push-related callbacks.</p>
+
+      <a href="#" name="analytics-custom"></a><a href="#" class="section section_minor " name="analytics-custom_anchor"></a>
+      <h3>Custom Analytics</h3>
+
+      <p><code>ParseAnalytics</code> also allows you to track free-form events,
+        with a handful of <code>String</code> keys and values.
+        These extra dimensions allow segmentation of your custom events
+        via your app's Dashboard.</p>
+
+      <p>Say your app offers search functionality for apartment listings,
+        and you want to track how often the feature is used, with some additional metadata.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">Map&lt;String, String&gt; dimensions = new HashMap&lt;String, String&gt;();
+// Define ranges to bucket data points into meaningful segments
+dimensions.put(&quot;priceRange&quot;, &quot;1000-1500&quot;);
+// Did the user filter the query?
+dimensions.put(&quot;source&quot;, &quot;craigslist&quot;);
+// Do searches happen more often on weekdays or weekends?
+dimensions.put(&quot;dayType&quot;, &quot;weekday&quot;);
+// Send the dimensions to Parse along with the &#x27;search&#x27; event
+ParseAnalytics.trackEvent(&quot;search&quot;, dimensions);</pre></div>
+      <p><code>ParseAnalytics</code> can even be used as a lightweight error tracker &mdash;
+        simply invoke the following and you'll have access to
+        an overview of the rate and frequency of errors,
+        broken down by error code, in your application:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">Map&lt;String, String&gt; dimensions = new HashMap&lt;String, String&gt;();
+dimensions.put(&#x27;code&#x27;, Integer.toString(error.getCode()));
+ParseAnalytics.trackEvent(&#x27;error&#x27;, dimensions);</pre></div>
+      <p>Note that Parse currently only stores the first eight dimension pairs
+        per call to <code>ParseAnalytics.trackEvent()</code>.</p>
+
+      <a href="#" name="config"></a><a href="#" class="section section_minor " name="config_anchor"></a>
+      <h2>Config</h2>
+
+      <h3>Parse Config</h3>
+      <p><code>ParseConfig</code> is a way to configure your applications remotely by storing a single configuration object on Parse.
+        It enables you to add things like feature gating or a simple "Message of the Day".
+        To start using <code>ParseConfig</code> you need to add a few key/value pairs (parameters) to your app on the Parse Config Dashboard.</p>
+
+      <p><img alt="Config_editor" src="/images/docs/config_editor.png?d178465" style="border: 1px solid #eee; width: 80%" /></p>
+
+      <p>After that you will be able to fetch the <code>ParseConfig</code> on the client, like in this example:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseConfig.getInBackground(new ConfigCallback() {
+  @Override
+  public void done(ParseConfig config, ParseException e) {
+    int number = config.getInt(&quot;winningNumber&quot;);
+    Log.d(&quot;TAG&quot;, String.format(&quot;Yay! The number is %d!&quot;, number));
+  }
+});</pre></div>
+      <a href="#" name="config-retrieve"></a><a href="#" class="section section_minor " name="config-retrieve_anchor"></a>
+      <h3>Retrieving Config</h3>
+      <p><code>ParseConfig</code> is built to be as robust and reliable as possible, even in the face of poor internet connections.
+        Caching is used by default to ensure that the latest successfully fetched config is always available.
+        In the below example we use <code>getInBackground</code> to retrieve the latest version of config from the server,
+        and if the fetch fails we can simply fall back to the version that we successfully fetched before via <code>getCurrentConfig</code>.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">Log.d(&quot;TAG&quot;, &quot;Getting the latest config...&quot;);
+ParseConfig.getInBackground(new ConfigCallback() {
+  @Override
+  public void done(ParseConfig config, ParseException e) {
+    if (e == null) {
+      Log.d(&quot;TAG&quot;, &quot;Yay! Config was fetched from the server.&quot;);
+    } else {
+      Log.e(&quot;TAG&quot;, &quot;Failed to fetch. Using Cached Config.&quot;);
+      config = ParseConfig.getCurrentConfig();
+    }
+
+    // Get the message from config or fallback to default value
+    String welcomeMessage = config.getString(&quot;welcomeMessage&quot;, &quot;Welcome!&quot;);
+    Log.d(&quot;TAG&quot;, String.format(&quot;Welcome Messsage From Config = %s&quot;, welcomeMessage));
+  }
+});</pre></div>
+      <a href="#" name="config-current"></a><a href="#" class="section section_minor " name="config-current_anchor"></a>
+      <h3>Current Config</h3>
+      <p>Every <code>ParseConfig</code> instance that you get is always immutable.
+        When you retrieve a new <code>ParseConfig</code> in the future from the network,
+        it will not modify any existing <code>ParseConfig</code> instance,
+        but will instead create a new one and make it available via <code>ParseConfig.getCurrentConfig()</code>.
+        Therefore, you can safely pass around any <code>ParseConfig</code> object and safely assume that it will not automatically change.</p>
+
+      <p>It might be troublesome to retrieve the config from the server every time you want to use it.
+        You can avoid this by simply using the cached <code>getCurrentConfig</code> object and fetching the config only once in a while.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">class Helper {
+  private static final long configRefreshInterval = 12 * 60 * 60 * 1000;
+  private static long lastFetchedTime;
+
+  // Fetches the config at most once every 12 hours per app runtime
+  public static void refreshConfig() {
+    long currentTime = System.currentTimeMillis();
+    if (currentTime - lastFetchedTime &gt; configRefreshInterval) {
+      lastFetchedTime = currentTime;
+      ParseConfig.getInBackground();
+    }
+  }
+}</pre></div>
+      <a href="#" name="config-parameters"></a><a href="#" class="section section_minor " name="config-parameters_anchor"></a>
+      <h3>Parameters</h3>
+      <p><code>ParseConfig</code> supports most of the data types supported by <code>ParseObject</code>:</p>
+      <ul class="text">
+        <li>String</li>
+        <li>Numbers (boolean/int/double/long)</li>
+        <li>Date</li>
+        <li>ParseFile</li>
+        <li>ParseGeoPoint</li>
+        <li>List</li>
+        <li>Map</li>
+      </ul>
+      <p>We currently allow up to <strong>100</strong> parameters in your config and a total size of <strong>128KB</strong> across all parameters.</p>
+
+      <a href="#" name="push"></a><a href="#" class="section section_minor " name="push_anchor"></a>
+      <h2>Push Notifications</h2>
+
+      <div class="callout_green">
+        To learn more about push check out our <a href="/docs/push_guide#top/Android">Push Notification Guide</a>!
+      </div>
+
+      <a href="#" name="localdatastore"></a><a href="#" class="section section_minor " name="localdatastore_anchor"></a>
+      <h2>The Local Datastore</h2>
+
+      <p>The Parse Android SDK provides a local datastore which can be used to store and retrieve <code>ParseObject</code>s, even when the network is unavailable. To enable this functionality, simply call <code>Parse.enableLocalDatastore()</code> before your call to <code>initialize</code>.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">import com.parse.Parse;
+import android.app.Application;
+
+public class App extends Application {
+  @Override
+  public void onCreate() {
+    super.onCreate();
+
+    Parse.enableLocalDatastore(this);
+    Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
+  }
+}</pre></div>
+      <p>There are a couple of side effects of enabling the local datastore that you should be aware of.
+        When enabled, there will only be one instance of any given <code>ParseObject</code>. For example,
+        imagine you have an instance of the <code>"GameScore"</code> class with an <code>objectId</code> of
+        <code>"xWMyZ4YEGZ"</code>, and then you issue a <code>ParseQuery</code> for all instances of
+        <code>"GameScore"</code> with that <code>objectId</code>. The result will be the same instance
+        of the object you already have in memory.</p>
+
+      <p>Another side effect is that the current user and current installation will be stored in the
+        local datastore, so you can persist unsaved changes to these objects between runs of your app
+        using the methods below.</p>
+
+      <p>Calling the <code>saveEventually</code> method on a <code>ParseObject</code> will cause the
+        object to be pinned in the local datastore until the save completes. So now, if you change
+        the current <code>ParseUser</code> and call <code>ParseUser.getCurrent().saveEventually()</code>,
+        your app will always see the changes that you have made.</p>
+
+      <a href="#" name="localdatastore-pin"></a><a href="#" class="section section_minor " name="localdatastore-pin_anchor"></a>
+      <h3>Pinning</h3>
+
+      <p>You can store a <code>ParseObject</code> in the local datastore by pinning it. Pinning
+        a <code>ParseObject</code> is recursive, just like saving, so any objects that are pointed to
+        by the one you are pinning will also be pinned. When an object is pinned, every time
+        you update it by fetching or saving new data, the copy in the local datastore will be updated
+        automatically. You don't need to worry about it at all.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+gameScore.put(&quot;score&quot;, 1337);
+gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
+gameScore.put(&quot;cheatMode&quot;, false);
+
+gameScore.pinInBackground();</pre></div>
+      <p>If you have multiple objects, you can pin them all at once with the <code>pinAllInBackground</code>
+        convenience method.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject.pinAllInBackground(listOfObjects);</pre></div>
+      <a href="#" name="localdatastore-get"></a><a href="#" class="section section_minor " name="localdatastore-get_anchor"></a>
+      <h3>Retrieving from the Local Datastore</h3>
+
+      <p>Storing objects is great, but it's only useful if you can then get the objects back out later.
+        Retrieving an object from the local datastore works just like retrieving one over the network.
+        The only difference is calling the <code>fromLocalDatastore</code> method to tell the
+        <code>ParseQuery</code> where to look for its results.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+query.fromLocalDatastore();
+query.getInBackground(&quot;xWMyZ4YE&quot;, new GetCallback&lt;ParseObject&gt;() {
+    public void done(ParseObject object, ParseException e) {
+        if (e == null) {
+            // object will be your game score
+        } else {
+            // something went wrong
+        }
+    }
+});</pre></div>
+      <a href="#" name="localdatastore-find"></a><a href="#" class="section section_minor " name="localdatastore-find_anchor"></a>
+      <h3>Querying the Local Datastore</h3>
+
+      <p>Often, you'll want to find a whole list of objects that match certain criteria, instead of
+        getting a single object by id. To do that, you can use a
+        <a href="#queries">ParseQuery</a>. Any <code>ParseQuery</code> can be
+        used with the local datastore just as with the network. The results will include any object you
+        have pinned that matches the query. Any unsaved changes you have made to the object will be
+        considered when evaluating the query. So you can find a local object that matches, even if it
+        was never returned from the server for this particular query.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.whereEqualTo(&quot;playerName&quot;, &quot;Joe Bob&quot;);
+query.fromLocalDatastore();
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+    public void done(List&lt;ParseObject&gt; scoreList,
+                     ParseException e) {
+        if (e == null) {
+            Log.d(&quot;score&quot;, &quot;Retrieved &quot; + scoreList.size());
+        } else {
+            Log.d(&quot;score&quot;, &quot;Error: &quot; + e.getMessage());
+        }
+    }
+});</pre></div>
+      <a href="#" name="localdatastore-unpin"></a><a href="#" class="section section_minor " name="localdatastore-unpin_anchor"></a>
+      <h3>Unpinning</h3>
+
+      <p>When you are done with an object and no longer need it to be in the
+        local datastore, you can simply unpin it. This will free up disk space
+        on the device and keep your queries on the local datastore running quickly.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">gameScore.unpinInBackground();</pre></div>
+      <p>There's also a method to unpin several objects at once.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject.unpinAllInBackground(listOfObjects);</pre></div>
+      <a href="#" name="localdatastore-labels"></a><a href="#" class="section section_minor " name="localdatastore-labels_anchor"></a>
+      <h3>Pinning with Labels</h3>
+
+      <p>Manually pinning and unpinning each object individual is a bit like using
+        <code>malloc</code> and <code>free</code>. It is a very powerful tool, but
+        it can be difficult to manage what objects get stored in complex scenarios.
+        For example, imagine you are making a game with separate high score lists for
+        global high scores and your friends' high scores. If one of your friends happens
+        to have a globally high score, you need to make sure you don't unpin them
+        completely when you remove them from one of the cached queries.
+        To make these scenarios easier, you can also pin with a label. Labels
+        indicate a group of objects that should be stored together.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">// Add several objects with a label.
+ParseObject.pinAllInBackground(&quot;MyScores&quot;, someGameScores);
+
+// Add another object with the same label.
+anotherGameScore.pinInBackground(&quot;MyScores&quot;);</pre></div>
+      <p>To unpin all of the objects with the same label at the same time, you can
+        pass a label to the unpin methods. This saves you from having to manually
+        track which objects are in each group you care about.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject.unpinAllInBackground(&quot;MyScores&quot;);</pre></div>
+      <p>Any object will stay in the datastore as long as it is pinned with any
+        label. In other words, if you pin an object with two different labels, and
+        then unpin it with one label, the object will stay in the datastore until you also
+        unpin it with the other label.</p>
+
+      <a href="#" name="localdatastore-caching"></a><a href="#" class="section section_minor " name="localdatastore-caching_anchor"></a>
+      <h3>Caching Query Results</h3>
+
+      <p>Pinning with labels makes it easy to cache the results of queries.
+        You can use one label to pin the results of each different query. To get
+        new results from the network, just do a query and update the pinned objects.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+query.orderByDescending(“score”);
+
+// Query for new results from the network.
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+    public void done(List&lt;ParseObject&gt; scores, ParseException e) {
+        // Remove the previously cached results.
+        ParseObject.unpinAllInBackground(“highScores”, new DeleteCallback() {
+            public void done(ParseException e) {
+                // Cache the new results.
+                ParseObject.pinAllInBackground(“highScores”, scores);
+            }
+        });
+    }
+});</pre></div>
+      <p>When you want to get the cached results for the query, you can then
+        run the same query against the local datastore.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+query.orderByDescending(“score”);
+query.fromLocalDatastore();
+
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+    public void done(List&lt;ParseObject&gt; scores, ParseException e) {
+        // Yay! Cached scores!
+    }
+});</pre></div>
+      <a href="#" name="localdatastore-saving"></a><a href="#" class="section section_minor " name="localdatastore-saving_anchor"></a>
+      <h3>Syncing Local Changes</h3>
+
+      <p>Once you've saved some changes locally, there are a few different ways
+        you can save those changes back to Parse over the network. The easiest way
+        to do this is with <code>saveEventually</code>. When you call <code>saveEventually</code>
+        on a <code>ParseObject</code>, it will be pinned until it can be saved. The SDK will
+        make sure to save the object the next time the network is available.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">gameScore.saveEventually();</pre></div>
+      <p>If you'd like to have more control over the way objects are synced, you can
+        keep them in the local datastore until you are ready to save them yourself using
+        <code>saveInBackground</code>. To manage the set of objects that need to be saved,
+        you can again use a label. The <code>fromPin</code> method on <code>ParseQuery</code>
+        makes it easy to fetch just the objects you care about.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+query.fromPin(“myChanges”);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+     public void done(List&lt;ParseObject&gt; scores, ParseException e) {
+        for (ParseObject score in scores) {
+            score.saveInBackground();
+            score.unpinInBackground(“myChanges”);
+        }
+     }
+});</pre></div>
+      <a href="#" name="users"></a><a href="#" class="section section_minor " name="users_anchor"></a>
+      <h2>Users</h2>
+
+      <p>At the core of many apps, there is a notion of user accounts that lets users access their information in a secure manner. We provide a specialized user class called <code>ParseUser</code> that automatically handles much of the functionality required for user account management.</p>
+
+      <p>With this class, you'll be able to add user account functionality in your app.</p>
+
+      <p><code>ParseUser</code> is a subclass of the <code>ParseObject</code>, and has all the same features, such as flexible schema, automatic persistence, and a key value interface. All the methods that are on <code>ParseObject</code> also exist in <code>ParseUser</code>. The difference is that <code>ParseUser</code> has some special additions specific to user accounts.</p>
+
+      <a href="#" name="users-props"></a><a href="#" class="section section_minor " name="users-props_anchor"></a>
+      <h3>Properties</h3>
+
+      <p><code>ParseUser</code> has several properties that set it apart from <code>ParseObject</code>:</p>
+
+      <ul class="text">
+        <li>username: The username for the user (required).</li>
+        <li>password: The password for the user (required on signup).</li>
+        <li>email: The email address for the user (optional).</li>
+      </ul>
+
+      <p>We'll go through each of these in detail as we run through the various use cases for users. Keep in mind that if you set <code>username</code> and <code>email</code> using the setters, you do not need to set it using the <code>put</code> method.</p>
+
+      <a href="#" name="users-signup"></a><a href="#" class="section section_minor " name="users-signup_anchor"></a>
+      <h3>Signing Up</h3>
+
+      <p>The first thing your app will do is probably ask the user to sign up. The following code illustrates a typical sign up:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser user = new ParseUser();
+user.setUsername(&quot;my name&quot;);
+user.setPassword(&quot;my pass&quot;);
+user.setEmail(&quot;email@example.com&quot;);
+
+// other fields can be set just like with ParseObject
+user.put(&quot;phone&quot;, &quot;650-253-0000&quot;);
+
+user.signUpInBackground(new SignUpCallback() {
+  public void done(ParseException e) {
+    if (e == null) {
+      // Hooray! Let them use the app now.
+    } else {
+      // Sign up didn&#x27;t succeed. Look at the ParseException
+      // to figure out what went wrong
+    }
+  }
+});</pre></div>
+      <p>This call will asynchronously create a new user in your Parse App. Before it does this, it checks to make sure that both the username and email are unique. Also, it securely hashes the password in the cloud. We never store passwords in plaintext, nor will we ever transmit passwords back to the client in plaintext.</p>
+
+      <p>Note that we used the <code>signUpInBackground</code> method, not the <code>saveInBackground</code> method. New <code>ParseUser</code>s should always be created using the <code>signUpInBackground</code> (or <code>signUp</code>) method. Subsequent updates to a user can be done by calling <code>save</code>.</p>
+
+      <p>The <code>signUpInBackground</code> method comes in various flavors, with the ability to pass back errors, and also synchronous versions. As usual, we highly recommend using the asynchronous versions when possible, so as not to block the UI in your app. You can read more about these specific methods in our <a href="/docs/android/">API docs</a>.</p>
+
+      <p>If a signup isn't successful, you should read the error object that is returned. The most likely case is that the username or email has already been taken by another user. You should clearly communicate this to your users, and ask them try a different username.</p>
+
+      <p>You are free to use an email address as the username. Simply ask your users to enter their email, but fill it in the username property &mdash; <code>ParseUser</code> will work as normal. We'll go over how this is handled in the reset password section.</p>
+
+      <a href="#" name="users-login"></a><a href="#" class="section section_minor " name="users-login_anchor"></a>
+      <h3>Logging In</h3>
+
+      <p>Of course, after you allow users to sign up, you need be able to let them log in to their account in the future. To do this, you can use the class method <code>logInInBackground</code>.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser.logInInBackground(&quot;Jerry&quot;, &quot;showmethemoney&quot;, new LogInCallback() {
+  public void done(ParseUser user, ParseException e) {
+    if (user != null) {
+      // Hooray! The user is logged in.
+    } else {
+      // Signup failed. Look at the ParseException to see what happened.
+    }
+  }
+});</pre></div>
+      <a href="#" name="users-emailverification"></a><a href="#" class="section section_minor " name="users-emailverification_anchor"></a>
+      <h3>Verifying Emails</h3>
+      <p>Enabling email verification in an application's settings allows the application to reserve part of its experience for users with confirmed email addresses. Email verification adds the <code>emailVerified</code> key to the <code>ParseUser</code> object. When a <code>ParseUser</code>'s <code>email</code> is set or modified, <code>emailVerified</code> is set to <code>false</code>. Parse then emails the user a link which will set <code>emailVerified</code> to <code>true</code>.</p>
+      <p>There are three <code>emailVerified</code> states to consider:
+      <ol>
+        <li><code>true</code> - the user confirmed his or her email address by clicking on the link Parse emailed them. <code>ParseUsers</code> can never have a <code>true</code> value when the user account is first created.</li>
+        <li><code>false</code> - at the time the <code>ParseUser</code> object was last fetched, the user had not confirmed his or her email address. If <code>emailVerified</code> is <code>false</code>, consider calling <code>fetch()</code> on the <code>ParseUser</code>.</li>
+        <li><em>missing</em> - the <code>ParseUser</code> was created when email verification was off or the <code>ParseUser</code> does not have an <code>email</code>.</li>
+      </ol>
+      </p>
+
+      <a href="#" name="users-current"></a><a href="#" class="section section_minor " name="users-current_anchor"></a>
+      <h3>Current User</h3>
+
+      <p>It would be bothersome if the user had to log in every time they open your app. You can avoid this by using the cached <code>currentUser</code> object.</p>
+
+      <p>Whenever you use any signup or login methods, the user is cached on disk. You can treat this cache as a session, and automatically assume the user is logged in:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser currentUser = ParseUser.getCurrentUser();
+if (currentUser != null) {
+  // do stuff with the user
+} else {
+  // show the signup or login screen
+}</pre></div>
+      <p>You can clear the current user by logging them out:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser.logOut();
+ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null</pre></div>
+      <a href="#" name="users-anonymous"></a><a href="#" class="section section_minor " name="users-anonymous_anchor"></a>
+      <h3>Anonymous Users</h3>
+
+      <p>Being able to associate data and objects with individual users is highly valuable, but sometimes you want to be able to do this without forcing a user to specify a username and password.</p>
+
+      <p>An anonymous user is a user that can be created without a username and password but still has all of the same capabilities as any other <code>ParseUser</code>. After logging out, an anonymous user is abandoned, and its data is no longer accessible.</p>
+
+      <p>You can create an anonymous user using <code>ParseAnonymousUtils</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseAnonymousUtils.logIn(new LogInCallback() {
+  @Override
+  public void done(ParseUser user, ParseException e) {
+    if (e != null) {
+      Log.d(&quot;MyApp&quot;, &quot;Anonymous login failed.&quot;);
+    } else {
+      Log.d(&quot;MyApp&quot;, &quot;Anonymous user logged in.&quot;);
+    }
+  }
+});</pre></div>
+      <p>You can convert an anonymous user into a regular user by setting the username and password, then calling <code>signUp()</code>, or by logging in or linking with a service like <a href="#fbusers">Facebook</a> or <a href="#twitterusers">Twitter</a>. The converted user will retain all of its data.  To determine whether the current user is an anonymous user, you can check <code>ParseAnonymousUtils.isLinked()</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+  enableSignUpButton();
+} else {
+  enableLogOutButton();
+}</pre></div>
+      <p>Anonymous users can also be automatically created for you without requiring a network request, so that you can begin working with your user immediately when your application starts.  When you enable automatic anonymous user creation at application startup, <code>ParseUser.getCurrentUser()</code> will never be <code>null</code>. The user will automatically be created in the cloud the first time the user or any object with a relation to the user is saved.  Until that point, the user's object ID will be <code>null</code>.  Enabling automatic user creation makes associating data with your users painless.  For example, in your <code>Application.onCreate()</code> method, you might write:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser.enableAutomaticUser();
+ParseUser.getCurrentUser().increment(&quot;RunCount&quot;);
+ParseUser.getCurrentUser().saveInBackground();</pre></div>
+      <a href="#" name="users-become"></a><a href="#" class="section section_minor " name="users-become_anchor"></a>
+      <h3>Setting the Current User</h3>
+
+      <p>If you’ve created your own authentication routines, or otherwise logged in a user on the server side, you can now pass the session token to the client and use the <code>become</code> method. This method will ensure the session token is valid before setting the current user.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser.becomeInBackground(&quot;session-token-here&quot;, new LogInCallback() {
+  public void done(ParseUser user, ParseException e) {
+    if (user != null) {
+      // The current user is now set to user.
+    } else {
+      // The token could not be validated.
+    }
+  }
+});</pre></div>
+      <a href="#" name="users-security"></a><a href="#" class="section section_minor " name="users-security_anchor"></a>
+      <h3>Security For User Objects</h3>
+
+      <p>The <code>ParseUser</code> class is secured by default. Data stored in a <code>ParseUser</code> can only be modified by that user. By default, the data can still be read by any client. Thus, some <code>ParseUser</code> objects are authenticated and can be modified, whereas others are read-only.</p>
+
+      <p>Specifically, you are not able to invoke any of the <code>save</code> or <code>delete</code> type methods unless the <code>ParseUser</code> was obtained using an authenticated method, like <code>logIn</code> or <code>signUp</code>. This ensures that only the user can alter their own data.</p>
+
+      <p>The following illustrates this security policy:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser user = ParseUser.logIn(&quot;my_username&quot;, &quot;my_password&quot;);
+user.setUsername(&quot;my_new_username&quot;); // attempt to change username
+user.saveInBackground(); // This succeeds, since the user was authenticated on the device
+
+// Get the user from a non-authenticated manner
+ParseQuery&lt;ParseUser&gt; query = ParseUser.getQuery();
+query.getInBackground(user.getObjectId(), new GetCallback&lt;ParseUser&gt;() {
+  public void done(ParseUser object, ParseException e) {
+    object.setUsername(&quot;another_username&quot;);
+
+    // This will throw an exception, since the ParseUser is not authenticated
+    object.saveInBackground();
+  }
+});</pre></div>
+      <p>The <code>ParseUser</code> obtained from <code>getCurrentUser()</code> will always be authenticated.</p>
+
+      <p>If you need to check if a <code>ParseUser</code> is authenticated, you can invoke the <code>isAuthenticated()</code> method. You do not need to check <code>isAuthenticated()</code> with <code>ParseUser</code> objects that are obtained via an authenticated method.</p>
+
+      <a href="#" name="users-acls"></a><a href="#" class="section section_minor " name="users-acls_anchor"></a>
+      <h3>Security for Other Objects</h3>
+
+      <p>The same security model that applies to the <code>ParseUser</code> can be applied to other objects. For any object, you can specify which users are allowed to read the object, and which users are allowed to modify an object. To support this type of security, each object has an <a href="http://en.wikipedia.org/wiki/Access_control_list">access control list</a>, implemented by the <code>ParseACL</code> class.</p>
+
+      <p>The simplest way to use a <code>ParseACL</code> is to specify that an object may only be read or written by a single user. To create such an object, there must first be a logged in <code>ParseUser</code>. Then, <code>new ParseACL(user)</code> generates a <code>ParseACL</code> that limits access to that user. An object's ACL is updated when the object is saved, like any other property. Thus, to create a private note that can only be accessed by the current user:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject privateNote = new ParseObject(&quot;Note&quot;);
+privateNote.put(&quot;content&quot;, &quot;This note is private!&quot;);
+privateNote.setACL(new ParseACL(ParseUser.getCurrentUser()));
+privateNote.saveInBackground();</pre></div>
+      <p>This note will then only be accessible to the current user, although it will be accessible to any device where that user is signed in. This functionality is useful for applications where you want to enable access to user data across multiple devices, like a personal todo list.</p>
+
+      <p>Permissions can also be granted on a per-user basis. You can add permissions individually to a <code>ParseACL</code> using <code>setReadAccess</code> and <code>setWriteAccess</code>. For example, let's say you have a message that will be sent to a group of several users, where each of them have the rights to read and delete that message:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject groupMessage = new ParseObject(&quot;Message&quot;);
+ParseACL groupACL = new ParseACL();
+
+// userList is an Iterable&lt;ParseUser&gt; with the users we are sending this message to.
+for (ParseUser user : userList) {
+  groupACL.setReadAccess(user, true);
+  groupACL.setWriteAccess(user, true);
+}
+
+groupMessage.setACL(groupACL);
+groupMessage.saveInBackground();</pre></div>
+      <p>You can also grant permissions to all users at once using <code>setPublicReadAccess</code> and <code>setPublicWriteAccess</code>. This allows patterns like posting comments on a message board. For example, to create a post that can only be edited by its author, but can be read by anyone:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject publicPost = new ParseObject(&quot;Post&quot;);
+ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
+postACL.setPublicReadAccess(true);
+publicPost.setACL(postACL);
+publicPost.saveInBackground();</pre></div>
+      <p>To help ensure that your users' data is secure by default, you can set a default ACL to be applied to all newly-created <code>ParseObjects</code>:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseACL.setDefaultACL(defaultACL, true);</pre></div>
+      <p>In the code above, the second parameter to setDefaultACL tells Parse to ensure that the default ACL assigned at the time of object creation allows read and write access to the current user at that time.  Without this setting, you would need to reset the defaultACL every time a user logs in or out so that the current user would be granted access appropriately.  With this setting, you can ignore changes to the current user until you explicitly need to grant different kinds of access.</p>
+
+      <p>Default ACLs make it easy to create apps that follow common access patterns. An application like Twitter, for example, where user content is generally visible to the world, might set a default ACL such as:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseACL defaultACL = new ParseACL();
+defaultACL.setPublicReadAccess(true);
+ParseACL.setDefaultACL(defaultACL, true);</pre></div>
+      <p>For an application like Dropbox, where a user's data is only accessible by the user itself unless explicit permission is given, you would provide a default ACL where only the current user is given access:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseACL.setDefaultACL(new ParseACL(), true);</pre></div>
+      <p>An application that logs data to Parse but doesn't provide any user access to that data would instead deny access to the current user while providing a restrictive ACL:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseACL.setDefaultACL(new ParseACL(), false);</pre></div>
+      <p>Operations that are forbidden, such as deleting an object that you do not have write access to, result in a <code>ParseException.OBJECT_NOT_FOUND</code> error code. For security purposes, this prevents clients from distinguishing which object ids exist but are secured, versus which object ids do not exist at all.</p>
+
+      <a href="#" name="users-resetting"></a><a href="#" class="section section_minor " name="users-resetting_anchor"></a>
+      <h3>Resetting Passwords</h3>
+
+      <p>It's a fact that as soon as you introduce passwords into a system, users will forget them. In such cases, our library provides a way to let them securely reset their password.</p>
+
+      <p>To kick off the password reset flow, ask the user for their email address, and call:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser.requestPasswordResetInBackground(&quot;myemail@example.com&quot;,
+                                           new RequestPasswordResetCallback() {
+  public void done(ParseException e) {
+    if (e == null) {
+      // An email was successfully sent with reset instructions.
+    } else {
+      // Something went wrong. Look at the ParseException to see what&#x27;s up.
+    }
+  }
+});</pre></div>
+      <p>This will attempt to match the given email with the user's email or username field, and will send them a password reset email. By doing this, you can opt to have users use their email as their username, or you can collect it separately and store it in the email field.</p>
+
+      <p>The flow for password reset is as follows:</p>
+
+      <ol class="text">
+        <li>User requests that their password be reset by typing in their email.</li>
+        <li>Parse sends an email to their address, with a special password reset link.</li>
+        <li>User clicks on the reset link, and is directed to a special Parse page that will allow them type in a new password.</li>
+        <li>User types in a new password. Their password has now been reset to a value they specify.</li>
+      </ol>
+
+      <p>Note that the messaging in this flow will reference your app by the name that you specified when you created this app on Parse.</p>
+
+      <a href="#" name="users-querying"></a><a href="#" class="section section_minor " name="users-querying_anchor"></a>
+      <h3>Querying</h3>
+
+      <p>To query for users, you need to use the special user query:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseUser&gt; query = ParseUser.getQuery();
+query.whereEqualTo(&quot;gender&quot;, &quot;female&quot;);
+query.findInBackground(new FindCallback&lt;ParseUser&gt;() {
+  public void done(List&lt;ParseUser&gt; objects, ParseException e) {
+    if (e == null) {
+        // The query was successful.
+    } else {
+        // Something went wrong.
+    }
+  }
+});</pre></div>
+      <p>In addition, you can use <code>get</code> to get a <code>ParseUser</code> by id.</p>
+
+      <a href="#" name="users-associations"></a><a href="#" class="section section_minor " name="users-associations_anchor"></a>
+      <h3>Associations</h3>
+
+      <p>Associations involving a <code>ParseUser</code> work right of the box. For example, let's say you're making a blogging app. To store a new post for a user and retrieve all their posts:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser user = ParseUser.getCurrentUser();
+
+// Make a new post
+ParseObject post = new ParseObject(&quot;Post&quot;);
+post.put(&quot;title&quot;, &quot;My New Post&quot;);
+post.put(&quot;body&quot;, &quot;This is some great content.&quot;);
+post.put(&quot;user&quot;, user);
+post.saveInBackground();
+
+// Find all posts by the current user
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Post&quot;);
+query.whereEqualTo(&quot;user&quot;, user);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></div>
+      <a href="#" name="users-browser"></a><a href="#" class="section section_minor " name="users-browser_anchor"></a>
+      <h3>Users in the Data Browser</h3>
+
+      <p>The User class is a special class that is dedicated to storing <code>ParseUser</code> objects. In the data browser, you'll see a little person icon next to the User class:</p>
+
+      <p><img alt="User_icon" src="/images/docs/user_icon.png?d178465" style="border: 1px solid #eee" /></p>
+
+      <a href="#" name="roles"></a><a href="#" class="section section_minor " name="roles_anchor"></a>
+      <h2>Roles</h2>
+      <p>
+        As your app grows in scope and user-base, you may find yourself needing more coarse-grained control over access to pieces of your data than
+        user-linked ACLs can provide. To address this requirement, Parse supports a form of
+        <a href="http://en.wikipedia.org/wiki/Role-based_access_control">Role-based Access Control</a>.
+        Roles provide a logical way of grouping users with common access privileges to your Parse data. Roles are
+        named objects that contain users and other roles.  Any permission granted to a role is implicitly granted to its users as well as to the
+        users of any roles that it contains.
+      </p>
+
+      <p>
+        For example, in your application with curated content, you may have a number of users that are considered "Moderators" and can modify and
+        delete content created by other users.  You may also have a set of users that are "Administrators" and are allowed all of the same
+        privileges as Moderators, but can also modify the global settings for the application. By adding users to these roles, you
+        can ensure that new users can be made moderators or administrators, without having to manually grant permission to every resource for each
+        user.
+      </p>
+
+      <p>
+        We provide a specialized class called <code>ParseRole</code> that represents these role objects in your client code.
+        <code>ParseRole</code> is a subclass of <code>ParseObject</code>, and has all of the same features, such as a flexible
+        schema, automatic persistence, and a key value interface.  All the methods that are on <code>ParseObject</code> also
+        exist on <code>ParseRole</code>.  The difference is that <code>ParseRole</code> has some additions specific to management of roles.
+      </p>
+
+      <a href="#" name="roles-props"></a><a href="#" class="section section_minor " name="roles-props_anchor"></a>
+      <h3>Properties</h3>
+      <p>
+        <code>ParseRole</code> has several properties that set it apart from <code>ParseObject</code>:
+      </p>
+      <ul class="text">
+        <li>
+          name: The name for the role.  This value is required, and can only be set once as a role is being created.  The name
+          must consist of alphanumeric characters, spaces, -, or _.  This name will be used to identify the Role without needing
+          its objectId.
+        </li>
+        <li>
+          users: A <a href="#objects-pointers">relation</a> to the set of users that will inherit permissions granted to the containing role.
+        </li>
+        <li>
+          roles: A <a href="#objects-pointers">relation</a> to the set of roles whose users and roles will inherit permissions granted to the
+          containing role.
+        </li>
+      </ul>
+
+      <a href="#" name="roles-security"></a><a href="#" class="section section_minor " name="roles-security_anchor"></a>
+      <h3>Security for Role Objects</h3>
+      <p>
+        The <code>ParseRole</code> uses the same security scheme (ACLs) as all other objects on Parse, except that it requires an ACL
+        to be set explicitly. Generally, only users with greatly elevated privileges (e.g. a master user or Administrator) should be able
+        to create or modify a Role, so you should define its ACLs accordingly.  Remember, if you give write-access to a
+        <code>ParseRole</code> to a user, that user can add other users to the role, or even delete the role altogether.
+      </p>
+
+      <p>
+        To create a new <code>ParseRole</code>, you would write:
+      </p>
+      <div class="code parseTheme"><pre class="brush: java;">// By specifying no write privileges for the ACL, we can ensure the role cannot be altered.
+ParseACL roleACL = new ParseACL();
+roleACL.setPublicReadAccess(true);
+ParseRole role = new ParseRole(&quot;Administrator&quot;, roleACL);
+role.saveInBackground();</pre></div>
+      <p>
+        You can add users and roles that should inherit your new role's permissions through the "users" and "roles" relations on <code>ParseRole</code>:
+      </p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseRole role = new ParseRole(roleName, roleACL);
+for (ParseUser user : usersToAddToRole) {
+  role.getUsers().add(user)
+}
+for (ParseRole childRole : rolesToAddToRole) {
+  role.getRoles().add(childRole);
+}
+role.saveInBackground();</pre></div>
+      <p>
+        Take great care when assigning ACLs to your roles so that they can only be modified by those who should have permissions to modify them.
+      </p>
+
+      <a href="#" name="roles-acls"></a><a href="#" class="section section_minor " name="roles-acls_anchor"></a>
+      <h3>Security for Other Objects</h3>
+      <p>
+        Now that you have created a set of roles for use in your application, you can use them with ACLs to define the privileges that their users will receive.
+        Each <code>ParseObject</code> can specify a <code>ParseACL</code>, which provides an access control list that indicates which users and roles
+        should be granted read or write access to the object.
+      </p>
+
+      <p>
+        Giving a role read or write permission to an object is straightforward.  You can either use the <code>ParseRole</code>:
+      </p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseRole moderators = /* Query for some ParseRole */;
+ParseObject wallPost = new ParseObject(&quot;WallPost&quot;);
+ParseACL postACL = new ParseACL();
+postACL.setRoleWriteAccess(moderators);
+wallPost.setACL(postACL);
+wallPost.saveInBackground();</pre></div>
+      <p>
+        You can avoid querying for a role by specifying its name for the ACL:
+      </p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseObject wallPost = new ParseObject(&quot;WallPost&quot;);
+ParseACL postACL = new ParseACL();
+postACL.setRoleWriteAccess(&quot;Moderators&quot;, true);
+wallPost.setACL(postACL);
+wallPost.save();</pre></div>
+      <p>
+        Role-based <code>ParseACL</code>s can also be used when specifying default ACLs for your application, making it easy to protect
+        your users' data while granting access to users with additional privileges.  For example, a moderated forum application might
+        specify a default ACL like this:
+      </p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseACL defaultACL = new ParseACL();
+// Everybody can read objects created by this user
+defaultACL.setPublicReadAccess(true);
+// Moderators can also modify these objects
+defaultACL.setRoleWriteAccess(&quot;Moderators&quot;);
+// And the user can read and modify its own objects
+ParseACL.setDefaultACL(defaultACL, true);</pre></div>
+      <a href="#" name="roles-hierarchy"></a><a href="#" class="section section_minor " name="roles-hierarchy_anchor"></a>
+      <h3>Role Hierarchy</h3>
+      <p>
+        As described above, one role can contain another, establishing a parent-child relationship between the two roles. The consequence of this
+        relationship is that any permission granted to the parent role is implicitly granted to all of its child roles.
+      </p>
+      <p>
+        These types of relationships are commonly found in applications with user-managed content, such as forums. Some small subset of users
+        are "Administrators", with the highest level of access to tweaking the application's settings, creating new forums, setting global
+        messages, and so on. Another set of users are "Moderators", who are responsible for ensuring that the content created by users remains
+        appropriate. Any user with Administrator privileges should also be granted the permissions of any Moderator. To establish this relationship,
+        you would make your "Administrators" role a child role of "Moderators", like this:
+      </p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseRole administrators = /* Your &quot;Administrators&quot; role */;
+ParseRole moderators = /* Your &quot;Moderators&quot; role */;
+moderators.getRoles().add(administrators);
+moderators.saveInBackground();</pre></div>
+
+      <a href="#" name="fbusers"></a><a href="#" class="section section_minor " name="fbusers_anchor"></a>
+      <h2>Facebook Users</h2>
+
+      <p>Parse provides an easy way to integrate Facebook with your application. The Facebook SDK can be used with our SDK, and is integrated with the <code>ParseUser</code> class to make linking your users to their Facebook identities easy.</p>
+
+      <p>Using our Facebook integration, you can associate an authenticated Facebook user with a <code>ParseUser</code>. With just a few lines of code, you'll be able to provide a "log in with Facebook" option in your app, and be able to save their data to Parse.</p>
+
+      <a href="#" name="fbusers-setup"></a><a href="#" class="section section_minor " name="fbusers-setup_anchor"></a>
+      <h3>Setup</h3>
+
+      <p>To start using Facebook with Parse, you need to:</p>
+
+      <ol>
+        <li><a href="https://developers.facebook.com/apps">Set up a Facebook app</a>, if you haven't already.</li>
+        <li>Add your application's Facebook Application ID on your Parse application's settings page.</li>
+        <li>Follow Facebook's instructions for <a href="https://developers.facebook.com/docs/getting-started/facebook-sdk-for-android/3.0/">getting started with the Facebook SDK</a> to create an app linked to the Facebook SDK.  Once you get to Step 6, stop after linking the Facebook SDK project and configuring the Facebook app ID. You can use our guide to attach your Parse users to their Facebook accounts when logging in.</li>
+        <li>
+          Add the following where you initialize the Parse SDK in your <code>Application.onCreate()</code>
+
+          <div class="code parseTheme"><pre class="brush: java;">ParseFacebookUtils.initialize(&quot;YOUR FACEBOOK APP ID&quot;);</pre></div>        </li>
+      </ol>
+
+      <p>Facebook's Android SDK provides an enhanced login experience on devices that have
+        <a href="https://market.android.com/details?id=com.facebook.katana">Facebook's official
+          Android app</a> installed. This allows users of apps that support Facebook login to
+        sign in directly through the Facebook app, using credentials that are already on the device.
+        If the Facebook app is not installed, the default dialog-based authentication will be used.
+        Facebook calls this feature "Single sign-on," and requires you to override <code>onActivityResult()</code>
+        in your calling <code>Activity</code> to invoke <code>finishAuthentication()</code>.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  super.onActivityResult(requestCode, resultCode, data);
+  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+}</pre></div>
+      <p>If your <code>Activity</code> is already using <code>onActivityResult()</code>, you
+        can avoid <code>requestCode</code> collisions by calling the versions of <code>link()</code>
+        and <code>logIn()</code> that take an <code>activityCode</code> parameter and specifying
+        a code you know to be unique.  Otherwise, a sensible default <code>activityCode</code>
+        will be used.</p>
+
+      <p>If you encounter any issues that are Facebook-related, a good resource is the <a href="https://developers.facebook.com/android/">official Facebook SDK for Android page</a>.</p>
+
+      <p>Parse is compatible with v3.0 of the Facebook SDK for Android.</p>
+
+      <p>There are two main ways to use Facebook with your Parse users: (1) logging in as a Facebook user and creating a <code>ParseUser</code>, or (2) linking Facebook to an existing <code>ParseUser</code>.</p>
+
+      <a href="#" name="fbusers-signup"></a><a href="#" class="section section_minor " name="fbusers-signup_anchor"></a>
+      <h3>Login &amp; Signup</h3>
+
+      <p><code>ParseFacebookUtils</code> provides a way to allow your <code>ParseUser</code>s to log in or sign up through Facebook. This is accomplished using the <code>logIn()</code> method:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseFacebookUtils.logIn(this, new LogInCallback() {
+  @Override
+  public void done(ParseUser user, ParseException err) {
+    if (user == null) {
+      Log.d(&quot;MyApp&quot;, &quot;Uh oh. The user cancelled the Facebook login.&quot;);
+    } else if (user.isNew()) {
+      Log.d(&quot;MyApp&quot;, &quot;User signed up and logged in through Facebook!&quot;);
+    } else {
+      Log.d(&quot;MyApp&quot;, &quot;User logged in through Facebook!&quot;);
+    }
+  }
+});</pre></div>
+      <p>When this code is run, the following happens:</p>
+
+      <ol>
+        <li>The user is shown the Facebook login dialog or a prompt generated by the Facebook app.</li>
+        <li>The user authenticates via Facebook, and your app receives a callback.</li>
+        <li>Our SDK receives the Facebook data and saves it to a <code>ParseUser</code>. If it's a new user
+          based on the Facebook ID, then that user is created.</li>
+        <li>Your <code>LogInCallback</code> is called with the user.</li>
+      </ol>
+
+      <p>In order to display the Facebook login dialogs and activities, the current <code>Activity</code> must be provided (often, the current activity is <code>this</code> when calling <code>logIn()</code> from within the <code>Activity</code>) as we have done above.</p>
+
+      <p>You may optionally provide a collection of strings that specifies what read permissions your app requires from the Facebook user.  You may specify these strings yourself, or use the constants we've provided for you in the <code>ParseFacebookUtils.Permissions</code> class.  For example:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseFacebookUtils.logIn(Arrays.asList(&quot;email&quot;, Permissions.Friends.ABOUT_ME),
+        this, new LogInCallback() {
+  @Override
+  public void done(ParseUser user, ParseException err) {
+    // Code to handle login.
+  }
+});</pre></div>
+      <p><code>ParseUser</code> integration doesn't require any permissions to work out of the box (ie. <code>null</code> or specifying no permissions is perfectly acceptable). When logging in, you can only use read permissions. See our documentation below about <a href="/docs/android_guide#fbusers-permissions">requesting additional permissions</a> (read or publish). <a href="https://developers.facebook.com/docs/reference/api/permissions/">Read more about permissions on Facebook's developer guide.</a></p>
+
+      <div class="callout_green">
+        It is up to you to record any data that you need from the Facebook user after they authenticate. To accomplish this, you'll need to <a href="https://parse.com/questions/how-can-i-find-parse-users-that-are-facebook-friends-with-the-current-user">do a graph query via Facebook's SDK</a>.
+      </div>
+
+
+      <a href="#" name="fbusers-link"></a><a href="#" class="section section_minor " name="fbusers-link_anchor"></a>
+      <h3>Linking</h3>
+
+      <p>If you want to associate an existing <code>ParseUser</code> to a Facebook account, you can link it like so:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">if (!ParseFacebookUtils.isLinked(user)) {
+  ParseFacebookUtils.link(user, this, new SaveCallback() {
+    @Override
+    public void done(ParseException ex) {
+      if (ParseFacebookUtils.isLinked(user)) {
+        Log.d(&quot;MyApp&quot;, &quot;Woohoo, user logged in with Facebook!&quot;);
+      }
+    }
+  });
+}</pre></div>
+      <p>The steps that happen when linking are very similar to log in. The difference is that on successful login,
+        the existing <code>ParseUser</code> is updated with the Facebook information. Future logins via
+        Facebook will now log the user into their existing account.</p>
+
+      <p>If you want to unlink Facebook from a user, simply do this:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseFacebookUtils.unlinkInBackground(user, new SaveCallback() {
+  @Override
+  public void done(ParseException ex) {
+    if (ex == null) {
+      Log.d(&quot;MyApp&quot;, &quot;The user is no longer associated with their Facebook account.&quot;);
+    }
+  }
+});</pre></div>
+      <p>Or if you are handling threading yourself, you can call <code>unlink()</code> directly like this:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">try {
+  ParseFacebookUtils.unlink(user);
+  Log.d(&quot;MyApp&quot;, &quot;The user is no longer associated with their Facebook account.&quot;);
+} catch (ParseException e) {
+}</pre></div>
+      <a href="#" name="fbusers-permissions"></a><a href="#" class="section section_minor " name="fbusers-permissions_anchor"></a>
+      <h3>Requesting Permissions</h3>
+
+      <p>As of v3.0 of the Facebook SDK, read and publish permissions must be requested separately.
+        <code>ParseFacebookUtils.logIn()</code> and <code>ParseFacebookUtils.link()</code> only
+        allow you to request read permissions. To request additional permissions, you may call
+        <code>ParseFacebookUtils.getSession().requestNewReadPermissions()</code> or
+        <code>ParseFacebookUtils.getSession().requestNewPublishPermissions()</code>. For more information
+        about requesting new permissions, please see <a href="https://developers.facebook.com/docs/reference/android/3.0/Session#requestNewReadPermissions(NewPermissionsRequest)" />Facebook's API documentation for these functions</a>.</p>
+
+      <p>After successfully retrieving new permissions, please call <code>ParseFacebookUtilities.saveLatestSessionData()</code>,
+        which will save any changes to the session token back to the <code>ParseUser</code> and ensure that this session data
+        follows the user wherever it logs in.</p>
+
+      <a href="#" name="fbusers-instance"></a><a href="#" class="section section_minor " name="fbusers-instance_anchor"></a>
+      <h3>Facebook SDK and Parse</h3>
+
+      <p>The Facebook Android SDK provides a number of helper classes for
+        interacting with Facebook's API. Generally, you will use the Request class to interact with Facebook
+        on behalf of your logged-in user. <a href="https://developers.facebook.com/docs/reference/android/3.0">You can
+          read more about the Facebook SDK here</a>.</p>
+
+      <p>Our library manages the user's <code>Session</code> object for you. You can simply call
+        <code>ParseFacebookUtils.getSession()</code> to access the session instance, which can
+        then be passed to Requests.</p>
+
+      <a href="#" name="twitterusers"></a><a href="#" class="section section_minor " name="twitterusers_anchor"></a>
+      <h2>Twitter Users</h2>
+
+      <p>As with Facebook, Parse also provides an easy way to integrate Twitter authentication into your application. The Parse SDK provides a straightforward way to authorize and link a Twitter account to your <code>ParseUser</code>s. With just a few lines of code, you'll be able to provide a "log in with Twitter" option in your app, and be able to save their data to Parse.</p>
+
+      <a href="#" name="twitterusers-setup"></a><a href="#" class="section section_minor " name="twitterusers-setup_anchor"></a>
+      <h3>Setup</h3>
+
+      <p>To start using Twitter with Parse, you need to:</p>
+
+      <ol>
+        <li><a href="https://dev.twitter.com/apps">Set up a Twitter app</a>, if you haven't already.</li>
+        <li>Add your application's Twitter consumer key on your Parse application's settings page.</li>
+        <li>When asked to specify a "Callback URL" for your Twitter app, please insert a valid URL. This value will not be used by your iOS or Android application, but is necessary in order to enable authentication through Twitter.</li>
+        <li>
+          Add the following where you initialize the Parse SDK in your <code>Application.onCreate()</code>
+
+          <div class="code parseTheme"><pre class="brush: java;">ParseTwitterUtils.initialize(&quot;YOUR CONSUMER KEY&quot;, &quot;YOUR CONSUMER SECRET&quot;);</pre></div>        </li>
+      </ol>
+
+      <p>If you encounter any issues that are Twitter-related, a good resource is the <a href="https://dev.twitter.com/docs">official Twitter documentation</a>.</p>
+
+      <p>There are two main ways to use Twitter with your Parse users: (1) logging in as a Twitter user and creating a <code>ParseUser</code>, or (2) linking Twitter to an existing <code>ParseUser</code>.</p>
+
+      <a href="#" name="twitterusers-signup"></a><a href="#" class="section section_minor " name="twitterusers-signup_anchor"></a>
+      <h3>Login &amp; Signup</h3>
+
+      <p><code>ParseTwitterUtils</code> provides a way to allow your <code>ParseUser</code>s to log in or sign up through Twitter. This is accomplished using the <code>logIn()</code> method:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseTwitterUtils.logIn(this, new LogInCallback() {
+  @Override
+  public void done(ParseUser user, ParseException err) {
+    if (user == null) {
+      Log.d(&quot;MyApp&quot;, &quot;Uh oh. The user cancelled the Twitter login.&quot;);
+    } else if (user.isNew()) {
+      Log.d(&quot;MyApp&quot;, &quot;User signed up and logged in through Twitter!&quot;);
+    } else {
+      Log.d(&quot;MyApp&quot;, &quot;User logged in through Twitter!&quot;);
+    }
+  }
+});</pre></div>
+      <p>When this code is run, the following happens:</p>
+
+      <ol>
+        <li>The user is shown the Twitter login dialog.</li>
+        <li>The user authenticates via Twitter, and your app receives a callback.</li>
+        <li>Our SDK receives the Twitter data and saves it to a <code>ParseUser</code>. If it's a new user
+          based on the Twitter handle, then that user is created.</li>
+        <li>Your <code>LogInCallback</code> is called with the user.</li>
+      </ol>
+
+      <p>In order to display the Twitter login dialogs and activities, the current <code>Context</code> must be provided (often, the current context is <code>this</code> when calling <code>logIn()</code> from within the <code>Activity</code>) as we have done above.</p>
+
+      <a href="#" name="twitterusers-link"></a><a href="#" class="section section_minor " name="twitterusers-link_anchor"></a>
+
+      <h3>Linking</h3>
+
+      <p>If you want to associate an existing <code>ParseUser</code> with a Twitter account, you can link it like so:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">if (!ParseTwitterUtils.isLinked(user)) {
+  ParseTwitterUtils.link(user, this, new SaveCallback() {
+    @Override
+    public void done(ParseException ex) {
+      if (ParseTwitterUtils.isLinked(user)) {
+        Log.d(&quot;MyApp&quot;, &quot;Woohoo, user logged in with Twitter!&quot;);
+      }
+    }
+  });
+}</pre></div>
+      <p>The steps that happen when linking are very similar to log in. The difference is that on successful login,
+        the existing <code>ParseUser</code> is updated with the Twitter information. Future logins via
+        Twitter will now log the user into their existing account.</p>
+
+      <p>If you want to unlink Twitter from a user, simply do this:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseTwitterUtils.unlinkInBackground(user, new SaveCallback() {
+  @Override
+  public void done(ParseException ex) {
+    if (ex == null) {
+      Log.d(&quot;MyApp&quot;, &quot;The user is no longer associated with their Twitter account.&quot;);
+    }
+  }
+});</pre></div>
+      <a href="#" name="twitterusers-requests"></a><a href="#" class="section section_minor " name="twitterusers-requests_anchor"></a>
+      <h3>Twitter API Calls</h3>
+
+      <p>Our SDK provides a straightforward way to sign your API HTTP requests to the <a href="https://dev.twitter.com/docs/api">Twitter REST API</a> when your app has a Twitter-linked <code>ParseUser</code>.  To make a request through our API, you can use the <code>Twitter</code> singleton provided by <code>ParseTwitterUtils</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">HttpClient client = new DefaultHttpClient();
+HttpGet verifyGet = new HttpGet(
+        &quot;https://api.twitter.com/1/account/verify_credentials.json&quot;);
+ParseTwitterUtils.getTwitter().signRequest(verifyGet);
+HttpResponse response = client.execute(verifyGet);</pre></div>
+      <a href="#" name="cloudfunctions"></a><a href="#" class="section section_minor " name="cloudfunctions_anchor"></a>
+      <h2>Cloud Functions</h2>
+
+      <p>
+        Cloud Functions can be called from Android using <code>ParseCloud</code>.
+        For example, to call the Cloud Function named <code>hello</code>:
+      </p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseCloud.callFunctionInBackground(&quot;hello&quot;, new HashMap&lt;String, Object&gt;(), new FunctionCallback&lt;String&gt;() {
+  void done(String result, ParseException e) {
+    if (e == null) {
+      // result is &quot;Hello world!&quot;
+    }
+  }
+});</pre></div>
+      <div class="callout_green">
+        Take a look at the <a href="/docs/cloud_code_guide?language=Android#functions-calling">Cloud Code Guide</a> to learn more about Cloud Functions.
+      </div>
+
+      <a href="#" name="geo"></a><a href="#" class="section section_minor " name="geo_anchor"></a>
+      <h2>GeoPoints</h2>
+
+      <p>Parse allows you to associate real-world latitude and longitude coordinates with an object.  Adding a <code>ParseGeoPoint</code> to a <code>ParseObject</code> allows queries to take into account the proximity of an object to a reference point.  This allows you to easily do things like find out what user is closest to another user or which places are closest to a user.</p>
+
+      <a href="#" name="geo-classes"></a><a href="#" class="section section_minor " name="geo-classes_anchor"></a>
+      <h3>ParseGeoPoint</h3>
+
+      <p>To associate a point with an object you first need to create a <code>ParseGeoPoint</code>.  For example, to create a point with latitude of 40.0 degrees and -30.0 degrees longitude:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseGeoPoint point = new ParseGeoPoint(40.0, -30.0);</pre></div>
+      <p>This point is then stored in the object as a regular field.</p>
+      <div class="code parseTheme"><pre class="brush: java;">placeObject.put(&quot;location&quot;, point);</pre></div>
+      <a href="#" name="geo-query"></a><a href="#" class="section section_minor " name="geo-query_anchor"></a>
+      <h3>Geo Queries</h3>
+      <p>Now that you have a bunch of objects with spatial coordinates, it would be nice to find out which objects are closest to a point.  This can be done by adding another restriction to <code>ParseQuery</code> using <code>whereNear</code>.  Getting a list of ten places that are closest to a user may look something like:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseGeoPoint userLocation = (ParseGeoPoint) userObject.get(&quot;location&quot;);
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;PlaceObject&quot;);
+query.whereNear(&quot;location&quot;, userLocation);
+query.setLimit(10);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></div>    <p> At this point <code>nearPlaces</code> will be an array of objects ordered by distance
+      (nearest to farthest) from <code>userLocation</code>.
+      Note that if an additional <code>orderByAscending()</code>/<code>orderByDescending()</code> constraint is applied,
+      it will take precedence over the distance ordering.</p>
+
+      <p> To limit the results using distance, check out <code>whereWithinKilometers</code>, <code>whereWithinMiles</code>, and <code>whereWithinRadians</code>.</p>
+
+      <p>It's also possible to query for the set of objects that are contained within a particular area.  To find the objects in a rectangular bounding box, add the <code>whereWithinGeoBox</code> restriction to your <code>ParseQuery</code>.
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseGeoPoint southwestOfSF = new ParseGeoPoint(37.708813, -122.526398);
+ParseGeoPoint northeastOfSF = new ParseGeoPoint(37.822802, -122.373962);
+ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;PizzaPlaceObject&quot;);
+query.whereWithinGeoBox(&quot;location&quot;, southwestOfSF, northeastOfSF);
+query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></div>
+      <a href="#" name="geo-limitations"></a><a href="#" class="section section_minor " name="geo-limitations_anchor"></a>
+      <h3>Caveats</h3>
+      <p> At the moment there are a couple of things to watch out for:</p>
+      <ol>
+        <li>Each ParseObject class may only have one key with a ParseGeoPoint object.</li>
+        <li>Points should not equal or exceed the extreme ends of the ranges.  Latitude should not be -90.0 or 90.0.  Longitude should not be -180.0 or 180.0.  Attempting to set latitude or longitude out of bounds will cause an error.</li>
+      </ol>
+
+      <a href="#" name="ui"></a><a href="#" class="section section_minor " name="ui_anchor"></a>
+      <h2>User Interface</h2>
+
+      <p>At the end of the day, users of your application will be interacting with Android UI components.
+        We provide several UI widgets to make working with Parse data easier.</p>
+
+      <a href="#" name="ui-login"></a><a href="#" class="section section_minor " name="ui-login_anchor"></a>
+      <h3>ParseLoginUI</h3>
+      <p>If you are using Parse to manage users in your mobile app, you are already familiar with the <code>ParseUser</code>  class. At some point in your app, you might want to present a screen to log in your <code>ParseUser</code>.  Parse provides an open-source <a href="https://github.com/ParsePlatform/ParseUI-Android" target="_blank">ParseLoginUI</a> library project that does exactly this.  Please note ParseLoginUI is not included with the Parse Android SDK; you need to import this library project from our Git repository into your Android Studio or Eclipse project.  Here is an <a href="https://developers.facebook.com/docs/android/getting-started#import" target="_blank">example</a> for how to import a library project.
+
+      <p>This library project contains an Android login activity that is ultra-customizable and easy to integrate with your app.  You can configure the look and feel of the login screens by either specifying XML configurations or constructing an Intent in code.  In this guide, we first provide several ways to integrate with the login library.  Then, we describe in detail how to customize the login screens.</p>
+
+      <div class="center_pic">
+        <img src="/images/docs/android_login/all_screens.png" alt="Android_login_screens"></img>
+        <p>Screens of the ParseLoginUI library</p>
+      </div>
+
+      <h4>Login Library API</h4>
+      <h5>Basic Integration</h5>
+      <br>
+      <p>The login library integration is simple.  Our library exposes an activity-level API that lets you launch the login library activity (<code>ParseLoginActivity</code>) to obtain a <code>ParseUser</code>.  <code>ParseLoginActivity</code> will guide the user through several screens to log in, sign up, or reset their password.  If the user resets their password by email, they are taken back to the login screen.
+        The user will also see helpful toast messages if they provide invalid input (e.g. logging in with an incorrect password or signing up with a username that's already taken).<p>
+
+      <p>To include <code>ParseLoginActivity</code> in your app, import the ParseLoginUI library project, and add the following into your <code>AndroidManifest.xml</code>:</p>
+      <div class="code parseTheme"><pre class="brush: xml;">&lt;activity
+    android:name=&quot;com.parse.ui.ParseLoginActivity&quot;
+    android:label=&quot;@string/app_name&quot;
+    android:launchMode=&quot;singleTop&quot;&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.PARSE_LOGIN_ENABLED&quot;
+        android:value=&quot;true&quot;/&gt;
+&lt;/activity&gt;</pre></div>
+      <p>Then, you can launch <code>ParseLoginActivity</code> from your own activity by calling:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseLoginBuilder builder = new ParseLoginBuilder(MyActivity.this);
+startActivityForResult(builder.build(), 0);</pre></div>
+      <p>When <code>ParseLoginActivity</code> finishes, your caller activity will receive either:</p>
+      <ul>
+        <li><code>RESULT_OK</code><br>
+          The user successfully logged in.  <code>ParseUser.getCurrentUser()</code> will be populated.</li>
+        <li><code>RESULT_CANCELLED</code><br>
+          The user pressed the back button.  If the user fails to log in or sign up, the only way to return to the previous screen is by  pressing the back button.</li>
+      </ul>
+      <p>We've provided a sample app, <a href="https://github.com/ParsePlatform/ParseUI-Android" target="_blank">ParseLoginSampleBasic</a> for this use case.  This sample app is a simple profile viewer.  If you are not logged in, <code>SampleProfileActivity</code> prompts you to log in.  Clicking on the login button in <code>SampleProfileActivity</code> launches the <code>ParseLoginActivity</code>, which prompts the user for login credentials.  If the user successfully logs in, <code>ParseLoginActivity</code> will automatically finish itself and return <code>RESULT_OK</code>.  Then, <code>SampleProfileActivity</code> will display the user's name and a logout button.</p>
+
+      <div class="center_pic">
+        <img src="/images/docs/android_login/basic_login.png" alt="Basic_login_integration"></img>
+        <p>Basic login integration</p>
+      </div>
+
+      <p>This basic integration case works well if your caller activity is designed to function regardless of whether there is a valid current user.  For example, a restaurant reviews app may allow the user to browse restaurants even when the user is not logged in.  If the user does log in, the app could provide a more personalized experience on that same screen.</p>
+
+      <br>
+
+      <h5>Advanced Integration</h5>
+      <br>
+      <p>If some parts or all of your app cannot function without a valid <code>ParseUser</code>, you can protect these parts of your app with a <code>ParseLoginDispatchActivity</code> (supplied in this library project).  This dispatch activity acts like a gatekeeper; it automatically launches <code>ParseLoginActivity</code> if no user is logged in, or launches the protected activity if a user is already logged in.  To use this, you subclass <code>ParseLoginDispatchActivity</code> and specify what protected activity to launch.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">public class SampleDispatchActivity extends ParseLoginDispatchActivity {
+  @Override
+  protected Class&lt;?&gt; getTargetClass() {
+    return SampleProfileActivity.class;
+  }
+}</pre></div>
+      <p>We've provided another sample app, <a href="https://github.com/ParsePlatform/ParseUI-Android" target="_blank">ParseLoginSampleWithDispatchActivity</a> for this use case.  The <code>SampleProfileActivity</code> in this app cannot function without a logged-in user, so it is protected by <code>SampleDispatchActivity</code>.</p>
+
+      <div class="center_pic">
+        <img src="/images/docs/android_login/login_with_dispatch.png" alt="Login_with_dispatch_activity"></img>
+        <p>Login with DispatchActivity protecting the entire app</p>
+      </div>
+
+      <p>The dispatch activity does not necessarily need to be the first activity at app launch.  You can launch the dispatch activity from any activity.  When your protected activity finishes, the dispatch activity will automatically forward the result code to your caller activity.</p>
+
+      <p>Let's revisit the restaurant reviews app again.  You might have a comment activity that requires a user.  You can protect this activity behind a dispatch activity.  The main restaurant listing activity (supports either user or no user), can launch the dispatch activity when the user presses the comment button.  If no user is logged in, the dispatch activity will start <code>ParseLoginActivity</code> to obtain a ParseUser.  If the user refuses to log in, they will be gracefully taken back to the restaurant listings activity.  In the restaurant listings activity, you can always call <code>ParseUser.getCurrentUser()</code> to determine whether the user logged in.</p>
+
+      <div class="center_pic">
+        <img src="/images/docs/android_login/restaurants_app.png" alt="Restaurants_app"></img>
+        <p>Login with DispatchActivity protecting parts of the app </p>
+      </div>
+
+      <h4>Customizing the Login Library</h4>
+      <p>There are three ways to customize the login library:</p>
+      <ul>
+        <li>Activity metadata in <code>AndroidManifest.xml</code> - This is most recommended because it allows you to customize the login experience without writing any code, and it makes the login experience consistent regardless which activity in your app launches <code>ParseLoginActivity</code>.</li>
+        <li>In code with <code>ParseLoginBuilder</code> - If you love writing code to do everything.</li>
+        <li>Overriding layout resource XMLs - This option is useful if you want to make significant changes to the look and feel of the login experience.</li>
+      </ul>
+      <br>
+      <h5>Configure by Activity Metadata</h5>
+      <br>
+      <p>We provide the following options for easily customizing the ParseLoginActivity in your app's AndroidManifest.xml:</p>
+      <ul>
+        <li><code>APP_LOGO</code><br>
+          <code>Drawable</code> resource for app logo.</li>
+        <li><code>PARSE_LOGIN_ENABLED</code><br>
+          <code>Boolean</code> for whether to enable the Parse username/password login (default = false)</li>
+        <li><code>PARSE_LOGIN_BUTTON_TEXT</code><br>
+          <code>String</code> to display on the login button (default = “Log in”)</li>
+        <li><code>PARSE_SIGNUP_BUTTON_TEXT</code><br>
+          <code>String</code> to display on the signup button on the login screen (default = "Sign up")</li>
+        <li><code>PARSE_LOGIN_HELP_TEXT</code><br>
+          <code>String</code> to display on the password-reset link (default =  "Forgotten password")</li>
+        <li><code>PARSE_LOGIN_INVALID_CREDENTIALS_TEXT</code><br>
+          <code>String</code> to show on the toast when the user login fails (default = "The username and password you entered don't match")</li>
+        <li><code>PARSE_LOGIN_EMAIL_AS_USERNAME</code><br>
+          <code>Boolean</code> for whether to prompt for the user's email as the username on the login and signup form (default = false)</li>
+        <li><code>PARSE_SIGNUP_MIN_PASSWORD_LENGTH</code><br>
+          <code>Integer</code> for the minimum required password length on the signup form (default = 6)</li>
+        <li><code>PARSE_SIGNUP_SUBMIT_BUTTON_TEXT</code><br>
+          <code>String</code> to display on the submit button on the signup screen (default = "Submit")</li>
+        <li><code>FACEBOOK_LOGIN_ENABLED</code><br>
+          <code>Boolean</code> for whether to show the Facebook login button (default = false)</li>
+        <li><code>FACEBOOK_LOGIN_BUTTON_TEXT</code><br>
+          <code>String</code> to display on the Facebook login button (default = "Log in with Facebook")</li>
+        <li><code>FACEBOOK_LOGIN_PERMISSIONS</code><br>
+          <code>String</code> array resource containing requested Facebook permissions (default = empty)</li>
+        <li><code>TWITTER_LOGIN_ENABLED</code><br>
+          <code>Boolean</code> for whether to show the Twitter login button (default = false)</li>
+        <li><code>TWITTER_LOGIN_BUTTON_TEXT</code><br>
+          <code>String</code> to display on the Twitter login button (default = "Log in with Twitter")</li>
+      </ul>
+
+      <p>Please note that <code>PARSE_LOGIN_ENABLED</code>, <code>FACEBOOK_LOGIN_ENABLED</code>, and <code>TWITTER_LOGIN_ENABLED</code> are all false by default.  You need to explicitly set them to true for those components to show up on the screen.  For <code>APP_LOGO</code> and <code>FACEBOOK_LOGIN_PERMISSIONS</code>, make sure you use <code>android:resource</code> instead of <code>android:value</code>.</p>
+
+      <p>Example configuration:</p>
+
+      <div class="code parseTheme"><pre class="brush: xml;">&lt;activity
+    android:name=&quot;com.parse.ui.ParseLoginActivity&quot;
+    android:label=&quot;@string/my_app_name&quot;
+    android:launchMode=&quot;singleTop&quot;&gt;
+    &lt;!-- We reference a drawable resource here, so we must use android:resource --&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.APP_LOGO&quot;
+        android:resource=&quot;@drawable/my_app_logo&quot;/&gt;
+    &lt;!-- For these non-resource options, use android:value --&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.PARSE_LOGIN_ENABLED&quot;
+        android:value=&quot;true&quot;/&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.PARSE_LOGIN_EMAIL_AS_USERNAME&quot;
+        android:value=&quot;true&quot;/&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.PARSE_LOGIN_HELP_TEXT&quot;
+        android:value=&quot;@string/password_reset_text&quot;/&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.MIN_PASSWORD_LENGTH&quot;
+        android:value=&quot;8&quot;/&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.FACEBOOK_LOGIN_ENABLED&quot;
+        android:value=&quot;true&quot;/&gt;
+    &lt;!-- We reference a string-array resource here, so we must use android:resource --&gt;
+    &lt;meta-data
+        android:name=&quot;com.parse.ui.ParseLoginActivity.FACEBOOK_LOGIN_PERMISSIONS&quot;
+        android:resource=&quot;@array/my_facebook_permissions&quot;/&gt;
+&lt;/activity&gt;</pre></div>
+      <p>For the Facebook permission array, you also need to have this in your <code>res/values/strings.xml</code>:</p>
+      <div class="code parseTheme"><pre class="brush: xml;">&lt;resources&gt;
+    &lt;string-array name=&quot;my_facebook_permissions&quot;&gt;
+        &lt;item&gt;public_profile&lt;/item&gt;
+        &lt;item&gt;user_friends&lt;/item&gt;
+    &lt;/string-array&gt;
+&lt;/resources&gt;</pre></div>    <br>
+      <h5>Configure by Code</h5>
+      <br>
+      <p>You can configure the <code>ParseLoginActivity</code> by code using the ParseLoginBuilder.  You specify the options on the builder, and then call <code>build()</code> to generate an <code>Intent</code> that can be used to start the <code>ParseLoginActivity</code>.  We've provided a sample app, <a href="https://github.com/ParsePlatform/ParseUI-Android" target="_blank">ParseLoginSampleCodeCustomization</a> demonstrating this use case.  The options in <code>ParseLoginBuilder</code> are the same as those in activity metadata customization.  If you specify options in both code and activity metadata, the options in code take precedence.</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseLoginBuilder builder = new ParseLoginBuilder(ProfileActivity.this);
+Intent parseLoginIntent = builder.setAppLogo(R.drawable.my_app_logo)
+    .setParseLoginEnabled(true)
+    .setParseLoginButtonText(&quot;Go&quot;)
+    .setParseSignupButtonText(&quot;Register&quot;)
+    .setParseLoginHelpText(&quot;Forgot password?&quot;)
+    .setParseLoginInvalidCredentialsToastText(&quot;You email and/or password is not correct&quot;)
+    .setParseLoginEmailAsUsername(true)
+    .setParseSignupSubmitButtonText(&quot;Submit registration&quot;)
+    .setFacebookLoginEnabled(true)
+    .setFacebookLoginButtonText(&quot;Facebook&quot;)
+    .setFacebookLoginPermissions(Arrays.asList(&quot;public_profile&quot;, &quot;user_friends&quot;))
+    .setTwitterLoginEnabled(true)
+    .setTwitterLoginButtontext(&quot;Twitter&quot;)
+    .build();
+startActivityForResult(parseLoginIntent, 0);</pre></div>    <br>
+      <h5>Configure by Overriding Layout Resource Files</h5>
+      <br>
+      <p>You can override any layout resources by having files with the same name as those in the ParseLoginUI library project.  This is useful if you want to add a background image, or reposition the login components on the screen.  The Android build process will automatically merge resource files with the same name, giving your app project's files precedence.   The top-level layout files are:</p>
+      <ul>
+        <li><code>com_parse_ui_parse_login_fragment.xml</code><br>
+          If you do not use certain login methods (username/password, Facebook, or Twitter), you can remove the corresponding UI elements from this layout.</li>
+        <li><code>com_parse_ui_parse_signup_fragment.xml</code><br>
+          You can add additional input fields in the signup form here.  If you do, you also need add code to <code>ParseSignupFragment</code> to copy that data into the <code>ParseUser</code> object.</li>
+        <li><code>com_parse_ui_parse_login_help_fragment.xml</code><br>
+          You can change the message for password reset.</li>
+      </ul>
+      <p>We've provided another sample app, <a href="https://github.com/ParsePlatform/ParseUI-Android" target="_blank">ParseLoginSampleLayoutOverride</a> showing how to do this.  This sample app only has a Facebook login button in <code>com_parse_ui_parse_login_fragment.xml</code>, and adds a background image to the login screens.</p>
+
+      <a href="#" name="ui-queryadapter"></a><a href="#" class="section section_minor " name="ui-queryadapter_anchor"></a>
+      <h3>ParseQueryAdapter</h3>
+
+      <p>To display collections of data, we provide an implementation of <code>Adapter</code> in the Parse Android SDK.
+        Instead of using a basic <code>ListAdapter</code> backed by a static array of objects,
+        our <code>ParseQueryAdapter</code> provides a layer of abstraction
+        and allows you to easily display data from one of your Parse classes
+        in your <code>AdapterView</code> of choice (e.g. <code>ListView</code> or <code>GridView</code>).</p>
+
+      <p>To use a <code>ParseQueryAdapter</code> to display data in an <code>Activity</code>,
+        follow the steps outlined below in your <code>Activity</code>'s <code>onCreate</code>:</p>
+
+      <ol>
+        <li>Instantiate a <code>ParseQueryAdapter</code>.
+        <li>Customize it as necessary (see the below subsections for detailed instructions to
+          display data from specific queries, change the UI of the <code>View</code>s to be displayed, and more).</li>
+        <li>Set your new <code>Adapter</code> on your <code>AdapterView</code> with <code>setAdapter()</code>.</li>
+      </ol>
+
+      <p>When the AdapterView is attached to the window,
+        your <code>ParseQueryAdapter</code> will automatically fetch the first set of data.
+        This subclass simplifies the code that would otherwise be involved with:</p>
+
+      <ol>
+        <li>Pagination, with a row that can be tapped to load the next page.</li>
+        <li>Configurable downloading and displaying of remote images within rows.</li>
+        <li>Automatic loading and management of the Parse objects array.</li>
+        <li>Callbacks from major events in the data cycle.</li>
+      </ol>
+
+      <p>Consider the following code, which sets up a very simple <code>ParseQueryAdapter</code>
+        to display data in a <code>ListView</code>.
+        You can be up and running with a functional <code>ListView</code> full of data
+        with very little configuration.</p>
+      <div class="code parseTheme"><pre class="brush: java;">// Inside an Activity
+public void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  // Uses a layout with a ListView (id: &quot;listview&quot;), which uses our Adapter.
+  setContentView(R.layout.main);
+
+  ParseQueryAdapter&lt;ParseObject&gt; adapter = new ParseQueryAdapter&lt;ParseObject&gt;(this, &quot;Instrument&quot;);
+  adapter.setTextKey(&quot;name&quot;);
+  adapter.setImageKey(&quot;photo&quot;);
+
+  ListView listView = (ListView) findViewById(R.id.listview);
+  listView.setAdapter(adapter);
+}</pre></div>
+      <p>This view will display a list of Instruments by name.
+        Notice all the code that we're not writing:
+        we can skip the logic to fetch each consecutive page of results,
+        to manually update and maintain the backing data array,
+        to download images in the background and set the image data on UI widgets,
+        and to handle touch events to trigger loading the next page of results.</p>
+
+      <p>The <code>ParseQueryAdapter</code> can be configured to customize
+        what data to use, how to display it,
+        and what to do before and after it's been fetched.
+        Read on to see what you can do,
+        and how to tweak a <code>ParseQueryAdapter</code> to fit all of your needs.</p>
+
+      <a href="#" name="ui-parsequeryadapter-query"></a><a href="#" class="section section_minor " name="ui-parsequeryadapter-query_anchor"></a>
+      <h4>Customizing the Query</h4>
+
+      <p>By default, the simplest <code>ParseQueryAdapter</code> constructor takes
+        a <code>Context</code> and a Parse class name.
+        All <code>ParseObject</code>s in that class are then fetched and
+        displayed in order of their <code>createdAt</code> timestamps.</p>
+
+      <p>To change this behavior, we drew from the functionality of an <code>ArrayAdapter</code>:
+        but instead of taking in a vanilla array of objects to be displayed by the adapter,
+        <code>ParseQueryAdapter</code> can also take a <code>QueryFactory</code> class
+        which returns a <code>ParseQuery</code> you define.
+        Pass that into the constructor,
+        and the adapter will then use that query to determine which objects to fetch and display.</p>
+
+      <p>See below for an example setting up a <code>ParseQueryAdapter</code> to display only
+        punk and metal bands with four or more members,
+        ordered by number of records sold:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">ParseQueryAdapter&lt;ParseObject&gt; adapter =
+  new ParseQueryAdapter&lt;ParseObject&gt;(this, new ParseQueryAdapter.QueryFactory&lt;ParseObject&gt;() {
+    public ParseQuery&lt;ParseObject&gt; create() {
+      // Here we can configure a ParseQuery to our heart&#x27;s desire.
+      ParseQuery query = new ParseQuery(&quot;Band&quot;);
+      query.whereContainedIn(&quot;genre&quot;, Arrays.asList({ &quot;Punk&quot;, &quot;Metal&quot; }));
+      query.whereGreaterThanOrEqualTo(&quot;memberCount&quot;, 4);
+      query.orderByDescending(&quot;albumsSoldCount&quot;);
+      return query;
+    }
+  });</pre></div>
+      <h4>Customizing the Rows</h4>
+
+      <p>The default layout for the individual <code>View</code>s in your <code>AdapterView</code>
+        is a simple <code>LinearLayout</code> with a <code>ParseImageView</code> and a <code>TextView</code>.
+        If <code>setTextKey(String)</code> is used with the <code>ParseQueryAdapter</code>,
+        its parameter will be used to select which key on your <code>ParseObject</code>
+        is displayed in the <code>TextView</code>.
+        Similarly, if <code>setImageKey(String)</code> is used,
+        its parameter will be used to determine the image displayed in the ImageView.</p>
+
+      <p>One way to customize the rows is to
+        override <code>getItemView(ParseObject, View, ViewGroup)</code> or <code>getNextPageView(View, ViewGroup)</code>
+        and call the superclass's implementation of the appropriate method to do the heavy lifting.
+        If you provide your own layout to the superclass's implementation, note that
+        <code>getItemView(ParseObject, View, ViewGroup)</code> and <code>getNextPageView(View, ViewGroup)</code>
+        expect a <code>TextView</code> (id: <code>android.R.id.text1</code>) if the <code>textKey</code> is set
+        and a <code>ParseImageView</code> (id: <code>android.R.id.icon</code>) if the <code>imageKey</code> is set.</p>
+
+      <p>Here, we inflate and configure a layout of our own,
+        with a <code>TextView</code>, a <code>ParseImageView</code>,
+        and an extra "description" <code>TextView</code> (id: <code>R.id.description</code>):</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">@Override
+public View getItemView(ParseObject object, View v, ViewGroup parent) {
+  if (v == null) {
+    v = View.inflate(getContext(), R.layout.adapter_item, null);
+  }
+
+  // Take advantage of ParseQueryAdapter&#x27;s getItemView logic for
+  // populating the main TextView/ImageView.
+  // The IDs in your custom layout must match what ParseQueryAdapter expects
+  // if it will be populating a TextView or ImageView for you.
+  super.getItemView(object, v, parent);
+
+  // Do additional configuration before returning the View.
+  TextView descriptionView = (TextView) v.findViewById(R.id.description);
+  descriptionView.setText(object.getString(&quot;description&quot;));
+  return v;
+}</pre></div>
+      <p>Another way to customize the rows is
+        to have complete control over the look of the rows
+        by overriding <code>ParseQueryAdapter</code>'s methods and
+        ignoring the superclass's implementation entirely.
+        In this example, our item views are simply rows where the color is defined by the <code>ParseObject</code>:</p>
+
+      <div class="code parseTheme"><pre class="brush: java;">@Override
+public View getItemView(ParseObject object, View v, ViewGroup parent) {
+  if (v == null) {
+    v = View.inflate(getContext(), R.layout.adapter_item, null);
+  }
+  v.setBackgroundColor(object.getInt(&quot;color&quot;));
+  return v;
+}
+
+@Override
+public View getNextPageView(View v, ViewGroup parent) {
+  if (v == null) {
+    // R.layout.adapter_next_page contains an ImageView with a custom graphic
+    // and a TextView.
+    v = View.inflate(getContext(), R.layout.adapter_next_page, null);
+  }
+  TextView textView = (TextView) v.findViewById(R.id.nextPageTextViewId);
+  textView.setText(&quot;Loaded &quot; + getCount() + &quot; rows. Get more!&quot;);
+  return v;
+}</pre></div>
+      <h4>Loading Remote Images in Rows</h4>
+
+      <p><code>ParseQueryAdapter</code> makes it simple to display remote images.
+        By calling <code>setImageKey(String)</code>, you can pass in a key name on your <code>ParseObject</code>
+        which should contain a <code>ParseFile</code> containing an image to be fetched from Parse
+        and loaded into the <code>ParseImageView</code> of the corresponding row.</p>
+
+      <p>The image will download asynchronously,
+        and the appropriate <code>ParseImageView</code> will be updated in the background.
+        As the user scrolls and rows are recycled by the adapter,
+        images will be fetched as rows become visible and assigned <code>ParseObject</code>s.</p>
+
+      <p>You can define a placeholder image to be used when the image fetch has not yet completed.
+        Call <code>setPlaceholder(Drawable)</code> on your <code>ParseQueryAdapter</code>
+        to use the specified <code>Drawable</code> as a fallback image.</p>
+
+      <h4>Lifecycle Methods</h4>
+
+      <p>We expose two hooks in the data lifecycle of the Adapter for you to execute custom logic &mdash;
+        right before we query Parse for your data and
+        right after the fetched objects have been loaded from the query.
+        These methods are particularly useful for toggling some loading UI.</p>
+
+      <p>An <code>OnQueryLoadListener</code> can be set via <code>setOnQueryLoadListener(OnQueryLoadListener)</code>,
+        which provides <code>onLoading()</code> and <code>onLoaded(List<ParseObject>, Exception)</code> methods for implementation.</p>
+
+      <h4>Pagination</h4>
+
+      <p>Pagination ensures that the table only gets one page of objects at a time.
+        You can set the number of objects are in a page by calling <code>setObjectsPerPage(int)</code>.</p>
+
+      <p>The query is automatically altered to apply pagination,
+        and a pagination row appears at the bottom of the <code>AdapterView</code>
+        to allow users to load the next page.</p>
+
+      <p>Pagination is turned on by default.
+        To turn it off, call <code>setPaginationEnabled(false)</code>.
+        With pagination turned off, the <code>ParseQueryAdapter</code> will use
+        the default <code>ParseQuery</code> limit of 100 items.</p>
+
+      <h4>Auto-loading of Data</h4>
+
+      <p>When the <code>AdapterView</code> that your <code>ParseQueryAdapter</code> is set on is attached to a window,
+        the <code>ParseQueryAdapter</code>'s <code>loadObjects()</code> method is automatically called,
+        triggering the fetching of the first page of results.
+        To disable this behavior (perhaps to delay the fetching of data, or run some custom logic ahead of time),
+        just call <code>setAutoload(false)</code> and
+        call <code>loadObjects()</code> manually if autoload is disabled.</p>
+
+      <a href="#" name="errors"></a><a href="#" class="section section_minor " name="errors_anchor"></a>
+      <h2>Handling Errors</h2>
+
+      <p>Many of the methods on <code>ParseObject</code>, including <code>save()</code>, <code>delete()</code>, and <code>get()</code> will throw a <code>ParseException</code> on an invalid request, such as deleting or editing an object that no longer exists in the cloud, or when there is a network failure preventing communication with the Parse Cloud. You will need to catch and deal with these exceptions.<p>
+
+      <p>For more details, look at the <a href="/docs/android">Android API</a>.</p>
+
+      <a href="#" name="security-recommendations"></a><a href="#" class="section section_minor " name="security-recommendations_anchor"></a>
+      <h2>Security</h2>
+
+      <p>We strongly recommend that you build your applications to restrict access to data as much as possible.  With this in mind, we recommend that you enable automatic <a href="#users-anonymous">anonymous user creation</a> and <a href="#users-acls">specify a default ACL based upon the current user</a> when your application is initialized.  Explicitly set public writability (and potentially public readability) on an object-by-object basis in order to protect your data from unauthorized access.</p>
+
+      <p>Consider adding the following code to your application startup:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseUser.enableAutomaticUser();
+ParseACL defaultACL = new ParseACL();
+// Optionally enable public read access while disabling public write access.
+// defaultACL.setPublicReadAccess(true);
+ParseACL.setDefaultACL(defaultACL, true);</pre></div>
+      <p>Please keep secure access to your data in mind as you build your applications for the protection of both you and your users.</p>
+
+      <p>Our <a href="/docs/data#security">Data &amp; Security Guide</a> has detailed descriptions of the various ways Parse can help keep your app's data safe.</p>
+
+      <h3>Settings</h3>
+      <p>In addition to coding securely, please review the settings pages for your applications to select options that will restrict access to your applications as much as is appropriate for your needs.  For example, if users should be unable to log in without a Facebook account linked to their application, disable all other login mechanisms.  Specify your Facebook application IDs, Twitter consumer keys, and other such information to enable server-side validation of your users' login attempts.</p>
+
+
+    </div>
+  </div>
+</div>
+</div>
+</div>

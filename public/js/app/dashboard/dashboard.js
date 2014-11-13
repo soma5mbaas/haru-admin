@@ -21,6 +21,7 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
     $scope.lineticks = lineticks;
 
     var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
+
     dashboards.getDashboardData(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
       console.log(result);
 
