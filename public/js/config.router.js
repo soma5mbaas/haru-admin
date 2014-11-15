@@ -548,10 +548,11 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad){
                               return $ocLazyLoad.load(['angularFileUpload',
+                                  'tpl/review/review.css',
                               'vendor/jquery/image-picker/image-picker.min.js',
                               'vendor/jquery/image-picker/image-picker.css']).then(
                                   function(){
-                                      return $ocLazyLoad.load('js/app//imageupload/imageupload.js');
+                                      return $ocLazyLoad.load('js/app/imageupload/imageupload.js');
                                   }
                               );
                           }]
@@ -603,10 +604,13 @@ angular.module('app')
                            //   return $ocLazyLoad.load('ui.select').then(
                              //     function(){
                                       return $ocLazyLoad.load([ 'vendor/libs/moment.min.js',
+                                          'vendor/libs/jsmap.js',
+                                          'tpl/review/review.css',
                                           'vendor/modules/ng-bs-daterangepicker/daterangepicker.js',
                                           'vendor/modules/ng-bs-daterangepicker/daterangepicker-bs3.css',
                                           'js/app/monetization/monetization.js',
-                                          'js/app/monetization/monetization.css'
+                                          'js/app/monetization/monetization.css',
+                                          'js/app/monetization/monetization-service.js'
                                       ]);
                                //   }
                               //);
@@ -772,6 +776,7 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load([
+                                  'vendor/libs/jsmap.js',
                                   'tpl/review/review.css',
                                   'js/app/review/review.js',
                                   'js/app/review/review-service.js',
@@ -794,7 +799,19 @@ angular.module('app')
               })
               .state('app.quickstart', {
                   url: '/quickstart',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/quickstart.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load([
+                                  'vendor/jquery/image-picker/image-picker.min.js',
+                                  'vendor/jquery/image-picker/image-picker.css']).then(
+                                  function(){
+                                      return $ocLazyLoad.load('js/app/quickstart/quickstart.js');
+                                  }
+                              );
+                          }]
+                  }
               })
               .state('app.android', {
                   url: '/android',
@@ -823,6 +840,14 @@ angular.module('app')
               .state('app.videos', {
                   url: '/videos',
                   templateUrl: 'tpl/document/youtube_docs.html'
+              })
+              .state('app.terms', {
+                  url: '/terms',
+                  templateUrl: 'tpl/terms/terms.html'
+              })
+              .state('app.privacy', {
+                  url: '/privacy',
+                  templateUrl: 'tpl/terms/privacy.html'
               })
       }
     ]

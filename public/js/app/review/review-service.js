@@ -59,7 +59,7 @@ app.factory('reviews', ['$http', '$q', function ($http, $q) {
 
     factory.getReviewInfo = function(csrf, applicationkey) {
         var param = {'csrf-token':csrf, 'appid': applicationkey};
-
+        console.log(param);
         var url = '/reviews/info';
         var deferred = $q.defer();
         $http({url:url,
@@ -67,6 +67,7 @@ app.factory('reviews', ['$http', '$q', function ($http, $q) {
             params:param,
             headers:{'Application-Id':applicationkey}})
             .then(function(response) {
+                console.log(response);
                 deferred.resolve(response.data);
             }, function(x) {
                 deferred.reject({ error: "Server Error" });

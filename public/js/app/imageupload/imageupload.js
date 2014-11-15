@@ -1,6 +1,6 @@
-app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
+app.controller('FileUploadCtrl', ['$scope', 'FileUploader', 'server_url', function($scope, FileUploader, server_url) {
     var uploader = $scope.uploader = new FileUploader({
-        url: 'http://api.haru.io/1/files',
+        url: server_url + '/1/files',
         headers : {'Application-Id':$scope.user.currentproject.applicationkey}
     });
 
@@ -48,9 +48,10 @@ app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, Fil
     };
     uploader.onCompleteItem = function(fileItem, response, status, headers) {
         //console.info('onCompleteItem', fileItem, response, status, headers);
-        console.log(response);
-        $scope.uploadimage.push({url:response.results[0].url, selected:true, size:response.results[0].size, originalsize : response.results[0].originalSize, text:'Covert Image', type:0});
-        $scope.uploadimage.push({url:response.results[0].originalUrl, selected:false,  size:response.results[0].originalSize, originalsize:response.results[0].originalSize, text:'Original Image', type:1});
+        console.log(fileItem);
+        $scope.uploadimage.push({url:response.results[0].originalUrl, selected:false,  size:response.results[0].originalSize, originalsize:response.results[0].originalSize, text:'Original Image', type:0});
+        $scope.uploadimage.push({url:response.results[0].url, selected:true, size:response.results[0].size, originalsize : response.results[0].originalSize, text:'Covert Image', type:1});
+
     };
     uploader.onCompleteAll = function() {
         console.info('onCompleteAll');
@@ -67,4 +68,7 @@ app.controller('FileUploadCtrl', ['$scope', 'FileUploader', function($scope, Fil
         })
         $scope.uploadimage[index].selected = true;
     };
+
+    angular.element(document.querySelector('select')).imagepicker();
+
 }]);

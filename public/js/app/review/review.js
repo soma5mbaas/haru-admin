@@ -2,58 +2,7 @@
  * Created by pheadra on 10/31/14.
  */
 
-Map = function(){
-    this.map = new Object();
-};
-Map.prototype = {
-    put : function(key, value){
-        this.map[key] = value;
-    },
-    get : function(key){
-        return this.map[key];
-    },
-    containsKey : function(key){
-        return key in this.map;
-    },
-    containsValue : function(value){
-        for(var prop in this.map){
-            if(this.map[prop] == value) return true;
-        }
-        return false;
-    },
-    isEmpty : function(key){
-        return (this.size() == 0);
-    },
-    clear : function(){
-        for(var prop in this.map){
-            delete this.map[prop];
-        }
-    },
-    remove : function(key){
-        delete this.map[key];
-    },
-    keys : function(){
-        var keys = new Array();
-        for(var prop in this.map){
-            keys.push(prop);
-        }
-        return keys;
-    },
-    values : function(){
-        var values = new Array();
-        for(var prop in this.map){
-            values.push(this.map[prop]);
-        }
-        return values;
-    },
-    size : function(){
-        var count = 0;
-        for (var prop in this.map) {
-            count++;
-        }
-        return count;
-    }
-};
+
 
 
 
@@ -83,6 +32,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         marketmap.put("playGoogle", {name: 'playGoogle', src: '/img/play_logo_x2.png'});
         marketmap.put("amazon", {name: 'amazon', src: '/img/amazon_gray.png'});
         marketmap.put("market360", {name: 'market360', src: '/img/market360.png'});
+        marketmap.put("tstore", {name: 'tstore', src: '/img/title_tstore.png'});
 
         var languagemap = new Map();
         languagemap.put("en", {language: 'English', code: 'en'});
@@ -117,7 +67,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
 
         var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
         reviews.getReviewInfo(csrf, applicationkey).then(function (result) {
-            //console.log(result);
+            console.log(result);
 
             Reviewstatistics = result.reviews;
 
@@ -148,6 +98,7 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
                 }
             });
 
+            console.log($scope.code);
             getReviewgraph($scope.code);
         }, function (result) {
             console.log(result);

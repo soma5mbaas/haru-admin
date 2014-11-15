@@ -1,12 +1,38 @@
-
+<div ng-controller="MonetizationCtrl">
 <div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3">Monetization</h1>
+  <h1 class="m-n font-thin h3 ">Monetization</h1>
 </div>
 
 <div class="wrapper-md " style="overflow: auto;" >
-  <div ng-controller="MonetizationTitleCtrl">
+  <div >
+    <div class="wrapper bg-white b-b">
+      <div class="row">
+        <div class="col-sm-8" >
+          <span class="h4 review-title">Nation</span>
+          <ul class="nav nav-pills nav-sm m-t-sm">
+            <li ng-class="{active: code==na.value}" ng-click="reviewReflash(na)"  ng-repeat="na in nation track by $index"><a href>{{na.nation}}</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-4 b-l">
+          <span class="h4 review-title">Duration</span>
+          <ul class="nav nav-pills nav-sm m-t-sm">
+            <div class="m-l-sm pull-right" >
+              <input type="text" name="reservation" id="reservation" class="form-control pull-right" style="width:auto;" ng-model="date"  />
+            </div>
+
+            <div class="btn-group pull-right">
+              <label class="btn btn-default" ng-init="radioModel = 'day'" ng-model="radioModel" btn-radio="'day'"> 일</label>
+              <label class="btn btn-default" ng-model="radioModel" btn-radio="'time'" uncheckable>시간</label>
+            </div>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--
     <div class="row no-padder ">
-      <div  class="col-sm-12 ">
+    -->
+<!--      <div  class="col-sm-12 ">
         <div class="m-l-sm m-r-xl pull-right" >
           <input type="text" name="reservation" id="reservation" class="form-control pull-right" style="width:auto;" ng-model="date"  />
         </div>
@@ -16,7 +42,8 @@
           <label class="btn btn-default" ng-model="radioModel" btn-radio="'time'" uncheckable>시간</label>
         </div>
 
-      </div>
+      </div>-->
+<!--
       <div class="col-sm-12">
         <div class="h4" >국가 지정</div>
         <div class="m-t">
@@ -53,19 +80,20 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </div>
+
 <div class="wrapper-md">
-  <div ng-controller="MonetizationCtrl">
+  <div >
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading font-bold">Total Revenue (전체 매출) </div>
           <div class="panel-body">
-            <div ui-jq="plot" ui-options="
+            <div ui-jq="plot" ui-refresh="grapherefrash" ui-options="
               [
-                { data: {{totalrevenue}}, bars: { show: true, barWidth: 0.6, fillColor: { colors: [{ opacity: 0.2 }, { opacity: 0.4}] } } }
+                { data: {{totalprices}}, bars: { show: true, barWidth: 0.6, fillColor: { colors: [{ opacity: 0.2 }, { opacity: 0.4}] } } }
               ],
               {
                 colors: ['{{app.color.info}}'],
@@ -73,14 +101,12 @@
                 xaxis:{
                   font: { color: '#ccc' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks: {{lineticks}}
                 },
                 yaxis:{ font: { color: '#ccc' } },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
                 tooltip: true,
-                tooltipOpts: { content: '%x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
+                tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 0, y: 20 } }
               }
             " style="height:240px" >
             </div>
@@ -93,7 +119,35 @@
         <div class="panel panel-default">
           <div class="panel-heading font-bold">Summery Revenue (전체 매출) </div>
           <div class="panel-body">
-            Summery Detail Data
+            <div class="col-sm-8">
+              Summery
+              {{lineticks[lineticks.length -1][1]}}
+              전체매출 :
+              ₩{{totalprices[totalprices.length -1][1]  | number : 0}}
+
+              ARPDAU :
+              ₩{{avgtotaluser[avgtotaluser.length -1][1]  | number: 0}}
+
+              ARPPDAU :
+              ₩{{avgprices[avgprices.length -1][1] | number: 0}}
+
+              PPU :
+              {{avgsalesuserrates[avgsalesuserrates.length -1][1] }}%
+
+            </div>
+            <div class="col-sm-4 b-l">
+              국가별 구매비율
+              <div ui-jq="plot" ui-options="
+              {{d3}},
+              {
+                series: { pie: { show: true, innerRadius: 0.5, stroke: { width: 0 }, label: { show: true, threshold: 0.05 } } },
+                colors: ['{{app.color.primary}}','{{app.color.info}}','{{app.color.success}}','{{app.color.warning}}','{{app.color.danger}}'],
+                grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
+                tooltip: true,
+                tooltipOpts: { content: '%s: %p.0%' }
+              }
+            " style="height:240px"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -105,17 +159,15 @@
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
               [
-                { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 }  }
+                { data: {{avgtotaluser}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 3, fill: 0 }  }
               ],
               {
-                colors: ['{{app.color.info}}'],
+                colors: ['{{app.color.primary}}'],
                 series: { shadowSize: 3 },
                 xaxis:{
-                  font: { color: '#ccc' },
+                  font: { color: '#aaa' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks: {{lineticks}}
                 },
                 yaxis:{ font: { color: '#ccc' } },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
@@ -129,21 +181,19 @@
       </div>
       <div class="col-md-6">
         <div class="panel panel-default">
-          <div class="panel-heading font-bold">ARPPDAU 구매 유저당 평균 매</div>
+          <div class="panel-heading font-bold">ARPPDAU 구매 유저당 평균 매출</div>
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
               [
-                { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 }  }
+                { data: {{avgprices}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 3, fill: 0 }  }
               ],
               {
-                colors: ['{{app.color.info}}'],
+                colors: ['{{app.color.success}}'],
                 series: { shadowSize: 3 },
                 xaxis:{
                   font: { color: '#ccc' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks: {{lineticks}}
                 },
                 yaxis:{ font: { color: '#ccc' } },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
@@ -163,19 +213,17 @@
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
               [
-                { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 }  }
+                { data: {{countusers}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 3, fill: 0 }  }
               ], 
               {
-                colors: ['{{app.color.info}}'],
+                colors: ['{{app.color.warning}}'],
                 series: { shadowSize: 3 },
                 xaxis:{ 
                   font: { color: '#ccc' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks: {{lineticks}}
                 },
-                yaxis:{ font: { color: '#ccc' } },
+                yaxis:{ font: { color: '#ccc' }, min:0 },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
                 tooltip: true,
                 tooltipOpts: { content: '%x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
@@ -191,19 +239,17 @@
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
               [
-                { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 }  }
+                { data: {{avgsalesuserrates}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 3, fill: 0 }  }
               ],
               {
-                colors: ['{{app.color.info}}'],
+                colors: ['{{app.color.danger}}'],
                 series: { shadowSize: 3 },
                 xaxis:{
                   font: { color: '#ccc' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks: {{lineticks}}
                 },
-                yaxis:{ font: { color: '#ccc' } },
+                yaxis:{ font: { color: '#ccc' }, min:0  },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
                 tooltip: true,
                 tooltipOpts: { content: '%x.1 is %y.4',  defaultTheme: false, shifts: { x: 0, y: 20 } }
@@ -214,6 +260,7 @@
         </div>
       </div>
     </div>
+    <!--
     <div class="row">
       <div class="col-md-6">
         <div class="panel panel-default">
@@ -272,6 +319,8 @@
         </div>
       </div>
     </div>
+    -->
+    <!--
     <div class="row">
       <div class="col-md-4">
         <div class="panel panel-default">
@@ -311,6 +360,7 @@
         </div>
       </div>
     </div>
+    -->
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
@@ -337,14 +387,36 @@
               }
             " style="height:240px" >
             </div>
-            <div>
-              구간별 매출 순위
-
+            <div class="m-lg">
+              <span class="h4 review-title">{{startday}} </span>
+              <table class="w-full m-r m-l">
+                <thead>
+                  <tr>
+                    <th>순위</th>
+                    <th>아이템명</th>
+                    <th>아이템 가격</th>
+                    <th>구매건수</th>
+                    <th>매출</th>
+                    <th>비율</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="product in productlist track by $index">
+                    <td>{{$index +1}}</td>
+                    <td>{{product.productname}}</td>
+                    <td>{{product.price | number:0}}</td>
+                    <td>{{product.count | number:0}}</td>
+                    <td>{{product.total | number:0}}</td>
+                    <td>{{product.avg | number:2}}%</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!--
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
@@ -375,6 +447,7 @@
         </div>
       </div>
     </div>
+    -->
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
@@ -382,7 +455,7 @@
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
               [
-               { data: {{d}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 }  }
+               { data: {{itemcounts}}, points: { show: true, radius: 6}, splines: { show: true, tension: 0.45, lineWidth: 5, fill: 0 }  }
               ],
               {
                 colors: ['{{app.color.info}}'],
@@ -390,9 +463,7 @@
                 xaxis:{
                   font: { color: '#ccc' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks: {{lineticks}}
                 },
                 yaxis:{ font: { color: '#ccc' } },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
@@ -405,6 +476,7 @@
         </div>
       </div>
     </div>
+  <!--
     <div class="row">
       <div class="col-md-6">
         <div class="panel panel-default">
@@ -463,5 +535,7 @@
           </div>
           </div>
       </div>
-    </div>
+-->
+  </div>
+</div>
 </div>

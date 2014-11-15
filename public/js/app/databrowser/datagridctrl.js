@@ -123,7 +123,7 @@ app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams',
             if (searchText) {
                 var ft = searchText.toLowerCase();
 
-                $http({url:'http://stage.haru.io:10100/1/classes/' + $scope.fold,
+                $http({url:server_url + '/1/classes/' + $scope.fold,
                     method:'GET',
                     headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':appkey}})
                     .then(function(response) {
@@ -136,7 +136,7 @@ app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams',
                     }, function(x) {
                     });
             } else {
-                $http({url:'http://stage.haru.io:10100/1/classes/' + $scope.fold,
+                $http({url:server_url + '/1/classes/' + $scope.fold,
                     method:'GET',
                     headers:{'Content-Type': 'application/x-www-form-urlencoded', 'Application-Id':appkey}})
                     .then(function(response) {
@@ -167,7 +167,7 @@ app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams',
 
     $scope.$on('ngGridEventEndCellEdit', function (event) {
         console.log('ngGridEventEndCellEdit');
-        var url = 'http://stage.haru.io:10200/1/classes/' +$scope.fold+'/' + event.targetScope.row.entity._id;
+        var url = server_url + '/1/classes/' +$scope.fold+'/' + event.targetScope.row.entity._id;
         //console.log(event.targetScope.row.entity);
 
         data = {};
@@ -278,6 +278,10 @@ app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams',
     };
 
     $scope.exportClass = function(){
+        console.log($scope.fold);
+        databrowsers.exportClass($scope.user.currentproject.applicationkey, $scope.fold, 'haruiodev@gmail.com').then(function(result){
+           console.log(result);
+        });
 
     };
 
@@ -346,6 +350,7 @@ app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams',
             $log.info('Modal dismissed at: ' + new Date());
         });
     };
+
 
 
 }]);

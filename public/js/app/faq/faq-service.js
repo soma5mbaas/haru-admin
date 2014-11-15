@@ -1,12 +1,12 @@
 /**
  * Created by pheadra on 10/31/14.
  */
-app.factory('faqs', ['$http', '$q', function ($http, $q) {
+app.factory('faqs', ['$http', '$q', 'server_url', function ($http, $q, server_url) {
   var factory = {};
 
   factory.getFaqCategory = function(applicationkey) {
 
-    var url = 'http://stage.haru.io:3000/faq/category/list';
+    var url = server_url + '/faq/category/list';
     var deferred = $q.defer();
     $http({url:url,
       method:'GET',
@@ -21,7 +21,7 @@ app.factory('faqs', ['$http', '$q', function ($http, $q) {
   factory.addFaqCategory = function(applicationkey, category) {
     var data = '{"category": "'+category+'"}';
 
-    var url = 'http://stage.haru.io:3000/faq/category/add/';
+    var url = server_url + '/faq/category/add/';
     var deferred = $q.defer();
     $http({url:url,
       method:'POST',
@@ -37,7 +37,7 @@ app.factory('faqs', ['$http', '$q', function ($http, $q) {
 
   factory.getFaqList = function(applicationkey,catgory) {
 
-    var url = 'http://stage.haru.io:3000/faq/list';
+    var url = server_url + '/faq/list';
     if(catgory != 'All'){
       url = url + '/'+catgory;
     }
@@ -57,7 +57,7 @@ app.factory('faqs', ['$http', '$q', function ($http, $q) {
 
 
   factory.createNotice = function(applicationkey, data) {
-    var url = 'http://stage.haru.io:3000/notice/add';
+    var url = server_url + '/notice/add';
     var deferred = $q.defer();
     $http({url:url,
       method:'POST',
@@ -73,7 +73,7 @@ app.factory('faqs', ['$http', '$q', function ($http, $q) {
 
   };
   factory.updateParam = function(applicationkey, data) {
-    var url = 'http://stage.haru.io:3000/notice/list';
+    var url = server_url + '/notice/list';
 
     var deferred = $q.defer();
     $http({url:url,
@@ -91,7 +91,7 @@ app.factory('faqs', ['$http', '$q', function ($http, $q) {
   };
 
   factory.deleteNotice = function(applicationkey, id) {
-    var url = 'http://stage.haru.io:3000/notice/' + id;
+    var url = server_url + '/notice/' + id;
     var deferred = $q.defer();
     $http({url:url,
       method:'DELETE',

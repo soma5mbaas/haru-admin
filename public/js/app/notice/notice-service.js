@@ -1,12 +1,12 @@
 /**
  * Created by pheadra on 10/31/14.
  */
-app.factory('notices', ['$http', '$q', function ($http, $q) {
+app.factory('notices', ['$http', '$q','server_url', function ($http, $q, server_url) {
     var factory = {};
 
     factory.getNotice = function(applicationkey) {
 
-        var url = 'http://stage.haru.io:3000/notice/list';
+        var url = server_url + '/notice/list';
         var deferred = $q.defer();
         $http({url:url,
             method:'GET',
@@ -21,7 +21,7 @@ app.factory('notices', ['$http', '$q', function ($http, $q) {
     };
 
     factory.createNotice = function(applicationkey, data) {
-        var url = 'http://stage.haru.io:3000/notice/add';
+        var url =  server_url + '/notice/add';
         var deferred = $q.defer();
         $http({url:url,
             method:'POST',
@@ -37,7 +37,7 @@ app.factory('notices', ['$http', '$q', function ($http, $q) {
 
     };
     factory.updateParam = function(applicationkey, data) {
-        var url = 'http://stage.haru.io:3000/notice/list';
+        var url =  server_url + '/notice/list';
 
         var deferred = $q.defer();
         $http({url:url,
@@ -55,7 +55,7 @@ app.factory('notices', ['$http', '$q', function ($http, $q) {
     };
 
     factory.deleteNotice = function(applicationkey, id) {
-        var url = 'http://stage.haru.io:3000/notice/' + id;
+        var url =  server_url + '/notice/' + id;
         var deferred = $q.defer();
         $http({url:url,
             method:'DELETE',

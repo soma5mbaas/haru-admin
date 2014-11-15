@@ -9,9 +9,11 @@
       <h4>Validate Form</h4>
       <form name="step1" class="form-validation">
         <p>Your email:</p>
+<!--
         <input type="email" name="email" class="form-control" ng-model="email" required ng-change="step1.email.$valid ? (steps.percent=30) : (steps.percent=20)">
         <p class="m-t">Your website:</p>
         <input type="url" name="url" placeholder="http://" class="form-control" ng-model="website" required>
+-->
         <div class="m-t m-b">
           <button type="submit" ng-disabled="step1.$invalid" class="btn btn-default btn-rounded" ng-click="steps.step2=true">Next</button>
         </div>

@@ -20,7 +20,7 @@
     <li ui-sref-active="active">
         <a ui-sref="app.imageupload">
             <i class="fa fa-image text-success-dker"></i>
-            <span class="font-bold" translate="aside.nav.IMAGEUPLOAD">Image</span>
+            <span class="font-bold" translate="aside.nav.IMAGEUPLOAD" >Image</span>
         </a>
     </li>
     <li ui-sref-active="active">
@@ -182,11 +182,26 @@
             <span >Videos</span>
         </a>
     </li>
-<!--
     <li class="line dk hidden-folded"></li>
 
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs" ng-show="selectLang ==  'Korean'">
+        <span >Terms</span>
+    </li>
+    <li  ui-sref-active="active" ng-show="selectLang ==  'Korean'">
+        <a ui-sref="app.terms">
+            <i class=" glyphicon-book glyphicon"></i>
+            <span>이용약관</span>
+        </a>
+    </li>
+    <li  ui-sref-active="active" ng-show="selectLang == 'Korean'">
+        <a ui-sref="app.privacy">
+            <i class="fa-user fa"></i>
+            <span>개인정보취급방침</span>
+        </a>
+    </li>
+    <!--
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span translate="aside.nav.your_stuff.YOUR_STUFF">Your Stuff</span>
+        <span >Terms</span>
     </li>
     <li>
         <a ui-sref="app.page.profile">

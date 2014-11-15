@@ -88,10 +88,10 @@
         </div>
         <div class="col-md-7">
           <div class="panel wrapper">
-            <div class="btn-group pull-right" ng-init="messagetype = '0'">
+           <label class="btn-group pull-right" ng-init="messagetype = '0'">
               <label class="btn btn-sm btn-info"    ng-model="messagetype" btn-radio="'0'"><i class="fa fa-check text-active"></i> API</label>
               <label class="btn btn-sm btn-primary"    ng-model="messagetype" btn-radio="'1'"><i class="fa fa-check text-active"></i> Push</label>
-            </div>
+            </label>
             <!--
             <label class="i-switch bg-warning pull-right" ng-init="showSpline=true">
               <input type="checkbox" ng-model="showSpline">
@@ -115,7 +115,7 @@
                 tooltip: true,
                 tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 10, y: -25 } }
               }
-            " style="width:516px;height:246px"  ng-show="messagetype == 0"> </div>
+            " style="height:246px"  ng-show="messagetype == 0"> </div>
 
               <div ui-jq="plot" ui-refresh="messagetype" ui-options="
               [
@@ -132,8 +132,8 @@
                 tooltip: true,
                 tooltipOpts: { content: '%y.0',  defaultTheme: false, shifts: { x: 10, y: -25 } }
               }
-            " style="width:516px;height:246px"  ng-show="messagetype == 1">
-            </div>
+            " style="height:246px"  ng-show="messagetype == 1">  </div>
+
           </div>
         </div>
       </div>

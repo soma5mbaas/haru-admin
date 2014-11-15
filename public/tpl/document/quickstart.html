@@ -1,0 +1,82 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Quick Start</h1>
+</div>
+
+
+<div class="wrapper-md"  ng-controller="QuickstartCtrl">
+
+  <tabset class="tab-container" >
+    <tab heading="Product" active="steps.step1" select="steps.percent=10">
+      <p class="m-b">Use quickstart to build you application.</p>
+      <progressbar value="steps.percent" class="progress-xs" type="success"></progressbar>
+      <h4>Select Platform</h4>
+
+      <form name="step1" class="form-validation">
+          <ul class="thumbnails image_picker_selector">
+              <li  ng-repeat="image in product track by $index" style="margin-right:30px;">
+                  <div class="col">
+                      <div class=" m-r-xs m-b-xs">
+                          <div class="bg-light h-auto" >
+                              <div class="thumbnail text-center" ng-class="{selected : image.selected}" >
+                                  <img ng-src="{{image.url}}" ng-click="clickProduct(image)"/>
+                                  <span class="" style="font-weight: 800;font-family: Raleway;text-transform: uppercase;letter-spacing:1px;">{{image.text}}</span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </li>
+          </ul>
+
+          <div class="m-t m-b">
+              <button type="submit" ng-disabled="step1.$invalid" class="btn btn-default btn-rounded" ng-click="steps.step2=true">Next</button>
+          </div>
+      </form>
+    </tab>
+    <tab heading="Platform" disabled="step1.$invalid" active="steps.step2" select="steps.percent=30">
+      <form name="step2" class="form-validation">
+        <p class="m-b">select platform. continue the next step</p>
+        <progressbar value="steps.percent" class="progress-xs" type="success"></progressbar>
+          <ul class="thumbnails image_picker_selector">
+              <li  ng-repeat="image in platform track by $index" style="margin-right:30px;">
+                  <div class="col">
+                      <div class=" m-r-xs m-b-xs">
+                          <div class="bg-light h-auto" >
+                              <div class="thumbnail text-center" ng-class="{selected : image.selected}" >
+                                  <img ng-src="{{image.url}}" ng-click="clickPlatform(image)"/>
+                                  <span class="" style="font-weight: 800;font-family: Raleway;text-transform: uppercase;letter-spacing:1px;">{{image.text}}</span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </li>
+          </ul>
+        <div class="m-t m-b">
+          <button type="button" class="btn btn-default btn-rounded" ng-click="steps.step1=true">Prev</button>
+          <button type="submit" ng-disabled="step2.$invalid" class="btn btn-default btn-rounded" ng-click="steps.step3=true">Next</button>
+        </div>
+      </form>
+    </tab>
+    <tab heading="Type of Project" disabled="step2.$invalid" active="steps.step3" select="steps.percent=60">
+      <p class="m-b">Congraduations! You got the last step.</p>
+      <progressbar value="steps.percent" class="progress-xs" type="success"></progressbar>
+        <ul class="thumbnails image_picker_selector">
+            <li  ng-repeat="image in project track by $index" style="margin-right:30px;">
+                <div class="col">
+                    <div class=" m-r-xs m-b-xs">
+                        <div class="bg-light h-auto" >
+                            <div class="thumbnail text-center" ng-class="{selected : image.selected}" >
+                                <img ng-src="{{image.url}}" ng-click="clickProject(image)"/>
+                                <span class="" style="font-weight: 800;font-family: Raleway;text-transform: uppercase;letter-spacing:1px;">{{image.text}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+      <div class="m-t m-b">
+        <button type="button" class="btn btn-default btn-rounded" ng-click="steps.step2=true">Prev</button>
+        <button type="button" class="btn btn-default btn-rounded" ng-click="clickfinish();">Click me to Finish</button>
+      </div>
+    </tab>
+  </tabset>
+</div>

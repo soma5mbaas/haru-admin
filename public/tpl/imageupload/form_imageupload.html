@@ -1,119 +1,104 @@
+
+
 <div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="FileUploadCtrl"  nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
-  <div class="col w-lg bg-light b-r bg-auto">
-    <div class="wrapper-md dker b-b">
-      <h3 class="m-n font-thin">Select files</h3>
-    </div>
-    <div class="wrapper-md">      
-      <div ng-show="uploader.isHTML5" class="m-b-md">
-          <!-- 3. nv-file-over uploader="link" over-class="className" -->
-          <div class="b-a b-2x b-dashed wrapper-lg bg-white text-center m-b" nv-file-over="" over-class="b-info" uploader="uploader">
-              File drop zone
-          </div>
-      </div>
-
-      <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
-      <input type="file" nv-file-select="" uploader="uploader" multiple  />
-
-    </div>
-  </div>
-  <div class="col">
-    <div class="wrapper-md bg-light dk b-b">
-      <span class="pull-right m-t-xs">Queue length: <b class="badge bg-info">{{ uploader.queue.length }}</b></span>
-      <h3 class="m-n font-thin">Upload Image</h3>
-    </div>
-    <div class="wrapper-md">
-      <table class="table bg-white-only b-a">
-          <thead>
-              <tr>
-                  <th width="50%">Name</th>
-                  <th ng-show="uploader.isHTML5">Size</th>
-                  <th ng-show="uploader.isHTML5">Progress</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr ng-repeat="item in uploader.queue">
-                  <td><strong>{{ item.file.name }}</strong></td>
-                  <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                  <td ng-show="uploader.isHTML5">
-                      <div class="progress progress-sm m-b-none m-t-xs">
-                          <div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-                      </div>
-                  </td>
-                  <td class="text-center">
-                      <span ng-show="item.isSuccess" class="text-success"><i class="glyphicon glyphicon-ok"></i></span>
-                      <span ng-show="item.isCancel" class="text-warning"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                      <span ng-show="item.isError" class="text-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                  </td>
-                  <td nowrap>
-                      <button type="button" class="btn btn-default btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                          Upload
-                      </button>
-                      <button type="button" class="btn btn-default btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                          Cancel
-                      </button>
-                      <button type="button" class="btn btn-default btn-xs" ng-click="item.remove()">
-                          Remove
-                      </button>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
-      <div>
-        <div>
-          <p>Queue progress:</p>
-          <div class="progress bg-light dker" style="">
-              <div class="progress-bar progress-bar-striped bg-info" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
-          </div>
+    <div class="col w-lg bg-light b-r bg-auto">
+        <div class="wrapper-md dker b-b">
+            <h3 class="m-n font-thin">Select files</h3>
         </div>
-        <button type="button" class="btn btn-addon btn-success" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-          <i class="fa fa-arrow-circle-o-up"></i> Upload all
-        </button>
-        <button type="button" class="btn btn-addon btn-warning" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
-          <i class="fa fa-ban"></i> Cancel all
-        </button>
-        <button type="button" class="btn btn-addon btn-danger" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-            <i class="fa fa-trash-o"></i> Remove all
-        </button>
-          <div class="m-t">
-          <ul class="thumbnails image_picker_selector" ng-show="visibleimage">
-              <li   ng-repeat="image in uploadimage track by $index">
-                  <div class="col">
-                      <div class="wrapper-sm b-a bg-white m-r-xs m-b-xs">
-                          <div class="bg-light h-auto" >
-                              <div class="thumbnail" ng-class="{selected:image.selected}" ng-click="selectimage($index)">
-                                  <img ng-src="{{image.url}}" class="w-xxl"/>
-                              </div>
+        <div class="wrapper-md">
+            <div ng-show="uploader.isHTML5" class="m-b-md">
+                <!-- 3. nv-file-over uploader="link" over-class="className" -->
+                <div class="b-a b-2x b-dashed wrapper-lg bg-white text-center m-b" nv-file-over="" over-class="b-info" uploader="uploader">
+                    File drop zone
+                </div>
+            </div>
 
+            <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+            <input ui-jq="filestyle" type="file" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s"  nv-file-select="" uploader="uploader" multiple   >
+           <!-- <input type="file" nv-file-select="" uploader="uploader" multiple   popover="lossy compression of PNG images" popover-trigger="mouseenter"/>-->
 
-                              <span ng-if="image.type == 0"> [Resized Image] Size :{{image.size | bytes}} saved {{(image.originalsize-image.size) / image.originalsize | percentage}}</span>
-                              <span ng-if="image.type == 1">[Original Image] Size : {{image.size | bytes}}</span>
-                          </div>
-                      </div>
-                  </div>
-              </li>
-          </ul>
-      </div>
-          <!--
-          <div class="hbox hbox-auto-xs m-t-xl" ng-show="visibleimage" ng-repeat="image in uploadimage track by $index">
-              <div class="col">
-                  <div class="wrapper-sm b-a bg-white m-r-xs m-b-xs">
-                      <div class="bg-light h-auto" >
-                        <img ng-src="{{image}}" class="w-full"/>
-                      </div>
-                  </div>
-              </div>
-              <div class="col">
-                  <div class="wrapper-sm b-a bg-white m-r-xs m-b-xs">
-                      <div class="bg-light h-auto">
-                          <img ng-src="{{image}}" class="w-full" />
-                      </div>
-                  </div>
-              </div>
-          </div>
-          -->
-      </div>
+        </div>
     </div>
-  </div>
+    <div class="col">
+        <div class="wrapper-md bg-light dk b-b">
+            <span class="pull-right m-t-xs">Queue length: <b class="badge bg-info">{{ uploader.queue.length }}</b></span>
+            <h3 class="m-n font-thin">Upload Image : lossy compression of PNG images</h3>
+        </div>
+        <div class="wrapper-md">
+            <table class="table bg-white-only b-a">
+                <thead>
+                <tr>
+                    <th width="50%">Name</th>
+                    <th ng-show="uploader.isHTML5">Size</th>
+                    <th ng-show="uploader.isHTML5">Progress</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in uploader.queue">
+                    <td><strong>{{ item.file.name }}</strong></td>
+                    <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                    <td ng-show="uploader.isHTML5">
+                        <div class="progress progress-sm m-b-none m-t-xs">
+                            <div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <span ng-show="item.isSuccess" class="text-success"><i class="glyphicon glyphicon-ok"></i></span>
+                        <span ng-show="item.isCancel" class="text-warning"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                        <span ng-show="item.isError" class="text-danger"><i class="glyphicon glyphicon-remove"></i></span>
+                    </td>
+                    <td nowrap>
+                        <button type="button" class="btn btn-default btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                            Upload
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-default btn-xs" ng-click="item.remove()">
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <div>
+                    <p>Queue progress:</p>
+                    <div class="progress bg-light dker" style="">
+                        <div class="progress-bar progress-bar-striped bg-info" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-addon btn-success" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                    <i class="fa fa-arrow-circle-o-up"></i> Upload all
+                </button>
+                <button type="button" class="btn btn-addon btn-warning" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                    <i class="fa fa-ban"></i> Cancel all
+                </button>
+                <button type="button" class="btn btn-addon btn-danger" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                    <i class="fa fa-trash-o"></i> Remove all
+                </button>
+                <div class="m-t-xl">
+                    <ul class="thumbnails image_picker_selector" ng-show="visibleimage">
+                        <li  ng-repeat="image in uploadimage track by $index" style="margin-right:30px;">
+                            <span class="h2 review-title " ng-if="image.type == 0">Original</span>
+                            <span class="h2 review-title " ng-if="image.type == 1">Resize</span>
+                            <div class="col">
+                                <div class=" m-r-xs m-b-xs">
+                                    <div class="bg-light h-auto" >
+                                        <div class="thumbnail" >
+                                            <img ng-src="{{image.url}}" style="width: 400px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="h4" ng-if="image.type == 0">Size : {{image.size | bytes}} </span>
+                            <span class="h4" ng-if="image.type == 1">Size : {{image.size | bytes}} <span class="font-bold">Saved {{(image.originalsize-image.size) / image.originalsize | percentage}}</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

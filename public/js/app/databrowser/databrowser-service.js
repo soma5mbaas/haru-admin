@@ -1,5 +1,5 @@
 // A RESTful factory for retreiving mails from 'mails.json'
-app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
+app.factory('databrowsers', ['$http', '$q', 'server_url', function ($http, $q, server_url) {
 
 
 
@@ -77,7 +77,8 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
         //var url = 'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid +'&class=' + classes +'&columnname=' + columnname +'&columntype=' + columntype;
         //console.log(url);
 
-        var url = 'http://stage.haru.io:10200/1/classes/' + classname;
+        //var url = 'http://stage.haru.io:10200/1/classes/' + classname;
+        var url = server_url + '/1/classes/' + classname;
         var deferred = $q.defer();
         $http({url:url,
             method:'POST',
@@ -95,7 +96,7 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
     factory.addRow = function(applicationkey, classname) {
         //var url = 'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid +'&class=' + classes +'&columnname=' + columnname +'&columntype=' + columntype;
 
-        var url = 'http://stage.haru.io:10200/1/classes/' + classname;
+        var url = server_url + '/1/classes/' + classname;
         console.log(url);
 
         var deferred = $q.defer();
@@ -118,7 +119,7 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
         //var url = 'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid +'&class=' + classes +'&columnname=' + columnname +'&columntype=' + columntype;
         //console.log(url);
 
-        var url = 'http://stage.haru.io:10200/1/classes/' + classname;
+        var url = server_url + '/1/classes/' + classname;
         var deferred = $q.defer();
         $http({url:url,
             method:'DELETE',
@@ -135,10 +136,28 @@ app.factory('databrowsers', ['$http', '$q', function ($http, $q) {
 
     factory.deleteRows = function(applicationkey, classname, data) {
         //var url = 'csrf-token=' + csrftoken + '&token=' + authtoken +'&appid=' + appid +'&class=' + classes +'&columnname=' + columnname +'&columntype=' + columntype;
-        var url = 'http://stage.haru.io:10200/1/classes/' + classname;
+        var url = server_url + '/1/classes/' + classname;
         var deferred = $q.defer();
         $http({url:url,
             method:'DELETE',
+            data:data,
+            headers:{'Application-Id':applicationkey,'Content-Type': 'application/json'}})
+            .then(function(response) {
+                deferred.resolve(response.data);
+            }, function(x) {
+                deferred.reject({ error: "Server Error" });
+            });
+        return deferred.promise;
+
+    };
+
+    factory.exportClass = function(applicationkey, classname, email) {
+        var data = {address:email, collection:classname};
+
+        var url = server_url + '/email/export';
+        var deferred = $q.defer();
+        $http({url:url,
+            method:'POST',
             data:data,
             headers:{'Application-Id':applicationkey,'Content-Type': 'application/json'}})
             .then(function(response) {

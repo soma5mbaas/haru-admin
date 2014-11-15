@@ -10,8 +10,8 @@
                     <div class="b-info">
                         <div class="tl-content panel padder b-a block">
                             <span class="arrow right pull-up visible-left"></span>
-                            <div class="text-lt m-b-sm"><span class="h3 font-bold">{{notice.Title}}</span>
-                                <span class="m-l-sm" >({{notice.Time * 1000|  date:"yyyy.MM.dd HH:mm:ss"}})</span>
+                            <div class="text-lt m-b-sm"><span class="h3 font-bold">{{notice.title}}</span>
+                                <span class="m-l-sm" >({{notice.time * 1000| date:"yyyy.MM.dd HH:mm:ss"}})</span>
                                <span class="pull-right">
                                 <a href><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
                                 <a href><i class="fa fa-plus fa-fw m-r-xs"></i></a>
@@ -19,7 +19,7 @@
                               </span>
                             </div>
                             <div class="panel-body pull-in b-t b-light">
-                                <p ta-bind ng-model="notice.Body"></p>
+                                <p ta-bind ng-model="notice.body"></p>
                             </div>
                         </div>
                     </div>

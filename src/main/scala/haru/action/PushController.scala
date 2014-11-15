@@ -72,7 +72,7 @@ class PushActor extends Actor with ActorLogging {
   def receive = {
     case PushMessage(id, appid, message) ⇒ 
     	Log.info("Actor receive")
-    	val url = "http://stage.haru.io:10200/1/push";
+    	val url = "http://api.haru.io/1/push";
     	val post = new HttpPost(url)
 	    post.addHeader("Application-Id", appid)
 	    post.addHeader("Content-Type","application/json")

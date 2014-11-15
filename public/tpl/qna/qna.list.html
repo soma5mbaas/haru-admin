@@ -11,15 +11,15 @@
             <div class="tl-content panel padder b-a block">
               <div class="panel-body pull-in b-light">
                       <span class="pull-right">
-                                <a href><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
-                                <a href><i class="fa fa-plus fa-fw m-r-xs"></i></a>
+                               <!-- <a href><i class="fa fa-pencil fa-fw m-r-xs"></i></a>
+                                <a href><i class="fa fa-plus fa-fw m-r-xs"></i></a>-->
                                 <a href ng-click="deleteQna($index)"><i class="fa fa-times fa-fw"></i></a>
                               </span>
                 <blockquote>
-                  <p  ng-bind="question.Body"></p>
+                  <p  ng-bind="question.body"></p>
                 </blockquote>
-                <span class="m-l-sm" >- {{question.Time * 1000|  date:"yyyy.MM.dd HH:mm:ss"}}</span>
-                <div class="panel panel-default m-t-md m-b-n-sm pos-rlt" ng-hide="question.Comment">
+                <span class="m-l-sm" >- {{question.time * 1000|  date:"yyyy.MM.dd HH:mm:ss"}}</span>
+                <div class="panel panel-default m-t-md m-b-n-sm pos-rlt" ng-hide="question.comment">
                   <span class="arrow top pull-left"></span>
                   <textarea class="form-control no-border" rows="3" placeholder="Your comment..." ng-model="comment[$index]"></textarea>
                   <div class="panel-footer bg-light lter">
@@ -30,7 +30,7 @@
                     </ul>
                   </div>
                 </div>
-                <div class="m-l-sm m-t-md" ng-show="question.Comment">
+                <div class="m-l-sm m-t-md" ng-show="question.comment">
                   <a class="pull-left thumb-sm avatar">
                     <img src="img/a5.jpg" alt="...">
                   </a>
@@ -38,9 +38,9 @@
                     <div class="panel-heading pos-rlt">
                       <span class="arrow left pull-up"></span>
                         <span class="text-muted m-l-sm pull-right">
-                         {{question.CommentTime * 1000 |  date:"yyyy.MM.dd HH:mm:ss"}}
+                         {{question.commenttime * 1000 |  date:"yyyy.MM.dd HH:mm:ss"}}
                         </span>
-                      {{question.Comment}}
+                      {{question.comment}}
                     </div>
                   </div>
                 </div>
