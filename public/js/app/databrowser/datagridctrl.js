@@ -1,5 +1,5 @@
-app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams', 'databrowsers', '$modal', '$log', '$state',
-                        function($rootScope, $scope, $http, $stateParams, databrowsers, $modal, $log, $state) {
+app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams', 'databrowsers', '$modal', '$log', '$state', 'server_url',
+                        function($rootScope, $scope, $http, $stateParams, databrowsers, $modal, $log, $state, server_url) {
     console.log('GridDemoCtrl');
     if($stateParams.fold == ''){
         $scope.fold = 'Users'

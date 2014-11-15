@@ -79,6 +79,7 @@ app.factory('databrowsers', ['$http', '$q', 'server_url', function ($http, $q, s
 
         //var url = 'http://stage.haru.io:10200/1/classes/' + classname;
         var url = server_url + '/1/classes/' + classname;
+        console.log(url);
         var deferred = $q.defer();
         $http({url:url,
             method:'POST',
