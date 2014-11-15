@@ -21,3 +21,11 @@ table.endpoints tr th{
     border : 1px solid #5298fc;
     padding: 6px;
 }
+
+
+.document-title {
+    font-weight: 800;
+    font-family: Raleway;
+    text-transform: uppercase;
+    letter-spacing:1px;
+}

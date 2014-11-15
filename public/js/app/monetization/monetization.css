@@ -76,3 +76,17 @@
 .pill select{border:none;color:#333;font-family:Arial,Helvetica,sans-serif;font-size:18px;outline:none;padding:8px 0;width:100%}
 .search{width:100%; height:100%;}
 .search-query{width:100px;height:100%;}
+
+
+table.item {
+    margin-bottom : 30px;
+}
+table.item tr th{
+    background : #5298fc;
+    color:white;
+    border : 1px solid #5298fc;
+    padding: 6px;
+}
+table.item tr td{
+    padding: 6px;
+}

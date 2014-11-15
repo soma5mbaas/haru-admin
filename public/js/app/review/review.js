@@ -33,6 +33,8 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
         marketmap.put("amazon", {name: 'amazon', src: '/img/amazon_gray.png'});
         marketmap.put("market360", {name: 'market360', src: '/img/market360.png'});
         marketmap.put("tstore", {name: 'tstore', src: '/img/title_tstore.png'});
+        marketmap.put("appStore", {name: 'appStore', src: '/img/appstore.png'});
+
 
         var languagemap = new Map();
         languagemap.put("en", {language: 'English', code: 'en'});

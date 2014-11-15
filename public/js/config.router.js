@@ -548,7 +548,7 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad){
                               return $ocLazyLoad.load(['angularFileUpload',
-                                  'tpl/review/review.css',
+                                  'js/app/review/review.css',
                               'vendor/jquery/image-picker/image-picker.min.js',
                               'vendor/jquery/image-picker/image-picker.css']).then(
                                   function(){
@@ -605,7 +605,7 @@ angular.module('app')
                              //     function(){
                                       return $ocLazyLoad.load([ 'vendor/libs/moment.min.js',
                                           'vendor/libs/jsmap.js',
-                                          'tpl/review/review.css',
+                                          'js/app/review/review.css',
                                           'vendor/modules/ng-bs-daterangepicker/daterangepicker.js',
                                           'vendor/modules/ng-bs-daterangepicker/daterangepicker-bs3.css',
                                           'js/app/monetization/monetization.js',
@@ -777,7 +777,7 @@ angular.module('app')
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load([
                                   'vendor/libs/jsmap.js',
-                                  'tpl/review/review.css',
+                                  'js/app/review/review.css',
                                   'js/app/review/review.js',
                                   'js/app/review/review-service.js',
                                   'vendor/libs/moment.min.js'
@@ -843,7 +843,7 @@ angular.module('app')
               })
               .state('app.sdkdownloads', {
                   url: '/sdkdownloads',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/sdkdownloads.html'
               })
               .state('app.apilibraries', {
                   url: '/apilibraries',
@@ -851,11 +851,19 @@ angular.module('app')
               })
               .state('app.tutorials', {
                   url: '/tutorials',
-                  templateUrl: 'tpl/docs.html'
+                  templateUrl: 'tpl/document/tutorials.html'
               })
               .state('app.videos', {
                   url: '/videos',
-                  templateUrl: 'tpl/document/youtube_docs.html'
+                  templateUrl: 'tpl/document/youtube_docs.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load([
+                                  'tpl/document/document.css'
+                              ]);
+                          }]
+                  }
               })
               .state('app.terms', {
                   url: '/terms',
