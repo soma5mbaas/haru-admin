@@ -1,4 +1,5 @@
-<div class="hbox hbox-auto-xs hbox-auto-sm">
+
+<div class="hbox hbox-auto-xs  hbox-auto-sm">
   <!-- .aside -->
   <div class="col w w-auto-xs bg-light inherit dk b-r">
     <div class="wrapper-md b-b">
@@ -9,16 +10,15 @@
     </div>
     <div class="hidden-sm hidden-xs" id="nav-docs">
       <ul class="nav">
-        <li class="padder b-b l-h-2x bg text-info"><em>Build</em></li>
-        <li><a ui-scroll="node-req">Requirements</a></li>
-        <li><a ui-scroll="bower">Bower</a></li>
-        <li><a ui-scroll="grunt">Grunt</a></li>      
-        <li><a ui-scroll="dev-server">Local Server</a></li>
+        <li class="padder b-b l-h-2x bg text-info"><em>Summery</em></li>
+        <li><a ui-scroll="quickreference">Quick Reference</a></li>
+        <li><a ui-scroll="requestformat">Request Format</a></li>
+        <li><a ui-scroll="responseformat">Response Format</a></li>
 
-        <li class="padder b-b l-h-2x bg text-success"><em>CSS</em></li>
-        <li><a ui-scroll="bootstrap">Bootstrap</a></li>
-        <li><a ui-scroll="icons">Icons</a></li>
-        <li><a ui-scroll="animate">Animate</a></li>
+        <li class="padder b-b l-h-2x bg text-success"><em>Objects</em></li>
+        <li><a ui-scroll="bootstrap">Object Format</a></li>
+        <li><a ui-scroll="icons">Creating Objects</a></li>
+        <li><a ui-scroll="animate">Retreving Objects</a></li>
         <li><a ui-scroll="colors">Colors</a></li>
         <li><a ui-scroll="layout">Layout</a></li>
         <li><a ui-scroll="utilities">Utilities</a></li>
@@ -61,7 +61,7 @@
         </ul>
 
         <a href="#" name="general-quick"></a><a href="#" class="section section_minor " name="general-quick_anchor"></a>
-        <h3>Quick Reference</h3>
+        <h3 id="quickreference">Quick Reference</h3>
 
         <p>All API access is over HTTPS, and accessed via the <code>https://api.plugy.com</code> domain. The relative path prefix <code>/1/</code> indicates that we are currently using version 1 of the API.
 
@@ -284,7 +284,7 @@
         </table>
 
         <a href="#" name="general-requests"></a><a href="#" class="section section_minor " name="general-requests_anchor"></a>
-        <h3>Request Format</h3>
+        <h3 id="requestformat">Request Format</h3>
 `
         <p>For POST and PUT requests,
             the request body must be JSON,
@@ -316,7 +316,7 @@ export REST_API_KEY=&quot;your REST API key&quot;</pre></div>
         <p>For Javascript usage, the Parse Cloud supports <a href="http://en.wikipedia.org/wiki/Cross-Origin_Resource_Sharing">cross-origin resource sharing</a>, so that you can use these headers in conjunction with XMLHttpRequest.</p>
 
         <a href="#" name="general-responses"></a><a href="#" class="section section_minor " name="general-responses_anchor"></a>
-        <h3>Response Format</h3>
+        <h3 id="responseformat">Response Format</h3>
 
         <p>The response format for all requests is a JSON object.</p>
 
@@ -410,7 +410,7 @@ Location: https://api.parse.com/1/classes/GameScore/Ed1nuqPvcm</pre></div>
 
         <p>Once you've created an object, you can retrieve its contents by sending a GET request to the object URL returned in the location header. For example, to retrieve the object we created above:</p>
 
-        <div class="code-container" id="container2"><div class="code_snippet"><div class="snippet_option" data-snippet-lang="python"><div class="code parseTheme"><pre class="brush: python;">import json,httplib
+        <div class="code-container"><div class="code_snippet"><div class="snippet_option" data-snippet-lang="python"><div class="code parseTheme"><pre class="brush: python;">import json,httplib
 connection = httplib.HTTPSConnection(&#x27;api.parse.com&#x27;, 443)
 connection.connect()
 connection.request(&#x27;GET&#x27;, &#x27;/1/classes/GameScore/Ed1nuqPvcm&#x27;, &#x27;&#x27;, {
@@ -3055,207 +3055,6 @@ print result</pre></div></div><div class="snippet_option" data-snippet-lang="cur
         </div>
 
         <a href="#" name="geo"></a><a href="#" class="section section_major " name="geo_anchor"></a>
-        <h2>GeoPoints</h2>
-
-        <p>Parse allows you to associate real-world latitude and longitude coordinates with an object.  Adding a <code>GeoPoint</code> data type to a class allows queries to take into account the proximity of an object to a reference point.  This allows you to easily do things like find out what user is closest to another user or which places are closest to a user.</p>
-
-        <a href="#" name="geo-classes"></a><a href="#" class="section section_minor " name="geo-classes_anchor"></a>
-        <h3>GeoPoint</h3>
-
-        <p>To associate a point with an object you will need to embed a <code>GeoPoint</code> data type into your object.  This is done by using a JSON object with <code>__type</code> set to the string <code>GeoPoint</code> and numeric values being set for the <code>latitude</code> and <code>longitude</code> keys.  For example, to create an object containing a point under the "location" key with a latitude of 40.0 degrees and -30.0 degrees longitude:</p>
-
-        <div class="code-container" id="container71"><div class="code_snippet"><div class="snippet_option" data-snippet-lang="python"><div class="code parseTheme"><pre class="brush: python;">import json,httplib
-connection = httplib.HTTPSConnection(&#x27;api.parse.com&#x27;, 443)
-connection.connect()
-connection.request(&#x27;POST&#x27;, &#x27;/1/classes/PlaceObject&#x27;, json.dumps({
-       &quot;location&quot;: {
-         &quot;__type&quot;: &quot;GeoPoint&quot;,
-         &quot;latitude&quot;: 40.0,
-         &quot;longitude&quot;: -30.0
-       }
-     }), {
-       &quot;X-Parse-Application-Id&quot;: &quot;${APPLICATION_ID}&quot;,
-       &quot;X-Parse-REST-API-Key&quot;: &quot;${REST_API_KEY}&quot;,
-       &quot;Content-Type&quot;: &quot;application/json&quot;
-     })
-result = json.loads(connection.getresponse().read())
-print result</pre></div></div><div class="snippet_option" data-snippet-lang="curl"><div class="code parseTheme"><pre class="brush: bash;">curl -X POST \
-  -H &quot;X-Parse-Application-Id: ${APPLICATION_ID}&quot; \
-  -H &quot;X-Parse-REST-API-Key: ${REST_API_KEY}&quot; \
-  -H &quot;Content-Type: application/json&quot; \
-  -d &#x27;{
-        &quot;location&quot;: {
-          &quot;__type&quot;: &quot;GeoPoint&quot;,
-          &quot;latitude&quot;: 40.0,
-          &quot;longitude&quot;: -30.0
-        }
-      }&#x27; \
-  https://api.parse.com/1/classes/PlaceObject</pre></div></div></div></div>
-
-        <a href="#" name="geo-query"></a><a href="#" class="section section_minor " name="geo-query_anchor"></a>
-        <h3>Geo Queries</h3>
-        <p>Now that you have a bunch of objects with spatial coordinates, it would be nice to find out which objects are closest to a point.  This can be done by using a <code>GeoPoint</code> data type with query on the field using <code>$nearSphere</code>.  Getting a list of ten places that are closest to a user may look something like:</p>
-
-        <div class="code-container" id="container72"><div class="code_snippet"><div class="snippet_option" data-snippet-lang="python"><div class="code parseTheme"><pre class="brush: python;">import json,httplib,urllib
-connection = httplib.HTTPSConnection(&#x27;api.parse.com&#x27;, 443)
-params = urllib.urlencode({&quot;limit&quot;:10,&quot;where&quot;:json.dumps({
-       &quot;location&quot;: {
-         &quot;$nearSphere&quot;: {
-           &quot;__type&quot;: &quot;GeoPoint&quot;,
-           &quot;latitude&quot;: 30.0,
-           &quot;longitude&quot;: -20.0
-         }
-       }
-     })})
-connection.connect()
-connection.request(&#x27;GET&#x27;, &#x27;/1/classes/PlaceObject?%s&#x27; % params, &#x27;&#x27;, {
-       &quot;X-Parse-Application-Id&quot;: &quot;${APPLICATION_ID}&quot;,
-       &quot;X-Parse-REST-API-Key&quot;: &quot;${REST_API_KEY}&quot;
-     })
-result = json.loads(connection.getresponse().read())
-print result</pre></div></div><div class="snippet_option" data-snippet-lang="curl"><div class="code parseTheme"><pre class="brush: bash;">curl -X GET \
-  -H &quot;X-Parse-Application-Id: ${APPLICATION_ID}&quot; \
-  -H &quot;X-Parse-REST-API-Key: ${REST_API_KEY}&quot; \
-  -G \
-  --data-urlencode &#x27;limit=10&#x27; \
-  --data-urlencode &#x27;where={
-        &quot;location&quot;: {
-          &quot;$nearSphere&quot;: {
-            &quot;__type&quot;: &quot;GeoPoint&quot;,
-            &quot;latitude&quot;: 30.0,
-            &quot;longitude&quot;: -20.0
-          }
-        }
-      }&#x27; \
-  https://api.parse.com/1/classes/PlaceObject</pre></div></div></div></div>
-
-        <p>This will return a list of results ordered by distance from 30.0 latitude and -20.0 longitude.
-            The first result will be the nearest object.
-            (Note that if an explicit <code>order</code> parameter is supplied,
-            it will take precedence over the distance ordering.)
-            For example, here are two results returned for the above query: </p>
-
-        <div class="code parseTheme"><pre class="brush: javascript;">{
-  &quot;results&quot;: [
-    {
-      &quot;location&quot;: {
-        &quot;latitude&quot;: 40.0,
-        &quot;__type&quot;: &quot;GeoPoint&quot;,
-        &quot;longitude&quot;: -30.0
-      },
-      &quot;updatedAt&quot;: &quot;2011-12-06T22:36:04.983Z&quot;,
-      &quot;createdAt&quot;: &quot;2011-12-06T22:36:04.983Z&quot;,
-      &quot;objectId&quot;: &quot;iFEPN5Gwoz&quot;
-    },
-    {
-      &quot;location&quot;: {
-        &quot;latitude&quot;: 60.0,
-        &quot;__type&quot;: &quot;GeoPoint&quot;,
-        &quot;longitude&quot;: -20.0
-      },
-      &quot;updatedAt&quot;: &quot;2011-12-06T22:36:26.143Z&quot;,
-      &quot;createdAt&quot;: &quot;2011-12-06T22:36:26.143Z&quot;,
-      &quot;objectId&quot;: &quot;LAyNKSNTHT&quot;
-    }
-  ]
-}</pre></div>
-
-        <p> To limit the search to a maximum distance add a <code>$maxDistanceInMiles</code> (for miles), <code>$maxDistanceInKilometers</code> (for kms), or <code>$maxDistanceInRadians</code> (for radian angle), term to the key constraint.  For example, the following limits the radius to 10 miles:</p>
-
-        <div class="code-container" id="container73"><div class="code_snippet"><div class="snippet_option" data-snippet-lang="python"><div class="code parseTheme"><pre class="brush: python;">import json,httplib,urllib
-connection = httplib.HTTPSConnection(&#x27;api.parse.com&#x27;, 443)
-params = urllib.urlencode({&quot;where&quot;:json.dumps({
-       &quot;location&quot;: {
-         &quot;$nearSphere&quot;: {
-           &quot;__type&quot;: &quot;GeoPoint&quot;,
-           &quot;latitude&quot;: 30.0,
-           &quot;longitude&quot;: -20.0
-         },
-         &quot;$maxDistanceInMiles&quot;: 10.0
-       }
-     })})
-connection.connect()
-connection.request(&#x27;GET&#x27;, &#x27;/1/classes/PlaceObject?%s&#x27; % params, &#x27;&#x27;, {
-       &quot;X-Parse-Application-Id&quot;: &quot;${APPLICATION_ID}&quot;,
-       &quot;X-Parse-REST-API-Key&quot;: &quot;${REST_API_KEY}&quot;
-     })
-result = json.loads(connection.getresponse().read())
-print result</pre></div></div><div class="snippet_option" data-snippet-lang="curl"><div class="code parseTheme"><pre class="brush: bash;">curl -X GET \
-  -H &quot;X-Parse-Application-Id: ${APPLICATION_ID}&quot; \
-  -H &quot;X-Parse-REST-API-Key: ${REST_API_KEY}&quot; \
-  -G \
-  --data-urlencode &#x27;where={
-        &quot;location&quot;: {
-          &quot;$nearSphere&quot;: {
-            &quot;__type&quot;: &quot;GeoPoint&quot;,
-            &quot;latitude&quot;: 30.0,
-            &quot;longitude&quot;: -20.0
-          },
-          &quot;$maxDistanceInMiles&quot;: 10.0
-        }
-      }&#x27; \
-  https://api.parse.com/1/classes/PlaceObject</pre></div></div></div></div>
-
-        <p>It's also possible to query for the set of objects that are contained within a particular area.  To find the objects in a rectangular bounding box, add a clause to the key constraint with the format <code>{"$within": {"$box": {[southwestGeoPoint, northeastGeoPoint]}}}</code>.
-
-        <div class="code-container" id="container74"><div class="code_snippet"><div class="snippet_option" data-snippet-lang="python"><div class="code parseTheme"><pre class="brush: python;">import json,httplib,urllib
-connection = httplib.HTTPSConnection(&#x27;api.parse.com&#x27;, 443)
-params = urllib.urlencode({&quot;where&quot;:json.dumps({
-       &quot;location&quot;: {
-         &quot;$within&quot;: {
-           &quot;$box&quot;: [
-             {
-               &quot;__type&quot;: &quot;GeoPoint&quot;,
-               &quot;latitude&quot;: 37.71,
-               &quot;longitude&quot;: -122.53
-             },
-             {
-               &quot;__type&quot;: &quot;GeoPoint&quot;,
-               &quot;latitude&quot;: 30.82,
-               &quot;longitude&quot;: -122.37
-             }
-           ]
-         }
-       }
-     })})
-connection.connect()
-connection.request(&#x27;GET&#x27;, &#x27;/1/classes/PizzaPlaceObject?%s&#x27; % params, &#x27;&#x27;, {
-       &quot;X-Parse-Application-Id&quot;: &quot;${APPLICATION_ID}&quot;,
-       &quot;X-Parse-REST-API-Key&quot;: &quot;${REST_API_KEY}&quot;
-     })
-result = json.loads(connection.getresponse().read())
-print result</pre></div></div><div class="snippet_option" data-snippet-lang="curl"><div class="code parseTheme"><pre class="brush: bash;">curl -X GET \
-  -H &quot;X-Parse-Application-Id: ${APPLICATION_ID}&quot; \
-  -H &quot;X-Parse-REST-API-Key: ${REST_API_KEY}&quot; \
-  -G \
-  --data-urlencode &#x27;where={
-        &quot;location&quot;: {
-          &quot;$within&quot;: {
-            &quot;$box&quot;: [
-              {
-                &quot;__type&quot;: &quot;GeoPoint&quot;,
-                &quot;latitude&quot;: 37.71,
-                &quot;longitude&quot;: -122.53
-              },
-              {
-                &quot;__type&quot;: &quot;GeoPoint&quot;,
-                &quot;latitude&quot;: 30.82,
-                &quot;longitude&quot;: -122.37
-              }
-            ]
-          }
-        }
-      }&#x27; \
-  https://api.parse.com/1/classes/PizzaPlaceObject</pre></div></div></div></div>
-
-        <a href="#" name="geo-limitations"></a><a href="#" class="section section_minor " name="geo-limitations_anchor"></a>
-        <h3>Caveats</h3>
-        <p> At the moment there are a couple of things to watch out for:</p>
-        <ol>
-            <li>Each PFObject class may only have one key with a PFGeoPoint object.</li>
-            <li>Points should not equal or exceed the extreme ends of the ranges.  Latitude should not be -90.0 or 90.0.  Longitude should not be -180.0 or 180.0.  Attempting to use <code>GeoPoint</code>'s with latitude and/or longitude outside these ranges will cause an error.</li>
-        </ol>
-
 
 
     </div>

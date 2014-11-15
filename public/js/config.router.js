@@ -815,7 +815,15 @@ angular.module('app')
               })
               .state('app.android', {
                   url: '/android',
-                  templateUrl: 'tpl/document/android_docs.html'
+                  templateUrl: 'tpl/document/android_docs.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load([
+                                  'tpl/document/document.css'
+                              ]);
+                          }]
+                  }
               })
               .state('app.ios', {
                   url: '/ios',
@@ -823,7 +831,15 @@ angular.module('app')
               })
               .state('app.rest', {
                   url: '/rest',
-                  templateUrl: 'tpl/document/rest_docs.html'
+                  templateUrl: 'tpl/document/rest_docs.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load([
+                                  'tpl/document/document.css'
+                              ]);
+                          }]
+                  }
               })
               .state('app.sdkdownloads', {
                   url: '/sdkdownloads',

@@ -1,0 +1,23 @@
+.code{
+    background:#e9f2ff;
+    border:1px solid #5298fc;
+
+    font-size:13px;
+    line-height:19px;
+    margin-bottom:25px;
+}
+pre{
+    background:#e9f2ff;
+    border:0px
+}
+
+table.endpoints {
+    width:700px;
+    margin-bottom : 30px;
+}
+table.endpoints tr th{
+    background : #5298fc;
+    color:white;
+    border : 1px solid #5298fc;
+    padding: 6px;
+}

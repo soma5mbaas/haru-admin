@@ -9,19 +9,26 @@
     </div>
     <div class="hidden-sm hidden-xs" id="nav-docs">
       <ul class="nav">
-        <li class="padder b-b l-h-2x bg text-info"><em>Build</em></li>
-        <li><a ui-scroll="node-req">Requirements</a></li>
-        <li><a ui-scroll="bower">Bower</a></li>
-        <li><a ui-scroll="grunt">Grunt</a></li>      
-        <li><a ui-scroll="dev-server">Local Server</a></li>
+        <li class="padder b-b l-h-2x bg text-info"><em>Objects</em></li>
+        <li><a ui-scroll="entity">Entity</a></li>
+        <li><a ui-scroll="savingentitys">Saving Entity</a></li>
+        <li><a ui-scroll="thelocaldatastore">The Local Datastore</a></li>
+        <li><a ui-scroll="savingentityoffline">Saving Entity Offline</a></li>
+        <li><a ui-scroll="updatingentity">Updating Entity</a></li>
+        <li><a ui-scroll="deletingentity">Deleting Entity</a></li>
+        <li><a ui-scroll="relationaldata">Relational Data</a></li>
+        <li><a ui-scroll="datatypes">Data Types</a></li>
 
-        <li class="padder b-b l-h-2x bg text-success"><em>CSS</em></li>
-        <li><a ui-scroll="bootstrap">Bootstrap</a></li>
-        <li><a ui-scroll="icons">Icons</a></li>
-        <li><a ui-scroll="animate">Animate</a></li>
-        <li><a ui-scroll="colors">Colors</a></li>
-        <li><a ui-scroll="layout">Layout</a></li>
-        <li><a ui-scroll="utilities">Utilities</a></li>
+        <li class="padder b-b l-h-2x bg text-success"><em>Queries</em></li>
+        <li><a ui-scroll="bootstrap">Basic Queryies</a></li>
+        <li><a ui-scroll="icons">Query Constraints</a></li>
+        <li><a ui-scroll="animate">Queries on Array Values</a></li>
+        <li><a ui-scroll="colors">Queries on String Values</a></li>
+        <li><a ui-scroll="layout">Relational Queries</a></li>
+        <li><a ui-scroll="utilities">Querying the Local Datastore</a></li>
+        <li><a ui-scroll="utilities">Caching Queries</a></li>
+        <li><a ui-scroll="utilities">Counting Queries</a></li>
+        <li><a ui-scroll="utilities">Compound Queries</a></li>
 
         <li ui-scroll="core" class="padder b-b b-t l-h-2x bg text-danger"><em>Core</em></li>        
         <li><a ui-scroll="ui-router">ui-router</a></li>
@@ -63,23 +70,23 @@
       <h2>Objects</h2>
 
       <a href="#" name="objects-classes"></a><a href="#" class="section section_minor " name="objects-classes_anchor"></a>
-      <h3>The ParseObject</h3>
+      <h3 id="entity">The Entity</h3>
 
-      <p>Storing data on Parse is built around the <code>ParseObject</code>. Each <code>ParseObject</code> contains key-value pairs of JSON-compatible data. This data is schemaless, which means that you don't need to specify ahead of time what keys exist on each <code>ParseObject</code>. You simply set whatever key-value pairs you want, and our backend will store it.</p>
+      <p>Storing data on Parse is built around the <code>Entity</code>. Each <code>Entity</code> contains key-value pairs of JSON-compatible data. This data is schemaless, which means that you don't need to specify ahead of time what keys exist on each <code>Entity</code>. You simply set whatever key-value pairs you want, and our backend will store it.</p>
 
-      <p>For example, let's say you're tracking high scores for a game. A single <code>ParseObject</code> could contain:</p>
+      <p>For example, let's say you're tracking high scores for a game. A single <code>Entity</code> could contain:</p>
 
       <div class="code parseTheme"><pre class="brush: javascript;">score: 1337, playerName: &quot;Sean Plott&quot;, cheatMode: false</pre></div>
       <p>Keys must be alphanumeric strings. Values can be strings, numbers, booleans, or even arrays and objects - anything that can be JSON-encoded.</p>
 
-      <p>Each <code>ParseObject</code> has a class name that you can use to distinguish different sorts of data. For example, we could call the high score object a <code>GameScore</code>. We recommend that you NameYourClassesLikeThis and nameYourKeysLikeThis, just to keep your code looking pretty.</p>
+      <p>Each <code>Entity</code> has a class name that you can use to distinguish different sorts of data. For example, we could call the high score object a <code>GameScore</code>. We recommend that you NameYourClassesLikeThis and nameYourKeysLikeThis, just to keep your code looking pretty.</p>
 
       <a href="#" name="objects-saving"></a><a href="#" class="section section_minor " name="objects-saving_anchor"></a>
-      <h3>Saving Objects</h3>
+      <h3 id="savingentitys">Saving Objects</h3>
 
       <p>Let's say you want to save the <code>GameScore</code> described above to the Parse Cloud. The interface is similar to a <code>Map</code>, plus the <code>saveInBackground</code> method:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity gameScore = new Entity(&quot;GameScore&quot;);
 gameScore.put(&quot;score&quot;, 1337);
 gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
 gameScore.put(&quot;cheatMode&quot;, false);
@@ -90,16 +97,16 @@ gameScore.saveInBackground();</pre></div>
 createdAt:&quot;2011-06-10T18:33:42Z&quot;, updatedAt:&quot;2011-06-10T18:33:42Z&quot;</pre></div>
       <p>There are two things to note here. You didn't have to configure or set up a new Class called <code>GameScore</code> before running this code. Your Parse app lazily creates this Class for you when it first encounters it.</p>
 
-      <p>There are also a few fields you don't need to specify that are provided as a convenience. <code>objectId</code> is a unique identifier for each saved object. <code>createdAt</code> and <code>updatedAt</code> represent the time that each object was created and last modified in the cloud. Each of these fields is filled in by Parse, so they don't exist on a <code>ParseObject</code> until a save operation has completed.</p>
+      <p>There are also a few fields you don't need to specify that are provided as a convenience. <code>objectId</code> is a unique identifier for each saved object. <code>createdAt</code> and <code>updatedAt</code> represent the time that each object was created and last modified in the cloud. Each of these fields is filled in by Parse, so they don't exist on a <code>Entity</code> until a save operation has completed.</p>
 
       <a href="#" name="objects-retrieving"></a><a href="#" class="section section_minor " name="objects-retrieving_anchor"></a>
       <h3>Retrieving Objects</h3>
 
-      <p>Saving data to the cloud is fun, but it's even more fun to get that data out again. If you have the <code>objectId</code>, you can retrieve the whole <code>ParseObject</code> using a <code>ParseQuery</code>:</p>
+      <p>Saving data to the cloud is fun, but it's even more fun to get that data out again. If you have the <code>objectId</code>, you can retrieve the whole <code>Entity</code> using a <code>ParseQuery</code>:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
-query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject object, ParseException e) {
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;Entity&gt;() {
+  public void done(Entity object, ParseException e) {
     if (e == null) {
       // object will be your game score
     } else {
@@ -107,7 +114,7 @@ query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;
     }
   }
 });</pre></div>
-      <p>To get the values out of the <code>ParseObject</code>, there's a <code>getX</code> method for each data type:</p>
+      <p>To get the values out of the <code>Entity</code>, there's a <code>getX</code> method for each data type:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">int score = gameScore.getInt(&quot;score&quot;);
 String playerName = gameScore.getString(&quot;playerName&quot;);
@@ -122,8 +129,8 @@ Date createdAt = gameScore.getCreatedAt();</pre></div>
       <p>If you need to refresh an object you already have with the latest data that
         is in the cloud, you can call the <code>fetchInBackground</code> method like so:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">myObject.fetchInBackground(new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject object, ParseException e) {
+      <div class="code parseTheme"><pre class="brush: java;">myObject.fetchInBackground(new GetCallback&lt;Entity&gt;() {
+  public void done(Entity object, ParseException e) {
     if (e == null) {
       // Success!
     } else {
@@ -138,7 +145,7 @@ Date createdAt = gameScore.getCreatedAt();</pre></div>
 
       <p>Parse also lets you store objects in a <a href="#localdatastore">local datastore</a> on the Android device itself. You can use this for data that doesn't need to be saved to the cloud, but this is especially useful for temporarily storing data so that it can be synced later. To enable the datastore, call <code>Parse.enableLocalDatastore()</code> in your <code>Application</code> constructor before calling <code>Parse.initialize()</code>. Once the local datastore is enabled, you can store an object by pinning it.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity gameScore = new Entity(&quot;GameScore&quot;);
 gameScore.put(&quot;score&quot;, 1337);
 gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
 gameScore.put(&quot;cheatMode&quot;, false);
@@ -149,10 +156,10 @@ gameScore.pinInBackground();</pre></div>
 
       <p>Storing an object is only useful if you can get it back out. To get the data for a specific object, you can use a <code>ParseQuery</code> just like you would while on the network, but using the <code>fromLocalDatastore</code> method to tell it where to get the data.
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 query.fromLocalDatastore();
-query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject object, ParseException e) {
+query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;Entity&gt;() {
+  public void done(Entity object, ParseException e) {
     if (e == null) {
       // object will be your game score
     } else {
@@ -162,9 +169,9 @@ query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;
 });</pre></div>
       <p>If you already have an instance of the object, you can instead use the <code>fetchFromLocalDatastoreInBackground</code> method.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject object = ParseObject.createWithoutData(&quot;GameScore&quot;, &quot;xWMyZ4YEGZ&quot;);
-object.fetchFromLocalDatastoreInBackground(new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject object, ParseException e) {
+      <div class="code parseTheme"><pre class="brush: java;">Entity object = Entity.createWithoutData(&quot;GameScore&quot;, &quot;xWMyZ4YEGZ&quot;);
+object.fetchFromLocalDatastoreInBackground(new GetCallback&lt;Entity&gt;() {
+  public void done(Entity object, ParseException e) {
     if (e == null) {
       // object will be your game score
     } else {
@@ -182,7 +189,7 @@ object.fetchFromLocalDatastoreInBackground(new GetCallback&lt;ParseObject&gt;() 
 
       <p>Most save functions execute immediately, and inform your app when the save is complete. If you don't need to know when the save has finished, you can use <code>saveEventually</code> instead. The advantage is that if the user currently doesn't have a network connection, <code>saveEventually</code> will store the update on the device until a network connection is re-established. If your app is closed before the connection is back, Parse will try again the next time the app is opened. All calls to <code>saveEventually</code> (and <code>deleteEventually</code>) are executed in the order they are called, so it is safe to call <code>saveEventually</code> on an object multiple times. If you have the local datastore enabled, then any object you <code>saveEventually</code> will be pinned as long as that save is in progress. That makes it easy to retrieve your local changes while waiting for the network to be available.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity gameScore = new Entity(&quot;GameScore&quot;);
 gameScore.put(&quot;score&quot;, 1337);
 gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
 gameScore.put(&quot;cheatMode&quot;, false);
@@ -190,13 +197,13 @@ gameScore.saveEventually();</pre></div>
       <a href="#" name="objects-updating"></a><a href="#" class="section section_minor " name="objects-updating_anchor"></a>
       <h3>Updating Objects</h3>
 
-      <p>Updating an object is simple. Just set some new data on it and call one of the save methods. Assuming you have saved the object and have the <code>objectId</code>, you can retrieve the <code>ParseObject</code> using a <code>ParseQuery</code> and update its data:</p>
+      <p>Updating an object is simple. Just set some new data on it and call one of the save methods. Assuming you have saved the object and have the <code>objectId</code>, you can retrieve the <code>Entity</code> using a <code>ParseQuery</code> and update its data:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 
 // Retrieve the object by id
-query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject gameScore, ParseException e) {
+query.getInBackground(&quot;xWMyZ4YEGZ&quot;, new GetCallback&lt;Entity&gt;() {
+  public void done(Entity gameScore, ParseException e) {
     if (e == null) {
       // Now let&#x27;s update it with some new data. In this case, only cheatMode and score
       // will get sent to the Parse Cloud. playerName hasn&#x27;t changed.
@@ -253,17 +260,17 @@ myObject.saveInBackground();</pre></div>
       <a href="#" name="objects-pointers"></a><a href="#" class="section section_minor " name="objects-pointers_anchor"></a>
       <h3>Relational Data</h3>
 
-      <p>Objects can have relationships with other objects. To model this behavior, any <code>ParseObject</code> can be used as a value in other <code>ParseObject</code>s. Internally, the Parse framework will store the referred-to object in just one place, to maintain consistency.</p>
+      <p>Objects can have relationships with other objects. To model this behavior, any <code>Entity</code> can be used as a value in other <code>Entity</code>s. Internally, the Parse framework will store the referred-to object in just one place, to maintain consistency.</p>
 
       <p>For example, each <code>Comment</code> in a blogging app might correspond to one <code>Post</code>. To create a new <code>Post</code> with a single <code>Comment</code>, you could write:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">// Create the post
-ParseObject myPost = new ParseObject(&quot;Post&quot;);
+Entity myPost = new Entity(&quot;Post&quot;);
 myPost.put(&quot;title&quot;, &quot;I&#x27;m Hungry&quot;);
 myPost.put(&quot;content&quot;, &quot;Where should we go for lunch?&quot;);
 
 // Create the comment
-ParseObject myComment = new ParseObject(&quot;Comment&quot;);
+Entity myComment = new Entity(&quot;Comment&quot;);
 myComment.put(&quot;content&quot;, &quot;Let&#x27;s do Sushirrito.&quot;);
 
 // Add a relation between the Post and Comment
@@ -274,24 +281,24 @@ myComment.saveInBackground();</pre></div>
       <p>You can also link objects using just their <code>objectId</code>s like so:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">// Add a relation between the Post with objectId &quot;1zEcyElZ80&quot; and the comment
-myComment.put(&quot;parent&quot;, ParseObject.createWithoutData(&quot;Post&quot;, &quot;1zEcyElZ80&quot;));</pre></div>
-      <p>By default, when fetching an object, related <code>ParseObject</code>s are not fetched.  These objects' values cannot be retrieved until they have been fetched like so:</p>
+myComment.put(&quot;parent&quot;, Entity.createWithoutData(&quot;Post&quot;, &quot;1zEcyElZ80&quot;));</pre></div>
+      <p>By default, when fetching an object, related <code>Entity</code>s are not fetched.  These objects' values cannot be retrieved until they have been fetched like so:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">fetchedComment.getParseObject(&quot;post&quot;)
-    .fetchIfNeededInBackground(new GetCallback&lt;ParseObject&gt;() {
-        public void done(ParseObject post, ParseException e) {
+    .fetchIfNeededInBackground(new GetCallback&lt;Entity&gt;() {
+        public void done(Entity post, ParseException e) {
           String title = post.getString(&quot;title&quot;);
           // Do something with your new title variable
         }
-    });</pre></div><p>You can also model a many-to-many relation using the <code>ParseRelation</code> object.  This works similar to <code>List<ParseObject></code>, except that you don't need to download all the <code>ParseObject</code>s in a relation at once.  This allows <code>ParseRelation</code> to scale to many more objects than the <code>List<ParseObject></code> approach.  For example, a <code>User</code> may have many <code>Post</code>s that they might like.  In this case, you can store the set of <code>Post</code>s that a <code>User</code> likes using <code>getRelation</code>.  In order to add a post to the list, the code would look something like:</p>
+    });</pre></div><p>You can also model a many-to-many relation using the <code>ParseRelation</code> object.  This works similar to <code>List<Entity></code>, except that you don't need to download all the <code>Entity</code>s in a relation at once.  This allows <code>ParseRelation</code> to scale to many more objects than the <code>List<Entity></code> approach.  For example, a <code>User</code> may have many <code>Post</code>s that they might like.  In this case, you can store the set of <code>Post</code>s that a <code>User</code> likes using <code>getRelation</code>.  In order to add a post to the list, the code would look something like:</p>
       <div class="code parseTheme"><pre class="brush: java;">ParseUser user = ParseUser.getCurrentUser();
-ParseRelation&lt;ParseObject&gt; relation = user.getRelation(&quot;likes&quot;);
+ParseRelation&lt;Entity&gt; relation = user.getRelation(&quot;likes&quot;);
 relation.add(post);
 user.saveInBackground();</pre></div>    <p>You can remove a post from the <code>ParseRelation</code> with something like:</p>
       <div class="code parseTheme"><pre class="brush: java;">relation.remove(post);</pre></div>
       <p>By default, the list of objects in this relation are not downloaded.  You can get the list of <code>Post</code>s by calling <code>findInBackground</code> on the <code>ParseQuery</code> returned by <code>getQuery</code>.  The code would look like:</p>
-      <div class="code parseTheme"><pre class="brush: java;">relation.getQuery().findInBackground(new FindCallback&lt;ParseObject&gt;() {
-    void done(List&lt;ParseObject&gt; results, ParseException e) {
+      <div class="code parseTheme"><pre class="brush: java;">relation.getQuery().findInBackground(new FindCallback&lt;Entity&gt;() {
+    void done(List&lt;Entity&gt; results, ParseException e) {
       if (e != null) {
         // There was an error
       } else {
@@ -300,15 +307,15 @@ user.saveInBackground();</pre></div>    <p>You can remove a post from the <code>
     }
 });</pre></div>
       <p>If you want only a subset of the <code>Post</code>s you can add extra constraints to the <code>ParseQuery</code> returned by <code>getQuery</code>.  The code would look something like:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = relation.getQuery();
-// Add other query constraints.</pre></div>    <p> For more details on <code>ParseQuery</code>, please look at the <a href="#queries">query portion of this guide</a>.  A <code>ParseRelation</code> behaves similar to a <code>List<ParseObject></code> for querying purposes, so any queries you can do on lists of objects (other than <code>include</code>) you can do on <code>ParseRelation</code>.</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = relation.getQuery();
+// Add other query constraints.</pre></div>    <p> For more details on <code>ParseQuery</code>, please look at the <a href="#queries">query portion of this guide</a>.  A <code>ParseRelation</code> behaves similar to a <code>List<Entity></code> for querying purposes, so any queries you can do on lists of objects (other than <code>include</code>) you can do on <code>ParseRelation</code>.</p>
 
       <a href="#" name="objects-types"></a><a href="#" class="section section_minor " name="objects-types_anchor"></a>
       <h3>Data Types</h3>
 
-      <p>So far we've used values with type <code>String</code>, <code>int</code>, <code>bool</code>, and <code>ParseObject</code>. Parse also supports <code>java.util.Date</code>, <code>byte[]</code>, and <code>JSONObject.NULL</code>.</p>
+      <p>So far we've used values with type <code>String</code>, <code>int</code>, <code>bool</code>, and <code>Entity</code>. Parse also supports <code>java.util.Date</code>, <code>byte[]</code>, and <code>JSONObject.NULL</code>.</p>
 
-      <p>You can nest <code>JSONObject</code> and <code>JSONArray</code> objects to store more structured data within a single <code>ParseObject</code>.</p>
+      <p>You can nest <code>JSONObject</code> and <code>JSONArray</code> objects to store more structured data within a single <code>Entity</code>.</p>
 
       <p>Some examples:</p>
 
@@ -326,7 +333,7 @@ myObject.put(&quot;string&quot;, myString);
 
 byte[] myData = { 4, 8, 16, 32 };
 
-ParseObject bigObject = new ParseObject(&quot;BigObject&quot;);
+Entity bigObject = new Entity(&quot;BigObject&quot;);
 bigObject.put(&quot;myNumber&quot;, myNumber);
 bigObject.put(&quot;myString&quot;, myString);
 bigObject.put(&quot;myDate&quot;, myDate);
@@ -335,7 +342,7 @@ bigObject.put(&quot;myArray&quot;, myArray);
 bigObject.put(&quot;myObject&quot;, myObject);
 bigObject.put(&quot;myNull&quot;, JSONObject.NULL);
 bigObject.saveInBackground();</pre></div>
-      <p>We do not recommend storing large pieces of binary data like images or documents using <code>byte[]</code> fields on <code>ParseObject</code>. <code>ParseObjects</code>s should not exceed 128 kilobytes in size. To store more, we recommend you use <code>ParseFile</code>. See the <a href="#files">guide section</a> for more details.<p>
+      <p>We do not recommend storing large pieces of binary data like images or documents using <code>byte[]</code> fields on <code>Entity</code>. <code>ParseObjects</code>s should not exceed 128 kilobytes in size. To store more, we recommend you use <code>ParseFile</code>. See the <a href="#files">guide section</a> for more details.<p>
 
       <p>For more information about how Parse handles data, check out our documentation on <a href="/docs/data">Data & Security</a>.</p>
 
@@ -347,12 +354,12 @@ bigObject.saveInBackground();</pre></div>
 
       <p>In many cases, <code>getInBackground</code> isn't powerful enough to specify which objects you want to retrieve. The <code>ParseQuery</code> offers different ways to retrieve a list of objects rather than just a single object.</p>
 
-      <p>The general pattern is to create a <code>ParseQuery</code>, put conditions on it, and then retrieve a <code>List</code> of matching <code>ParseObject</code>s using the <code>findInBackground</code> method with a <code>FindCallback</code>. For example, to retrieve scores with a particular <code>playerName</code>, use the <code>whereEqualTo</code> method to constrain the value for a key:</p>
+      <p>The general pattern is to create a <code>ParseQuery</code>, put conditions on it, and then retrieve a <code>List</code> of matching <code>Entity</code>s using the <code>findInBackground</code> method with a <code>FindCallback</code>. For example, to retrieve scores with a particular <code>playerName</code>, use the <code>whereEqualTo</code> method to constrain the value for a key:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 query.whereEqualTo(&quot;playerName&quot;, &quot;Dan Stemkoski&quot;);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-    public void done(List&lt;ParseObject&gt; scoreList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+    public void done(List&lt;Entity&gt; scoreList, ParseException e) {
         if (e == null) {
             Log.d(&quot;score&quot;, &quot;Retrieved &quot; + scoreList.size() + &quot; scores&quot;);
         } else {
@@ -377,10 +384,10 @@ query.whereGreaterThan(&quot;playerAge&quot;, 18);</pre></div>
       <div class="code parseTheme"><pre class="brush: java;">query.setLimit(10); // limit to at most 10 results</pre></div>
       <p>If you want exactly one result, a more convenient alternative may be to use <code>getFirst</code> or <code>getFirstBackground</code> instead of using <code>find</code>.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 query.whereEqualTo(&quot;playerEmail&quot;, &quot;dstemkoski@example.com&quot;);
-query.getFirstInBackground(new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject object, ParseException e) {
+query.getFirstInBackground(new GetCallback&lt;Entity&gt;() {
+  public void done(Entity object, ParseException e) {
     if (object == null) {
       Log.d(&quot;score&quot;, &quot;The getFirst request failed.&quot;);
     } else {
@@ -432,7 +439,7 @@ query.whereExists(&quot;score&quot;);
 
 // Finds objects that don&#x27;t have the score set
 query.whereDoesNotExist(&quot;score&quot;);</pre></div>    <p>You can use the <code>whereMatchesKeyInQuery</code> method to get objects where a key matches the value of a key in a set of objects resulting from another query.  For example, if you have a class containing sports teams and you store a user's hometown in the user class, you can issue one query to find the list of users whose hometown teams have winning records.  The query would look like:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; teamQuery = ParseQuery.getQuery(&quot;Team&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; teamQuery = ParseQuery.getQuery(&quot;Team&quot;);
 teamQuery.whereGreaterThan(&quot;winPct&quot;, 0.5);
 ParseQuery&lt;ParseUser&gt; userQuery = ParseUser.getQuery();
 userQuery.whereMatchesKeyInQuery(&quot;hometown&quot;, &quot;city&quot;, teamQuery);
@@ -450,13 +457,13 @@ losingUserQuery.findInBackground(new FindCallback&lt;ParseUser&gt;() {
   }
 });</pre></div>
       <p>You can restrict the fields returned by calling <code>selectKeys</code> with a collection of keys. To retrieve documents that contain only the <code>score</code> and <code>playerName</code> fields (and also special built-in fields such as <code>objectId</code>, <code>createdAt</code>, and <code>updatedAt</code>):</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 query.selectKeys(Arrays.asList(&quot;playerName&quot;, &quot;score&quot;));;
-List&lt;ParseObject&gt; results = query.find();</pre></div>
+List&lt;Entity&gt; results = query.find();</pre></div>
       <p>The remaining fields can be fetched later by calling one of the <code>fetchIfNeeded</code> variants on the returned objects:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject object = results.get(0);
-object.fetchIfNeededInBackground(new GetCallback&lt;ParseObject&gt;() {
-  public void done(ParseObject object, ParseException e) {
+      <div class="code parseTheme"><pre class="brush: java;">Entity object = results.get(0);
+object.fetchIfNeededInBackground(new GetCallback&lt;Entity&gt;() {
+  public void done(Entity object, ParseException e) {
     // all fields of the object will now be available here.
   }
 });</pre></div>
@@ -478,7 +485,7 @@ query.whereContainsAll(&quot;arrayKey&quot;, numbers);</pre></div>
       <p>Use <code>whereStartsWith</code> to restrict to string values that start with a particular string. Similar to a MySQL LIKE operator, this is indexed so it is efficient for large datasets:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">// Finds barbecue sauces that start with &quot;Big Daddy&#x27;s&quot;.
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;BarbecueSauce&quot;);
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;BarbecueSauce&quot;);
 query.whereStartsWith(&quot;name&quot;, &quot;Big Daddy&#x27;s&quot;);</pre></div>
       <div class="callout_green">
         If you're trying to implement a generic search feature, we recommend taking a look at this blog post: <a href="http://blog.parse.com/2013/03/19/implementing-scalable-search-on-a-nosql-backend/">Implementing Scalable Search on a NoSQL Backend</a>.
@@ -487,39 +494,39 @@ query.whereStartsWith(&quot;name&quot;, &quot;Big Daddy&#x27;s&quot;);</pre></di
       <a href="#" name="queries-relational"></a><a href="#" class="section section_minor " name="queries-relational_anchor"></a>
       <h3>Relational Queries</h3>
 
-      <p>There are several ways to issue queries for relational data. If you want to retrieve objects where a field matches a particular <code>ParseObject</code>, you can use <code>whereEqualTo</code> just like for other data types. For example, if each <code>Comment</code> has a <code>Post</code> object in its <code>post</code> field, you can fetch comments for a particular <code>Post</code>:</p>
+      <p>There are several ways to issue queries for relational data. If you want to retrieve objects where a field matches a particular <code>Entity</code>, you can use <code>whereEqualTo</code> just like for other data types. For example, if each <code>Comment</code> has a <code>Post</code> object in its <code>post</code> field, you can fetch comments for a particular <code>Post</code>:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">// Assume ParseObject myPost was previously created.
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">// Assume Entity myPost was previously created.
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
 query.whereEqualTo(&quot;post&quot;, myPost);
 
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; commentList, ParseException e) {
     // commentList now has the comments for myPost
   }
-});</pre></div>    <p>If you want to retrieve objects where a field contains a <code>ParseObject</code> that matches a different query, you can use <code>whereMatchesQuery</code>. Note that the default limit of 100 and maximum limit of 1000 apply to the inner query as well, so with large data sets you may need to construct queries carefully to get the desired behavior. In order to find comments for posts containing images, you can do:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; innerQuery = ParseQuery.getQuery(&quot;Post&quot;);
+});</pre></div>    <p>If you want to retrieve objects where a field contains a <code>Entity</code> that matches a different query, you can use <code>whereMatchesQuery</code>. Note that the default limit of 100 and maximum limit of 1000 apply to the inner query as well, so with large data sets you may need to construct queries carefully to get the desired behavior. In order to find comments for posts containing images, you can do:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; innerQuery = ParseQuery.getQuery(&quot;Post&quot;);
 innerQuery.whereExists(&quot;image&quot;);
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
 query.whereMatchesQuery(&quot;post&quot;, innerQuery);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; commentList, ParseException e) {
     // comments now contains the comments for posts with images.
   }
-});</pre></div>  <p>If you want to retrieve objects where a field contains a <code>ParseObject</code> that does not match a different query, you can use <code>whereDoesNotMatchQuery</code>. In order to find comments for posts without images, you can do:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; innerQuery = ParseQuery.getQuery(&quot;Post&quot;);
+});</pre></div>  <p>If you want to retrieve objects where a field contains a <code>Entity</code> that does not match a different query, you can use <code>whereDoesNotMatchQuery</code>. In order to find comments for posts without images, you can do:</p>
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; innerQuery = ParseQuery.getQuery(&quot;Post&quot;);
 innerQuery.whereExists(&quot;image&quot;);
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
 query.whereDoesNotMatchQuery(&quot;post&quot;, innerQuery);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; commentList, ParseException e) {
     // comments now contains the comments for posts without images.
   }
 });</pre></div>
 
       <p>In some situations, you want to return multiple types of related objects in one query. You can do this with the <code>include</code> method. For example, let's say you are retrieving the last ten comments, and you want to retrieve their related posts at the same time:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;Comment&quot;);
 
 // Retrieve the most recent ones
 query.orderByDescending(&quot;createdAt&quot;);
@@ -530,13 +537,13 @@ query.setLimit(10);
 // Include the post data with each comment
 query.include(&quot;post&quot;);
 
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; commentList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; commentList, ParseException e) {
     // commentList now contains the last ten comments, and the &quot;post&quot;
     // field has been populated. For example:
-    for (ParseObject comment : commentList) {
+    for (Entity comment : commentList) {
       // This does not require a network access.
-      ParseObject post = comment.getParseObject(&quot;post&quot;);
+      Entity post = comment.getParseObject(&quot;post&quot;);
       Log.d(&quot;post&quot;, &quot;retrieved a related post&quot;);
     }
   }
@@ -553,8 +560,8 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
       <p>If you have enabled the local datastore by calling <code>Parse.enableLocalDatastore()</code> before your call to <code>Parse.initialize()</code>, then you can also query against the objects stored locally on the device. To do this, call the <code>fromLocalDatastore</code> method on the query.</p>
 
       <div class="code parseTheme"><pre class="brush: java;">query.fromLocalDatastore();
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; scoreList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; scoreList, ParseException e) {
     if (e == null) {
       // Results were successfully found from the local datastore.
     } else {
@@ -572,15 +579,15 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
       <div class="code parseTheme"><pre class="brush: java;">final String TOP_SCORES_LABEL = &quot;topScores&quot;;
 
 // Query for the latest objects from Parse.
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(final List&lt;ParseObject&gt; scoreList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(final List&lt;Entity&gt; scoreList, ParseException e) {
     if (e != null) {
       // There was an error or the network wasn&#x27;t available.
       return;
     }
 
     // Release any objects previously pinned for this query.
-    ParseObject.unpinAllInBackground(TOP_SCORES_LABEL, scoreList, new DeleteCallback() {
+    Entity.unpinAllInBackground(TOP_SCORES_LABEL, scoreList, new DeleteCallback() {
       public void done(ParseException e) {
         if (e != null) {
           // There was some error.
@@ -588,7 +595,7 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
         }
 
         // Add the latest results for this query to the cache.
-        ParseObject.pinAllInBackground(TOP_SCORES_LABEL, scoreList);
+        Entity.pinAllInBackground(TOP_SCORES_LABEL, scoreList);
       }
     });
   }
@@ -598,8 +605,8 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
       <p>If you aren't using the local datastore, you can use the per-query cache for <code>ParseQuery</code> instead. The default query behavior doesn't use the cache, but you can enable caching with <code>setCachePolicy</code>. For example, to try the network and then fall back to cached data if the network is not available:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; scoreList, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; scoreList, ParseException e) {
     if (e == null) {
       // Results were successfully found, looking first on the
       // network and then on disk.
@@ -663,7 +670,7 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
 
       <p>If you just need to count how many objects match a query, but you do not need to retrieve all the objects that match, you can use <code>count</code> instead of <code>find</code>. For example, to count how many games have been played by a particular player:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 query.whereEqualTo(&quot;playerName&quot;, &quot;Sean Plott&quot;);
 query.countInBackground(new CountCallback() {
   public void done(int count, ParseException e) {
@@ -682,19 +689,19 @@ query.countInBackground(new CountCallback() {
       <a href="#" name="queries-compound"></a><a href="#" class="section section_minor " name="queries-compound_anchor"></a>
       <h3>Compound Queries</h3>
       <p> If you want to find objects that match one of several queries, you can use <code>ParseQuery.or</code> method to construct a query that is an or of the queries passed in.  For instance if you want to find players who either have a lot of wins or a few wins, you can do:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; lotsOfWins = ParseQuery.getQuery(&quot;Player&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; lotsOfWins = ParseQuery.getQuery(&quot;Player&quot;);
 lotsOfWins.whereGreaterThan(150);
 
-ParseQuery&lt;ParseObject&gt; fewWins = ParseQuery.getQuery(&quot;Player&quot;);
+ParseQuery&lt;Entity&gt; fewWins = ParseQuery.getQuery(&quot;Player&quot;);
 fewWins.whereLessThan(5);
 
-List&lt;ParseQuery&lt;ParseObject&gt;&gt; queries = new ArrayList&lt;ParseQuery&lt;ParseObject&gt;&gt;();
+List&lt;ParseQuery&lt;Entity&gt;&gt; queries = new ArrayList&lt;ParseQuery&lt;Entity&gt;&gt;();
 queries.add(lotsOfWins);
 queries.add(fewWins);
 
-ParseQuery&lt;ParseObject&gt; mainQuery = ParseQuery.or(queries);
-mainQuery.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-  public void done(List&lt;ParseObject&gt; results, ParseException e) {
+ParseQuery&lt;Entity&gt; mainQuery = ParseQuery.or(queries);
+mainQuery.findInBackground(new FindCallback&lt;Entity&gt;() {
+  public void done(List&lt;Entity&gt; results, ParseException e) {
     // results has the list of players that win a lot or haven&#x27;t won much.
   }
 });</pre></div>    <p>You can add additional constraints to the newly created <code>ParseQuery</code>
@@ -705,9 +712,9 @@ mainQuery.findInBackground(new FindCallback&lt;ParseObject&gt;() {
 
       <a href="#" name="subclasses"></a><a href="#" class="section section_minor " name="subclasses_anchor"></a>
       <h2>Subclasses</h2>
-      <p>Parse is designed to get you up and running as quickly as possible. You can access all of your data using the <code>ParseObject</code> class and access any field with <code>get()</code>. In mature codebases, subclasses have many advantages, including terseness, extensibility, and support for autocomplete. Subclassing is completely optional, but can transform this code:</p>
+      <p>Parse is designed to get you up and running as quickly as possible. You can access all of your data using the <code>Entity</code> class and access any field with <code>get()</code>. In mature codebases, subclasses have many advantages, including terseness, extensibility, and support for autocomplete. Subclassing is completely optional, but can transform this code:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject shield = new ParseObject(&quot;Armor&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity shield = new Entity(&quot;Armor&quot;);
 shield.put(&quot;displayName&quot;, &quot;Wooden Shield&quot;);
 shield.put(&quot;fireproof&quot;, false);
 shield.put(&quot;rupees&quot;, 50);</pre></div>
@@ -718,22 +725,22 @@ shield.setDisplayName(&quot;Wooden Shield&quot;);
 shield.setFireproof(false);
 shield.setRupees(50);</pre></div>
       <a href="#" name="subclasses-defining"></a><a href="#" class="section section_minor " name="subclasses-defining_anchor"></a>
-      <h3>Subclassing ParseObject</h3>
-      <p>To create a <code>ParseObject</code> subclass:
+      <h3>Subclassing Entity</h3>
+      <p>To create a <code>Entity</code> subclass:
       <ol>
-        <li>Declare a subclass which extends <code>ParseObject</code>.</li>
-        <li>Add a <code>@ParseClassName</code> annotation. Its value should be the string you would pass into the <code>ParseObject</code> constructor, and makes all future class name references unnecessary.</li>
-        <li>Ensure that your subclass has a public default (i.e. zero-argument) constructor. You must not modify any <code>ParseObject</code> fields in this constructor.</li>
-        <li>Call <code>ParseObject.registerSubclass(YourClass.class)</code> in your <code>Application</code> constructor before calling <code>Parse.initialize()</code>.</li>
+        <li>Declare a subclass which extends <code>Entity</code>.</li>
+        <li>Add a <code>@ParseClassName</code> annotation. Its value should be the string you would pass into the <code>Entity</code> constructor, and makes all future class name references unnecessary.</li>
+        <li>Ensure that your subclass has a public default (i.e. zero-argument) constructor. You must not modify any <code>Entity</code> fields in this constructor.</li>
+        <li>Call <code>Entity.registerSubclass(YourClass.class)</code> in your <code>Application</code> constructor before calling <code>Parse.initialize()</code>.</li>
       </ol>
-      The following code sucessfully implements and registers the <code>Armor</code> subclass of <code>ParseObject</code>:</p>
+      The following code sucessfully implements and registers the <code>Armor</code> subclass of <code>Entity</code>:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">// Armor.java
-import com.parse.ParseObject;
+import com.parse.Entity;
 import com.parse.ParseClassName;
 
 @ParseClassName(&quot;Armor&quot;)
-public class Armor extends ParseObject {
+public class Armor extends Entity {
 }
 
 // App.java
@@ -745,19 +752,19 @@ public class App extends Application {
   public void onCreate() {
     super.onCreate();
 
-    ParseObject.registerSubclass(Armor.class);
+    Entity.registerSubclass(Armor.class);
     Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
   }
 }</pre></div>
       <a href="#" name="subclasses-properties"></a><a href="#" class="section section_minor " name="subclasses-properties_anchor"></a>
       <h3>Accessors, Mutators, and Methods</h3>
-      <p>Adding methods to your <code>ParseObject</code> subclass helps encapsulate logic about the class. You can keep all your logic about a subject in one place rather than using separate classes for business logic and storage/transmission logic.</p>
+      <p>Adding methods to your <code>Entity</code> subclass helps encapsulate logic about the class. You can keep all your logic about a subject in one place rather than using separate classes for business logic and storage/transmission logic.</p>
 
-      <p>You can add accessors and mutators for the fields of your <code>ParseObject</code> easily. Declare the getter and setter for the field as you normally would, but implement them in terms of <code>get()</code> and <code>put()</code>. The following example creates a <code>displayName</code> field in the <code>Armor</code> class:
+      <p>You can add accessors and mutators for the fields of your <code>Entity</code> easily. Declare the getter and setter for the field as you normally would, but implement them in terms of <code>get()</code> and <code>put()</code>. The following example creates a <code>displayName</code> field in the <code>Armor</code> class:
 
       <div class="code parseTheme"><pre class="brush: java;">// Armor.java
 @ParseClassName(&quot;Armor&quot;)
-public class Armor extends ParseObject {
+public class Armor extends Entity {
   public String getDisplayName() {
     return getString(&quot;displayName&quot;);
   }
@@ -779,11 +786,11 @@ public class Armor extends ParseObject {
 }</pre></div>
       <a href="#" name="subclasses-initializing"></a><a href="#" class="section section_minor " name="subclasses-initializing_anchor"></a>
       <h3>Initializing Subclasses</h3>
-      <p>You should create new instances of your subclasses using the constructors you have defined. Your subclass must define a public default constructor that does not modify fields of the <code>ParseObject</code>, which will be used throughout the Parse SDK to create strongly-typed instances of your subclass.</p>
+      <p>You should create new instances of your subclasses using the constructors you have defined. Your subclass must define a public default constructor that does not modify fields of the <code>Entity</code>, which will be used throughout the Parse SDK to create strongly-typed instances of your subclass.</p>
 
-      <p>To create a reference to an existing object, use <code>ParseObject.createWithoutData()</code>:</p>
+      <p>To create a reference to an existing object, use <code>Entity.createWithoutData()</code>:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">Armor armorReference = ParseObject.createWithoutData(Armor.class, armor.getObjectId());</pre></div>
+      <div class="code parseTheme"><pre class="brush: java;">Armor armorReference = Entity.createWithoutData(Armor.class, armor.getObjectId());</pre></div>
       <a href="#" name="subclasses-queries"></a><a href="#" class="section section_minor " name="subclasses-queries_anchor"></a>
       <h3>Queries</h3>
       <p>You can get a query for objects of a particular subclass using the static method <code>ParseQuery.getQuery()</code>. The following example queries for armors that the user can afford:</p>
@@ -804,7 +811,7 @@ query.findInBackground(new FindCallback&lt;Armor&gt;() {
       <a href="#" name="files-classes"></a><a href="#" class="section section_minor " name="files-classes_anchor"></a>
       <h3>The ParseFile</h3>
 
-      <p><code>ParseFile</code> lets you store application files in the cloud that would otherwise be too large or cumbersome to fit into a regular <code>ParseObject</code>. The most common use case is storing images but you can also use it for documents, videos, music, and any other binary data (up to 10 megabytes).</p>
+      <p><code>ParseFile</code> lets you store application files in the cloud that would otherwise be too large or cumbersome to fit into a regular <code>Entity</code>. The most common use case is storing images but you can also use it for documents, videos, music, and any other binary data (up to 10 megabytes).</p>
 
       <p>Getting started with <code>ParseFile</code> is easy. First, you'll need to have the data in <code>byte[]</code> form and then create a <code>ParseFile</code> with it. In this example, we'll just use a string:</p>
 
@@ -816,16 +823,16 @@ ParseFile file = new ParseFile(&quot;resume.txt&quot;, data);</pre></div>
         <li>It's important that you give a name to the file that has a file extension. This lets Parse figure out the file type and handle it accordingly. So, if you're storing PNG images, make sure your filename ends with <code>.png</code>.</li>
       </ul>
 
-      <p>Next you'll want to save the file up to the cloud. As with <code>ParseObject</code>, there are many variants of the <code>save</code> method you can use depending on what sort of callback and error handling suits you.</p>
+      <p>Next you'll want to save the file up to the cloud. As with <code>Entity</code>, there are many variants of the <code>save</code> method you can use depending on what sort of callback and error handling suits you.</p>
 
       <div class="code parseTheme"><pre class="brush: java;">file.saveInBackground();</pre></div>
-      <p>Finally, after the save completes, you can associate a <code>ParseFile</code> onto a <code>ParseObject</code> just like any other piece of data:</p>
+      <p>Finally, after the save completes, you can associate a <code>ParseFile</code> onto a <code>Entity</code> just like any other piece of data:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject jobApplication = new ParseObject(&quot;JobApplication&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity jobApplication = new Entity(&quot;JobApplication&quot;);
 jobApplication.put(&quot;applicantName&quot;, &quot;Joe Smith&quot;);
 jobApplication.put(&quot;applicantResumeFile&quot;, file);
 jobApplication.saveInBackground();</pre></div>
-      <p>Retrieving it back involves calling one of the <code>getData</code> variants on the <code>ParseObject</code>. Here we retrieve the resume file off another JobApplication object:</p>
+      <p>Retrieving it back involves calling one of the <code>getData</code> variants on the <code>Entity</code>. Here we retrieve the resume file off another JobApplication object:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">ParseFile applicantResume = (ParseFile)anotherApplication.get(&quot;applicantResumeFile&quot;);
 applicantResume.getDataInBackground(new GetDataCallback() {
@@ -837,7 +844,7 @@ applicantResume.getDataInBackground(new GetDataCallback() {
     }
   }
 });</pre></div>
-      <p>Just like on <code>ParseObject</code>, you will most likely want to use the background version of <code>getData</code>.</p>
+      <p>Just like on <code>Entity</code>, you will most likely want to use the background version of <code>getData</code>.</p>
 
       <a href="#" name="files-progress"></a><a href="#" class="section section_minor " name="files-progress_anchor"></a>
       <h3>Progress</h3>
@@ -996,7 +1003,7 @@ ParseConfig.getInBackground(new ConfigCallback() {
 }</pre></div>
       <a href="#" name="config-parameters"></a><a href="#" class="section section_minor " name="config-parameters_anchor"></a>
       <h3>Parameters</h3>
-      <p><code>ParseConfig</code> supports most of the data types supported by <code>ParseObject</code>:</p>
+      <p><code>ParseConfig</code> supports most of the data types supported by <code>Entity</code>:</p>
       <ul class="text">
         <li>String</li>
         <li>Numbers (boolean/int/double/long)</li>
@@ -1018,7 +1025,7 @@ ParseConfig.getInBackground(new ConfigCallback() {
       <a href="#" name="localdatastore"></a><a href="#" class="section section_minor " name="localdatastore_anchor"></a>
       <h2>The Local Datastore</h2>
 
-      <p>The Parse Android SDK provides a local datastore which can be used to store and retrieve <code>ParseObject</code>s, even when the network is unavailable. To enable this functionality, simply call <code>Parse.enableLocalDatastore()</code> before your call to <code>initialize</code>.</p>
+      <p>The Parse Android SDK provides a local datastore which can be used to store and retrieve <code>Entity</code>s, even when the network is unavailable. To enable this functionality, simply call <code>Parse.enableLocalDatastore()</code> before your call to <code>initialize</code>.</p>
 
       <div class="code parseTheme"><pre class="brush: java;">import com.parse.Parse;
 import android.app.Application;
@@ -1033,7 +1040,7 @@ public class App extends Application {
   }
 }</pre></div>
       <p>There are a couple of side effects of enabling the local datastore that you should be aware of.
-        When enabled, there will only be one instance of any given <code>ParseObject</code>. For example,
+        When enabled, there will only be one instance of any given <code>Entity</code>. For example,
         imagine you have an instance of the <code>"GameScore"</code> class with an <code>objectId</code> of
         <code>"xWMyZ4YEGZ"</code>, and then you issue a <code>ParseQuery</code> for all instances of
         <code>"GameScore"</code> with that <code>objectId</code>. The result will be the same instance
@@ -1043,7 +1050,7 @@ public class App extends Application {
         local datastore, so you can persist unsaved changes to these objects between runs of your app
         using the methods below.</p>
 
-      <p>Calling the <code>saveEventually</code> method on a <code>ParseObject</code> will cause the
+      <p>Calling the <code>saveEventually</code> method on a <code>Entity</code> will cause the
         object to be pinned in the local datastore until the save completes. So now, if you change
         the current <code>ParseUser</code> and call <code>ParseUser.getCurrent().saveEventually()</code>,
         your app will always see the changes that you have made.</p>
@@ -1051,13 +1058,13 @@ public class App extends Application {
       <a href="#" name="localdatastore-pin"></a><a href="#" class="section section_minor " name="localdatastore-pin_anchor"></a>
       <h3>Pinning</h3>
 
-      <p>You can store a <code>ParseObject</code> in the local datastore by pinning it. Pinning
-        a <code>ParseObject</code> is recursive, just like saving, so any objects that are pointed to
+      <p>You can store a <code>Entity</code> in the local datastore by pinning it. Pinning
+        a <code>Entity</code> is recursive, just like saving, so any objects that are pointed to
         by the one you are pinning will also be pinned. When an object is pinned, every time
         you update it by fetching or saving new data, the copy in the local datastore will be updated
         automatically. You don't need to worry about it at all.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject gameScore = new ParseObject(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity gameScore = new Entity(&quot;GameScore&quot;);
 gameScore.put(&quot;score&quot;, 1337);
 gameScore.put(&quot;playerName&quot;, &quot;Sean Plott&quot;);
 gameScore.put(&quot;cheatMode&quot;, false);
@@ -1066,7 +1073,7 @@ gameScore.pinInBackground();</pre></div>
       <p>If you have multiple objects, you can pin them all at once with the <code>pinAllInBackground</code>
         convenience method.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject.pinAllInBackground(listOfObjects);</pre></div>
+      <div class="code parseTheme"><pre class="brush: java;">Entity.pinAllInBackground(listOfObjects);</pre></div>
       <a href="#" name="localdatastore-get"></a><a href="#" class="section section_minor " name="localdatastore-get_anchor"></a>
       <h3>Retrieving from the Local Datastore</h3>
 
@@ -1075,10 +1082,10 @@ gameScore.pinInBackground();</pre></div>
         The only difference is calling the <code>fromLocalDatastore</code> method to tell the
         <code>ParseQuery</code> where to look for its results.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(“GameScore&quot;);
 query.fromLocalDatastore();
-query.getInBackground(&quot;xWMyZ4YE&quot;, new GetCallback&lt;ParseObject&gt;() {
-    public void done(ParseObject object, ParseException e) {
+query.getInBackground(&quot;xWMyZ4YE&quot;, new GetCallback&lt;Entity&gt;() {
+    public void done(Entity object, ParseException e) {
         if (e == null) {
             // object will be your game score
         } else {
@@ -1097,11 +1104,11 @@ query.getInBackground(&quot;xWMyZ4YE&quot;, new GetCallback&lt;ParseObject&gt;()
         considered when evaluating the query. So you can find a local object that matches, even if it
         was never returned from the server for this particular query.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;GameScore&quot;);
 query.whereEqualTo(&quot;playerName&quot;, &quot;Joe Bob&quot;);
 query.fromLocalDatastore();
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-    public void done(List&lt;ParseObject&gt; scoreList,
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+    public void done(List&lt;Entity&gt; scoreList,
                      ParseException e) {
         if (e == null) {
             Log.d(&quot;score&quot;, &quot;Retrieved &quot; + scoreList.size());
@@ -1120,7 +1127,7 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
       <div class="code parseTheme"><pre class="brush: java;">gameScore.unpinInBackground();</pre></div>
       <p>There's also a method to unpin several objects at once.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject.unpinAllInBackground(listOfObjects);</pre></div>
+      <div class="code parseTheme"><pre class="brush: java;">Entity.unpinAllInBackground(listOfObjects);</pre></div>
       <a href="#" name="localdatastore-labels"></a><a href="#" class="section section_minor " name="localdatastore-labels_anchor"></a>
       <h3>Pinning with Labels</h3>
 
@@ -1135,7 +1142,7 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
         indicate a group of objects that should be stored together.</p>
 
       <div class="code parseTheme"><pre class="brush: java;">// Add several objects with a label.
-ParseObject.pinAllInBackground(&quot;MyScores&quot;, someGameScores);
+Entity.pinAllInBackground(&quot;MyScores&quot;, someGameScores);
 
 // Add another object with the same label.
 anotherGameScore.pinInBackground(&quot;MyScores&quot;);</pre></div>
@@ -1143,7 +1150,7 @@ anotherGameScore.pinInBackground(&quot;MyScores&quot;);</pre></div>
         pass a label to the unpin methods. This saves you from having to manually
         track which objects are in each group you care about.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject.unpinAllInBackground(&quot;MyScores&quot;);</pre></div>
+      <div class="code parseTheme"><pre class="brush: java;">Entity.unpinAllInBackground(&quot;MyScores&quot;);</pre></div>
       <p>Any object will stay in the datastore as long as it is pinned with any
         label. In other words, if you pin an object with two different labels, and
         then unpin it with one label, the object will stay in the datastore until you also
@@ -1156,17 +1163,17 @@ anotherGameScore.pinInBackground(&quot;MyScores&quot;);</pre></div>
         You can use one label to pin the results of each different query. To get
         new results from the network, just do a query and update the pinned objects.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(“GameScore&quot;);
 query.orderByDescending(“score”);
 
 // Query for new results from the network.
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-    public void done(List&lt;ParseObject&gt; scores, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+    public void done(List&lt;Entity&gt; scores, ParseException e) {
         // Remove the previously cached results.
-        ParseObject.unpinAllInBackground(“highScores”, new DeleteCallback() {
+        Entity.unpinAllInBackground(“highScores”, new DeleteCallback() {
             public void done(ParseException e) {
                 // Cache the new results.
-                ParseObject.pinAllInBackground(“highScores”, scores);
+                Entity.pinAllInBackground(“highScores”, scores);
             }
         });
     }
@@ -1174,12 +1181,12 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
       <p>When you want to get the cached results for the query, you can then
         run the same query against the local datastore.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(“GameScore&quot;);
 query.orderByDescending(“score”);
 query.fromLocalDatastore();
 
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-    public void done(List&lt;ParseObject&gt; scores, ParseException e) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+    public void done(List&lt;Entity&gt; scores, ParseException e) {
         // Yay! Cached scores!
     }
 });</pre></div>
@@ -1189,7 +1196,7 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
       <p>Once you've saved some changes locally, there are a few different ways
         you can save those changes back to Parse over the network. The easiest way
         to do this is with <code>saveEventually</code>. When you call <code>saveEventually</code>
-        on a <code>ParseObject</code>, it will be pinned until it can be saved. The SDK will
+        on a <code>Entity</code>, it will be pinned until it can be saved. The SDK will
         make sure to save the object the next time the network is available.</p>
 
       <div class="code parseTheme"><pre class="brush: java;">gameScore.saveEventually();</pre></div>
@@ -1199,11 +1206,11 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
         you can again use a label. The <code>fromPin</code> method on <code>ParseQuery</code>
         makes it easy to fetch just the objects you care about.</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(“GameScore&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(“GameScore&quot;);
 query.fromPin(“myChanges”);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-     public void done(List&lt;ParseObject&gt; scores, ParseException e) {
-        for (ParseObject score in scores) {
+query.findInBackground(new FindCallback&lt;Entity&gt;() {
+     public void done(List&lt;Entity&gt; scores, ParseException e) {
+        for (Entity score in scores) {
             score.saveInBackground();
             score.unpinInBackground(“myChanges”);
         }
@@ -1216,12 +1223,12 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() {
 
       <p>With this class, you'll be able to add user account functionality in your app.</p>
 
-      <p><code>ParseUser</code> is a subclass of the <code>ParseObject</code>, and has all the same features, such as flexible schema, automatic persistence, and a key value interface. All the methods that are on <code>ParseObject</code> also exist in <code>ParseUser</code>. The difference is that <code>ParseUser</code> has some special additions specific to user accounts.</p>
+      <p><code>ParseUser</code> is a subclass of the <code>Entity</code>, and has all the same features, such as flexible schema, automatic persistence, and a key value interface. All the methods that are on <code>Entity</code> also exist in <code>ParseUser</code>. The difference is that <code>ParseUser</code> has some special additions specific to user accounts.</p>
 
       <a href="#" name="users-props"></a><a href="#" class="section section_minor " name="users-props_anchor"></a>
       <h3>Properties</h3>
 
-      <p><code>ParseUser</code> has several properties that set it apart from <code>ParseObject</code>:</p>
+      <p><code>ParseUser</code> has several properties that set it apart from <code>Entity</code>:</p>
 
       <ul class="text">
         <li>username: The username for the user (required).</li>
@@ -1241,7 +1248,7 @@ user.setUsername(&quot;my name&quot;);
 user.setPassword(&quot;my pass&quot;);
 user.setEmail(&quot;email@example.com&quot;);
 
-// other fields can be set just like with ParseObject
+// other fields can be set just like with Entity
 user.put(&quot;phone&quot;, &quot;650-253-0000&quot;);
 
 user.signUpInBackground(new SignUpCallback() {
@@ -1385,7 +1392,7 @@ query.getInBackground(user.getObjectId(), new GetCallback&lt;ParseUser&gt;() {
 
       <p>The simplest way to use a <code>ParseACL</code> is to specify that an object may only be read or written by a single user. To create such an object, there must first be a logged in <code>ParseUser</code>. Then, <code>new ParseACL(user)</code> generates a <code>ParseACL</code> that limits access to that user. An object's ACL is updated when the object is saved, like any other property. Thus, to create a private note that can only be accessed by the current user:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject privateNote = new ParseObject(&quot;Note&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity privateNote = new Entity(&quot;Note&quot;);
 privateNote.put(&quot;content&quot;, &quot;This note is private!&quot;);
 privateNote.setACL(new ParseACL(ParseUser.getCurrentUser()));
 privateNote.saveInBackground();</pre></div>
@@ -1393,7 +1400,7 @@ privateNote.saveInBackground();</pre></div>
 
       <p>Permissions can also be granted on a per-user basis. You can add permissions individually to a <code>ParseACL</code> using <code>setReadAccess</code> and <code>setWriteAccess</code>. For example, let's say you have a message that will be sent to a group of several users, where each of them have the rights to read and delete that message:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject groupMessage = new ParseObject(&quot;Message&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity groupMessage = new Entity(&quot;Message&quot;);
 ParseACL groupACL = new ParseACL();
 
 // userList is an Iterable&lt;ParseUser&gt; with the users we are sending this message to.
@@ -1406,7 +1413,7 @@ groupMessage.setACL(groupACL);
 groupMessage.saveInBackground();</pre></div>
       <p>You can also grant permissions to all users at once using <code>setPublicReadAccess</code> and <code>setPublicWriteAccess</code>. This allows patterns like posting comments on a message board. For example, to create a post that can only be edited by its author, but can be read by anyone:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject publicPost = new ParseObject(&quot;Post&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity publicPost = new Entity(&quot;Post&quot;);
 ParseACL postACL = new ParseACL(ParseUser.getCurrentUser());
 postACL.setPublicReadAccess(true);
 publicPost.setACL(postACL);
@@ -1483,16 +1490,16 @@ query.findInBackground(new FindCallback&lt;ParseUser&gt;() {
       <div class="code parseTheme"><pre class="brush: java;">ParseUser user = ParseUser.getCurrentUser();
 
 // Make a new post
-ParseObject post = new ParseObject(&quot;Post&quot;);
+Entity post = new Entity(&quot;Post&quot;);
 post.put(&quot;title&quot;, &quot;My New Post&quot;);
 post.put(&quot;body&quot;, &quot;This is some great content.&quot;);
 post.put(&quot;user&quot;, user);
 post.saveInBackground();
 
 // Find all posts by the current user
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;Post&quot;);
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;Post&quot;);
 query.whereEqualTo(&quot;user&quot;, user);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></div>
+query.findInBackground(new FindCallback&lt;Entity&gt;() { ... });</pre></div>
       <a href="#" name="users-browser"></a><a href="#" class="section section_minor " name="users-browser_anchor"></a>
       <h3>Users in the Data Browser</h3>
 
@@ -1521,15 +1528,15 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></di
 
       <p>
         We provide a specialized class called <code>ParseRole</code> that represents these role objects in your client code.
-        <code>ParseRole</code> is a subclass of <code>ParseObject</code>, and has all of the same features, such as a flexible
-        schema, automatic persistence, and a key value interface.  All the methods that are on <code>ParseObject</code> also
+        <code>ParseRole</code> is a subclass of <code>Entity</code>, and has all of the same features, such as a flexible
+        schema, automatic persistence, and a key value interface.  All the methods that are on <code>Entity</code> also
         exist on <code>ParseRole</code>.  The difference is that <code>ParseRole</code> has some additions specific to management of roles.
       </p>
 
       <a href="#" name="roles-props"></a><a href="#" class="section section_minor " name="roles-props_anchor"></a>
       <h3>Properties</h3>
       <p>
-        <code>ParseRole</code> has several properties that set it apart from <code>ParseObject</code>:
+        <code>ParseRole</code> has several properties that set it apart from <code>Entity</code>:
       </p>
       <ul class="text">
         <li>
@@ -1583,7 +1590,7 @@ role.saveInBackground();</pre></div>
       <h3>Security for Other Objects</h3>
       <p>
         Now that you have created a set of roles for use in your application, you can use them with ACLs to define the privileges that their users will receive.
-        Each <code>ParseObject</code> can specify a <code>ParseACL</code>, which provides an access control list that indicates which users and roles
+        Each <code>Entity</code> can specify a <code>ParseACL</code>, which provides an access control list that indicates which users and roles
         should be granted read or write access to the object.
       </p>
 
@@ -1592,7 +1599,7 @@ role.saveInBackground();</pre></div>
       </p>
 
       <div class="code parseTheme"><pre class="brush: java;">ParseRole moderators = /* Query for some ParseRole */;
-ParseObject wallPost = new ParseObject(&quot;WallPost&quot;);
+Entity wallPost = new Entity(&quot;WallPost&quot;);
 ParseACL postACL = new ParseACL();
 postACL.setRoleWriteAccess(moderators);
 wallPost.setACL(postACL);
@@ -1601,7 +1608,7 @@ wallPost.saveInBackground();</pre></div>
         You can avoid querying for a role by specifying its name for the ACL:
       </p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseObject wallPost = new ParseObject(&quot;WallPost&quot;);
+      <div class="code parseTheme"><pre class="brush: java;">Entity wallPost = new Entity(&quot;WallPost&quot;);
 ParseACL postACL = new ParseACL();
 postACL.setRoleWriteAccess(&quot;Moderators&quot;, true);
 wallPost.setACL(postACL);
@@ -1907,7 +1914,7 @@ HttpResponse response = client.execute(verifyGet);</pre></div>
       <a href="#" name="geo"></a><a href="#" class="section section_minor " name="geo_anchor"></a>
       <h2>GeoPoints</h2>
 
-      <p>Parse allows you to associate real-world latitude and longitude coordinates with an object.  Adding a <code>ParseGeoPoint</code> to a <code>ParseObject</code> allows queries to take into account the proximity of an object to a reference point.  This allows you to easily do things like find out what user is closest to another user or which places are closest to a user.</p>
+      <p>Parse allows you to associate real-world latitude and longitude coordinates with an object.  Adding a <code>ParseGeoPoint</code> to a <code>Entity</code> allows queries to take into account the proximity of an object to a reference point.  This allows you to easily do things like find out what user is closest to another user or which places are closest to a user.</p>
 
       <a href="#" name="geo-classes"></a><a href="#" class="section section_minor " name="geo-classes_anchor"></a>
       <h3>ParseGeoPoint</h3>
@@ -1920,10 +1927,10 @@ HttpResponse response = client.execute(verifyGet);</pre></div>
       <h3>Geo Queries</h3>
       <p>Now that you have a bunch of objects with spatial coordinates, it would be nice to find out which objects are closest to a point.  This can be done by adding another restriction to <code>ParseQuery</code> using <code>whereNear</code>.  Getting a list of ten places that are closest to a user may look something like:</p>
       <div class="code parseTheme"><pre class="brush: java;">ParseGeoPoint userLocation = (ParseGeoPoint) userObject.get(&quot;location&quot;);
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;PlaceObject&quot;);
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;PlaceObject&quot;);
 query.whereNear(&quot;location&quot;, userLocation);
 query.setLimit(10);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></div>    <p> At this point <code>nearPlaces</code> will be an array of objects ordered by distance
+query.findInBackground(new FindCallback&lt;Entity&gt;() { ... });</pre></div>    <p> At this point <code>nearPlaces</code> will be an array of objects ordered by distance
       (nearest to farthest) from <code>userLocation</code>.
       Note that if an additional <code>orderByAscending()</code>/<code>orderByDescending()</code> constraint is applied,
       it will take precedence over the distance ordering.</p>
@@ -1934,14 +1941,14 @@ query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></di
 
       <div class="code parseTheme"><pre class="brush: java;">ParseGeoPoint southwestOfSF = new ParseGeoPoint(37.708813, -122.526398);
 ParseGeoPoint northeastOfSF = new ParseGeoPoint(37.822802, -122.373962);
-ParseQuery&lt;ParseObject&gt; query = ParseQuery.getQuery(&quot;PizzaPlaceObject&quot;);
+ParseQuery&lt;Entity&gt; query = ParseQuery.getQuery(&quot;PizzaPlaceObject&quot;);
 query.whereWithinGeoBox(&quot;location&quot;, southwestOfSF, northeastOfSF);
-query.findInBackground(new FindCallback&lt;ParseObject&gt;() { ... });</pre></div>
+query.findInBackground(new FindCallback&lt;Entity&gt;() { ... });</pre></div>
       <a href="#" name="geo-limitations"></a><a href="#" class="section section_minor " name="geo-limitations_anchor"></a>
       <h3>Caveats</h3>
       <p> At the moment there are a couple of things to watch out for:</p>
       <ol>
-        <li>Each ParseObject class may only have one key with a ParseGeoPoint object.</li>
+        <li>Each Entity class may only have one key with a ParseGeoPoint object.</li>
         <li>Points should not equal or exceed the extreme ends of the ranges.  Latitude should not be -90.0 or 90.0.  Longitude should not be -180.0 or 180.0.  Attempting to set latitude or longitude out of bounds will cause an error.</li>
       </ol>
 
@@ -2179,7 +2186,7 @@ public void onCreate(Bundle savedInstanceState) {
   // Uses a layout with a ListView (id: &quot;listview&quot;), which uses our Adapter.
   setContentView(R.layout.main);
 
-  ParseQueryAdapter&lt;ParseObject&gt; adapter = new ParseQueryAdapter&lt;ParseObject&gt;(this, &quot;Instrument&quot;);
+  ParseQueryAdapter&lt;Entity&gt; adapter = new ParseQueryAdapter&lt;Entity&gt;(this, &quot;Instrument&quot;);
   adapter.setTextKey(&quot;name&quot;);
   adapter.setImageKey(&quot;photo&quot;);
 
@@ -2204,7 +2211,7 @@ public void onCreate(Bundle savedInstanceState) {
 
       <p>By default, the simplest <code>ParseQueryAdapter</code> constructor takes
         a <code>Context</code> and a Parse class name.
-        All <code>ParseObject</code>s in that class are then fetched and
+        All <code>Entity</code>s in that class are then fetched and
         displayed in order of their <code>createdAt</code> timestamps.</p>
 
       <p>To change this behavior, we drew from the functionality of an <code>ArrayAdapter</code>:
@@ -2218,9 +2225,9 @@ public void onCreate(Bundle savedInstanceState) {
         punk and metal bands with four or more members,
         ordered by number of records sold:</p>
 
-      <div class="code parseTheme"><pre class="brush: java;">ParseQueryAdapter&lt;ParseObject&gt; adapter =
-  new ParseQueryAdapter&lt;ParseObject&gt;(this, new ParseQueryAdapter.QueryFactory&lt;ParseObject&gt;() {
-    public ParseQuery&lt;ParseObject&gt; create() {
+      <div class="code parseTheme"><pre class="brush: java;">ParseQueryAdapter&lt;Entity&gt; adapter =
+  new ParseQueryAdapter&lt;Entity&gt;(this, new ParseQueryAdapter.QueryFactory&lt;Entity&gt;() {
+    public ParseQuery&lt;Entity&gt; create() {
       // Here we can configure a ParseQuery to our heart&#x27;s desire.
       ParseQuery query = new ParseQuery(&quot;Band&quot;);
       query.whereContainedIn(&quot;genre&quot;, Arrays.asList({ &quot;Punk&quot;, &quot;Metal&quot; }));
@@ -2234,16 +2241,16 @@ public void onCreate(Bundle savedInstanceState) {
       <p>The default layout for the individual <code>View</code>s in your <code>AdapterView</code>
         is a simple <code>LinearLayout</code> with a <code>ParseImageView</code> and a <code>TextView</code>.
         If <code>setTextKey(String)</code> is used with the <code>ParseQueryAdapter</code>,
-        its parameter will be used to select which key on your <code>ParseObject</code>
+        its parameter will be used to select which key on your <code>Entity</code>
         is displayed in the <code>TextView</code>.
         Similarly, if <code>setImageKey(String)</code> is used,
         its parameter will be used to determine the image displayed in the ImageView.</p>
 
       <p>One way to customize the rows is to
-        override <code>getItemView(ParseObject, View, ViewGroup)</code> or <code>getNextPageView(View, ViewGroup)</code>
+        override <code>getItemView(Entity, View, ViewGroup)</code> or <code>getNextPageView(View, ViewGroup)</code>
         and call the superclass's implementation of the appropriate method to do the heavy lifting.
         If you provide your own layout to the superclass's implementation, note that
-        <code>getItemView(ParseObject, View, ViewGroup)</code> and <code>getNextPageView(View, ViewGroup)</code>
+        <code>getItemView(Entity, View, ViewGroup)</code> and <code>getNextPageView(View, ViewGroup)</code>
         expect a <code>TextView</code> (id: <code>android.R.id.text1</code>) if the <code>textKey</code> is set
         and a <code>ParseImageView</code> (id: <code>android.R.id.icon</code>) if the <code>imageKey</code> is set.</p>
 
@@ -2252,7 +2259,7 @@ public void onCreate(Bundle savedInstanceState) {
         and an extra "description" <code>TextView</code> (id: <code>R.id.description</code>):</p>
 
       <div class="code parseTheme"><pre class="brush: java;">@Override
-public View getItemView(ParseObject object, View v, ViewGroup parent) {
+public View getItemView(Entity object, View v, ViewGroup parent) {
   if (v == null) {
     v = View.inflate(getContext(), R.layout.adapter_item, null);
   }
@@ -2272,10 +2279,10 @@ public View getItemView(ParseObject object, View v, ViewGroup parent) {
         to have complete control over the look of the rows
         by overriding <code>ParseQueryAdapter</code>'s methods and
         ignoring the superclass's implementation entirely.
-        In this example, our item views are simply rows where the color is defined by the <code>ParseObject</code>:</p>
+        In this example, our item views are simply rows where the color is defined by the <code>Entity</code>:</p>
 
       <div class="code parseTheme"><pre class="brush: java;">@Override
-public View getItemView(ParseObject object, View v, ViewGroup parent) {
+public View getItemView(Entity object, View v, ViewGroup parent) {
   if (v == null) {
     v = View.inflate(getContext(), R.layout.adapter_item, null);
   }
@@ -2297,14 +2304,14 @@ public View getNextPageView(View v, ViewGroup parent) {
       <h4>Loading Remote Images in Rows</h4>
 
       <p><code>ParseQueryAdapter</code> makes it simple to display remote images.
-        By calling <code>setImageKey(String)</code>, you can pass in a key name on your <code>ParseObject</code>
+        By calling <code>setImageKey(String)</code>, you can pass in a key name on your <code>Entity</code>
         which should contain a <code>ParseFile</code> containing an image to be fetched from Parse
         and loaded into the <code>ParseImageView</code> of the corresponding row.</p>
 
       <p>The image will download asynchronously,
         and the appropriate <code>ParseImageView</code> will be updated in the background.
         As the user scrolls and rows are recycled by the adapter,
-        images will be fetched as rows become visible and assigned <code>ParseObject</code>s.</p>
+        images will be fetched as rows become visible and assigned <code>Entity</code>s.</p>
 
       <p>You can define a placeholder image to be used when the image fetch has not yet completed.
         Call <code>setPlaceholder(Drawable)</code> on your <code>ParseQueryAdapter</code>
@@ -2318,7 +2325,7 @@ public View getNextPageView(View v, ViewGroup parent) {
         These methods are particularly useful for toggling some loading UI.</p>
 
       <p>An <code>OnQueryLoadListener</code> can be set via <code>setOnQueryLoadListener(OnQueryLoadListener)</code>,
-        which provides <code>onLoading()</code> and <code>onLoaded(List<ParseObject>, Exception)</code> methods for implementation.</p>
+        which provides <code>onLoading()</code> and <code>onLoaded(List<Entity>, Exception)</code> methods for implementation.</p>
 
       <h4>Pagination</h4>
 
@@ -2346,24 +2353,12 @@ public View getNextPageView(View v, ViewGroup parent) {
       <a href="#" name="errors"></a><a href="#" class="section section_minor " name="errors_anchor"></a>
       <h2>Handling Errors</h2>
 
-      <p>Many of the methods on <code>ParseObject</code>, including <code>save()</code>, <code>delete()</code>, and <code>get()</code> will throw a <code>ParseException</code> on an invalid request, such as deleting or editing an object that no longer exists in the cloud, or when there is a network failure preventing communication with the Parse Cloud. You will need to catch and deal with these exceptions.<p>
+      <p>Many of the methods on <code>Entity</code>, including <code>save()</code>, <code>delete()</code>, and <code>get()</code> will throw a <code>ParseException</code> on an invalid request, such as deleting or editing an object that no longer exists in the cloud, or when there is a network failure preventing communication with the Parse Cloud. You will need to catch and deal with these exceptions.<p>
 
       <p>For more details, look at the <a href="/docs/android">Android API</a>.</p>
 
       <a href="#" name="security-recommendations"></a><a href="#" class="section section_minor " name="security-recommendations_anchor"></a>
-      <h2>Security</h2>
-
-      <p>We strongly recommend that you build your applications to restrict access to data as much as possible.  With this in mind, we recommend that you enable automatic <a href="#users-anonymous">anonymous user creation</a> and <a href="#users-acls">specify a default ACL based upon the current user</a> when your application is initialized.  Explicitly set public writability (and potentially public readability) on an object-by-object basis in order to protect your data from unauthorized access.</p>
-
-      <p>Consider adding the following code to your application startup:</p>
-      <div class="code parseTheme"><pre class="brush: java;">ParseUser.enableAutomaticUser();
-ParseACL defaultACL = new ParseACL();
-// Optionally enable public read access while disabling public write access.
-// defaultACL.setPublicReadAccess(true);
-ParseACL.setDefaultACL(defaultACL, true);</pre></div>
-      <p>Please keep secure access to your data in mind as you build your applications for the protection of both you and your users.</p>
-
-      <p>Our <a href="/docs/data#security">Data &amp; Security Guide</a> has detailed descriptions of the various ways Parse can help keep your app's data safe.</p>
+      
 
       <h3>Settings</h3>
       <p>In addition to coding securely, please review the settings pages for your applications to select options that will restrict access to your applications as much as is appropriate for your needs.  For example, if users should be unable to log in without a Facebook account linked to their application, disable all other login mechanisms.  Specify your Facebook application IDs, Twitter consumer keys, and other such information to enable server-side validation of your users' login attempts.</p>
