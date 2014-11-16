@@ -155,7 +155,7 @@ app.factory('databrowsers', ['$http', '$q', 'server_url', function ($http, $q, s
     factory.exportClass = function(applicationkey, classname, email) {
         var data = {address:email, collection:classname};
 
-        var url = server_url + '/email/export';
+        var url = server_url + '/1/email/export';
         var deferred = $q.defer();
         $http({url:url,
             method:'POST',

@@ -6,7 +6,7 @@ app.factory('notices', ['$http', '$q','server_url', function ($http, $q, server_
 
     factory.getNotice = function(applicationkey) {
 
-        var url = server_url + '/notice/list';
+        var url = server_url + '/1/notice/list';
         var deferred = $q.defer();
         $http({url:url,
             method:'GET',
@@ -21,7 +21,7 @@ app.factory('notices', ['$http', '$q','server_url', function ($http, $q, server_
     };
 
     factory.createNotice = function(applicationkey, data) {
-        var url =  server_url + '/notice/add';
+        var url =  server_url + '/1/notice/add';
         var deferred = $q.defer();
         $http({url:url,
             method:'POST',
@@ -37,7 +37,7 @@ app.factory('notices', ['$http', '$q','server_url', function ($http, $q, server_
 
     };
     factory.updateParam = function(applicationkey, data) {
-        var url =  server_url + '/notice/list';
+        var url =  server_url + '/1/notice/list';
 
         var deferred = $q.defer();
         $http({url:url,
@@ -55,7 +55,7 @@ app.factory('notices', ['$http', '$q','server_url', function ($http, $q, server_
     };
 
     factory.deleteNotice = function(applicationkey, id) {
-        var url =  server_url + '/notice/' + id;
+        var url =  server_url + '/1/notice/' + id;
         var deferred = $q.defer();
         $http({url:url,
             method:'DELETE',

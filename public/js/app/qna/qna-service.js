@@ -5,7 +5,7 @@ app.factory('qnas', ['$http', '$q','server_url', function ($http, $q, server_url
     var factory = {};
 
     factory.getQuestionList = function(applicationkey) {
-        var url = server_url + '/qna/list';
+        var url = server_url + '/1/qna/list';
         var deferred = $q.defer();
         $http({url:url,
             method:'GET',
@@ -20,7 +20,7 @@ app.factory('qnas', ['$http', '$q','server_url', function ($http, $q, server_url
     };
 
     factory.addComment = function(applicationkey, id, comment) {
-        var url = server_url + '/qna/comment/' + id;
+        var url = server_url + '/1/qna/comment/' + id;
         console.log(url);
         var data = '{"content":"'+comment+'"}';
 
@@ -41,7 +41,7 @@ app.factory('qnas', ['$http', '$q','server_url', function ($http, $q, server_url
 
 
     factory.deleteQna = function(applicationkey, id) {
-        var url = server_url + '/qna/' + id;
+        var url = server_url + '/1/qna/' + id;
         var deferred = $q.defer();
         $http({url:url,
             method:'DELETE',

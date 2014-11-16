@@ -549,8 +549,8 @@ angular.module('app')
                           function( $ocLazyLoad){
                               return $ocLazyLoad.load(['angularFileUpload',
                                   'js/app/review/review.css',
-                              'vendor/jquery/image-picker/image-picker.min.js',
-                              'vendor/jquery/image-picker/image-picker.css']).then(
+                                  'vendor/jquery/image-picker/image-picker.min.js',
+                                  'vendor/jquery/image-picker/image-picker.css']).then(
                                   function(){
                                       return $ocLazyLoad.load('js/app/imageupload/imageupload.js');
                                   }
@@ -558,7 +558,6 @@ angular.module('app')
                           }]
                   }
               })
-
               // push
               .state('app.push', {
                   abstract: true,
@@ -872,7 +871,7 @@ angular.module('app')
               .state('app.privacy', {
                   url: '/privacy',
                   templateUrl: 'tpl/terms/privacy.html'
-              })
+              });
       }
     ]
   );

@@ -14,7 +14,7 @@ import xitrum.annotation.GET
 
 case class UserCount(results: Option[Any], count: Int)
 object UserCountProtocol extends DefaultJsonProtocol {
-  implicit object ColorJsonFormat extends RootJsonFormat[UserCount] {
+  implicit object UserCountJsonFormat extends RootJsonFormat[UserCount] {
     def write(c: UserCount) = JsObject(
       "count" -> JsNumber(c.count))
     def read(value: JsValue) = {
