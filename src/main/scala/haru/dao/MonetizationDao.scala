@@ -51,7 +51,8 @@ object MonetizationDao extends DatabasePool {
       select * from (
      	 select productname from Monetization 
       	where applicationid = $appid and buydate between $startday and $endday
-      	group by productname limit 0, 5) as tmp
+      	group by productname 
+      	order by sum(price) desc limit 0, 5) as tmp
       ) 
       group by buydate, productname;
        """.as[(String, String, Int, Int, Int)]
@@ -87,9 +88,23 @@ object MonetizationDao extends DatabasePool {
       itemlist.foreach { p =>
         itemlists ++= List(Map("productname" -> p._1, "price" -> p._2, "total" -> p._3, "avg" -> p._4, "count" -> p._5))
       }
+      
+      
+      /*
+      sales item list
+      */
+      val nationquery = sql"""
+      select national, sum(price) from Monetization 
+      where applicationid = $appid group by national
+       """.as[(String, Int)]
 
-      val Itemdata = Map("toplist" -> toplist, "itemlist" -> itemlists)
-
+      val nationlist = nationquery.list
+      var nationlists : List[Map[String, Any]] = List();
+      nationlist.foreach { p =>
+        nationlists ++= List(Map("label" -> p._1, "data" -> p._2))
+      }
+      
+      val Itemdata = Map("toplist" -> toplist, "itemlist" -> itemlists, "nation" ->nationlists)
       return Itemdata
   }
 }

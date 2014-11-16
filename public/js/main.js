@@ -12,8 +12,8 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'HaRu.io',
-        version: '1.3.2',
+        name: 'Plugy.io',
+        version: '1.0.0',
         // for chart colors
         color: {
           primary: '#7266ba',

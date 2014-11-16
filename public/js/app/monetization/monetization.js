@@ -43,11 +43,11 @@ app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter','monetiza
 
 
   $scope.productlist = [];
-
+  $scope.itemgraph = [];
 
   var getMonetization = function(startday, endday, nation){
     monetizations.getMonetization(applicationkey, startday, endday, nation).then(function(result) {
-      console.log(JSON.stringify(result));
+      //console.log(JSON.stringify(result));
       var totalprices = [];
       var countusers = [];
       var avgprices = [];
@@ -79,11 +79,11 @@ app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter','monetiza
         itemcounts.push([index + 1, itemcount])
       });
       //console.log('total price : ', JSON.stringify(totalprices));
-      console.log('count users : ', JSON.stringify(countusers));
-      console.log('average sales prices : ', JSON.stringify(avgprices));
-      console.log('average total user prices : ', JSON.stringify(avgtotaluser));
-      console.log('average sales user rates : ', JSON.stringify(avgsalesuserrates));
-      console.log('sale item count : ', JSON.stringify(itemcounts));
+      //console.log('count users : ', JSON.stringify(countusers));
+      //console.log('average sales prices : ', JSON.stringify(avgprices));
+      //console.log('average total user prices : ', JSON.stringify(avgtotaluser));
+      //console.log('average sales user rates : ', JSON.stringify(avgsalesuserrates));
+      //console.log('sale item count : ', JSON.stringify(itemcounts));
       $scope.totalprices = totalprices;
       $scope.countusers = countusers;
       $scope.avgprices = avgprices;
@@ -96,17 +96,57 @@ app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter','monetiza
 
 
     monetizations.getMonetizationitemlist(applicationkey, startday, endday, nation).then(function(result) {
-      console.log(result);
+      console.log(JSON.stringify(result.nation));
+      $scope.d3 = result.nation;
+
+      var count = result.itemlist.length;
+      if(count >= 5){
+        count = 5;
+      }
+
+      var topproducts = [];
+      for(i = 0; i < count; i++){
+        topproducts.push(result.itemlist[i].productname);
+      }
+
+      console.log(topproducts);
+      //console.log(topproducts.length);
+      var topitemgraph = new Array(topproducts.length);
+      for(item = 0; item < topproducts.length; item++){
+        topitemgraph[item] = new Array( $scope.lineticks.length);
+      }
+
+      topproducts.forEach(function(elem, index){
+        //console.log(index);
+
+        var count = 0;
+        for (i = 0; i < result.toplist.length; i++) {
+          if(elem == result.toplist[i].productname){
+            topitemgraph[index].push([count, result.toplist[i].total]);
+            //console.log(result.toplist[i], count);
+            count++;
+            continue;;
+          }
+        }
+      });
+      console.log(topitemgraph.length);
+
+
+
+      for(graphindex = 0 ;graphindex< topitemgraph.length;graphindex++  ){
+        $scope.itemgraph.push({ data: topitemgraph[graphindex], label: topproducts[graphindex], points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } });
+      }
+
 
       $scope.productlist = result.itemlist;
+      console.log(result.itemlist);
     });
   };
-  console.log(startday);
+  //console.log(startday);
   getMonetization(startday.format('YYYY-MM-DD'), endday.format('YYYY-MM-DD'), 'ko');
 
 
   // daterangepicker
-  //console.log(angular.element(document.querySelector('meta[name=csrf-token]')).context.content);
   $scope.date = moment().subtract(7, 'days').format('YYYY-MM-DD') + " ~ " + moment().format('YYYY-MM-DD');
   angular.element(document.querySelector('#reservation')).daterangepicker({
     format: 'YYYY-MM-DD',
@@ -124,59 +164,6 @@ app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter','monetiza
 
 
   });
-
-
-
-  $scope.totalrevenue = [ [1,6.5],[2,6.5],[3,7],[4,8],[5,7.5],[6,7],[7,6.8],[8,7],[9,7.2],[10,7],[11,6.8],[12,7],[13,7], [14,7] ];
-  $scope.d = [ [1,6.5],[2,6.5],[3,7],[4,8],[5,7.5],[6,7],[7,6.8],[8,7],[9,7.2],[10,7],[11,6.8],[12,7] ];
-  $scope.d2 = [ [1,4.5],[2,1.5],[3,4],[4,10],[5,7],[6,7],[7,2],[8,7],[9,10],[10,7],[11,6.8],[12,7] ];
-  $scope.d0_1 = [ [0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7] ];
-  $scope.d0_2 = [ [0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3] ];
-  $scope.d1_1 = [ [10, 120], [20, 70], [30, 70], [40, 60] ];
-  $scope.d1_2 = [ [10, 50],  [20, 60], [30, 90],  [40, 35] ];
-  $scope.d1_3 = [ [10, 80],  [20, 40], [30, 30],  [40, 20] ];
-  $scope.d2 = [];
-
-  for (var i = 0; i < 20; ++i) {
-    $scope.d2.push([i, Math.sin(i)]);
-  }
-
-  $scope.d3 = [
-    { label: "iPhone5S", data: 40 },
-    { label: "iPad Mini", data: 10 },
-    { label: "iPad Mini Retina", data: 20 },
-    { label: "iPhone4S", data: 12 },
-    { label: "iPad Air", data: 18 }
-  ];
-
-  $scope.refreshData = function(){
-    $scope.d0_1 = $scope.d0_2;
-  };
-
-  $scope.getRandomData = function() {
-    var data = [],
-        totalPoints = 150;
-    if (data.length > 0)
-      data = data.slice(1);
-    while (data.length < totalPoints) {
-      var prev = data.length > 0 ? data[data.length - 1] : 50,
-          y = prev + Math.random() * 10 - 5;
-      if (y < 0) {
-        y = 0;
-      } else if (y > 100) {
-        y = 100;
-      }
-      data.push(y);
-    }
-    // Zip the generated y values with the x values
-    var res = [];
-    for (var i = 0; i < data.length; ++i) {
-      res.push([i, data[i]])
-    }
-    return res;
-  };
-  $scope.d4 = $scope.getRandomData();
-
 
   // title nation selector
   $scope.nation = [

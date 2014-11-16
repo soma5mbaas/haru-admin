@@ -89,7 +89,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
-          <div class="panel-heading font-bold">Total Revenue (전체 매출) </div>
+          <div class="panel-heading font-bold">Total Revenue 전체 매출</div>
           <div class="panel-body">
             <div ui-jq="plot" ui-refresh="grapherefrash" ui-options="
               [
@@ -117,25 +117,33 @@
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
-          <div class="panel-heading font-bold">Summery Revenue (전체 매출) </div>
+          <div class="panel-heading font-bold">Summery Revenue 전체 매출 요약</div>
           <div class="panel-body">
-            <div class="col-sm-8">
-              Summery
-              {{lineticks[lineticks.length -1][1]}}
-              전체매출 :
-              ₩{{totalprices[totalprices.length -1][1]  | number : 0}}
-
-              ARPDAU :
-              ₩{{avgtotaluser[avgtotaluser.length -1][1]  | number: 0}}
-
-              ARPPDAU :
-              ₩{{avgprices[avgprices.length -1][1] | number: 0}}
-
-              PPU :
-              {{avgsalesuserrates[avgsalesuserrates.length -1][1] }}%
+            <div class="col-sm-9">
+              <div class="row m-l-xs">
+                <span class="h3 review-title "> {{lineticks[lineticks.length -1][1]}}</span>
+              </div>
+              <div class="row m-t b-t">
+              <div class="col-sm-3">
+                <div class="h3 review-title m-t" popover="전체매출" popover-trigger="mouseenter"> Total Revenue</div>
+                <div class="h3 text-info m-t">  ₩{{totalprices[totalprices.length -1][1]  | number : 0}}({{(totalprices[totalprices.length -1][1] - totalprices[totalprices.length -2][1]) / totalprices[totalprices.length -2][1] * 100 | number : 0}} %)</div>
+              </div>
+              <div class="col-sm-3 b-l">
+               <div class="h3 review-title m-t" popover="유저당 균 매출" popover-trigger="mouseenter"> ARPDAU</div>
+                <div class="h3 m-t">₩{{avgtotaluser[avgtotaluser.length -1][1]  | number: 0}}({{(avgtotaluser[avgtotaluser.length -1][1] - avgtotaluser[avgtotaluser.length -2][1]) / avgtotaluser[avgtotaluser.length -2][1] * 100 | number : 0}} %)</div>
+            </div>
+              <div class="col-sm-3 b-l">
+                <div class="h3 review-title m-t" popover="구매유저당 평균 매출" popover-trigger="mouseenter">ARPPDAU</div>
+                <div class="h3 m-t"> ₩{{avgprices[avgprices.length -1][1] | number: 0}}({{(avgprices[avgprices.length -1][1] - avgprices[avgprices.length -2][1]) / avgprices[avgprices.length -2][1] * 100 | number : 0}} %)</div>
+            </div>
+              <div class="col-sm-3 b-l">
+               <div class="h3 review-title m-t" popover="결제 유저 비율" popover-trigger="mouseenter"> PPU</div>
+                <div class="h3 m-t">{{avgsalesuserrates[avgsalesuserrates.length -1][1]| number : 0 }}%</div>
+              </div>
+              </div>
 
             </div>
-            <div class="col-sm-4 b-l">
+            <div class="col-sm-3 b-l">
               국가별 구매비율
               <div ui-jq="plot" ui-options="
               {{d3}},
@@ -146,7 +154,7 @@
                 tooltip: true,
                 tooltipOpts: { content: '%s: %p.0%' }
               }
-            " style="height:240px"></div>
+            " style="height:150px"></div>
             </div>
           </div>
         </div>
@@ -367,18 +375,14 @@
           <div class="panel-heading font-bold">상위 매출 아이템 </div>
           <div class="panel-body">
             <div ui-jq="plot" ui-options="
-              [
-                { data: {{d0_1}}, label: 'A', points: { show: true }, lines: { show: true, fill: true, fillColor: { colors: [{ opacity: 0.1 }, { opacity: 0.1}] } } }
-              ],
+              {{itemgraph}},
               {
-                colors: ['{{app.color.info}}'],
+                colors: ['{{app.color.info}}','{{app.color.primary}}'],
                 series: { shadowSize: 3 },
                 xaxis:{
                   font: { color: '#ccc' },
                   position: 'bottom',
-                  ticks: [
-                    [ 1, 'Jan' ], [ 2, 'Feb' ], [ 3, 'Mar' ], [ 4, 'Apr' ], [ 5, 'May' ], [ 6, 'Jun' ], [ 7, 'Jul' ], [ 8, 'Aug' ], [ 9, 'Sep' ], [ 10, 'Oct' ], [ 11, 'Nov' ], [ 12, 'Dec' ]
-                  ]
+                  ticks:{{lineticks}}
                 },
                 yaxis:{ font: { color: '#ccc' } },
                 grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#ccc' },
@@ -388,7 +392,6 @@
             " style="height:240px" >
             </div>
             <div class="m-lg">
-              <span class="h4 review-title">{{startday}} </span>
               <table class="w-full m-r m-l item">
                 <thead>
                   <tr>
