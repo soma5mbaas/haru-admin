@@ -31,7 +31,7 @@ angular.module('app')
                   resolve: {
                     deps: ['$ocLazyLoad',
                       function( $ocLazyLoad ){
-                        return $ocLazyLoad.load(['vendor/libs/moment.min.js', 'js/app/dashboard/dashboard.js', 'js/app/dashboard/dashboard-service.js']);
+                        return $ocLazyLoad.load(['vendor/libs/moment.min.js', 'js/app/dashboard/dashboard.js', 'js/app/dashboard/dashboard-service.js', 'js/app/dashboard/dashboard.css']);
                     }]
                   }
               })
@@ -696,6 +696,7 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load(['textAngular',
+                                  'js/app/dashboard/dashboard.css',
                                   'js/app/notice/notice.js',
                                   'js/app/notice/notice-service.js'
                               ]);
@@ -725,6 +726,7 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function ($ocLazyLoad) {
                               return $ocLazyLoad.load([
+                                  'js/app/dashboard/dashboard.css',
                                   'js/app/faq/faq.js',
                                   'js/app/faq/faq-service.js'
                               ]);
@@ -762,8 +764,10 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load(['textAngular',
+                                  'js/app/dashboard/dashboard.css',
                                   'js/app/qna/qna.js',
                                   'js/app/qna/qna-service.js'
+
                               ]);
                           }]
                   }
@@ -776,6 +780,7 @@ angular.module('app')
                           function( $ocLazyLoad ){
                               return $ocLazyLoad.load([
                                   'vendor/libs/jsmap.js',
+                                  'js/app/dashboard/dashboard.css',
                                   'js/app/review/review.css',
                                   'js/app/review/review.js',
                                   'js/app/review/review-service.js',
@@ -798,7 +803,7 @@ angular.module('app')
               })
               .state('app.quickstart', {
                   url: '/quickstart',
-                  templateUrl: 'tpl/document/quickstart.html',
+                  templateUrl: 'tpl/quickstart/quickstart.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad){
@@ -809,6 +814,30 @@ angular.module('app')
                                       return $ocLazyLoad.load('js/app/quickstart/quickstart.js');
                                   }
                               );
+                          }]
+                  }
+              })
+              .state('app.android1', {
+                  url: '/android1',
+                  templateUrl: 'tpl/quickstart/android1.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load([
+                                  'js/app/quickstart/quickstart.js'
+                              ]);
+                          }]
+                  }
+              })
+              .state('app.android2', {
+                  url: '/android2',
+                  templateUrl: 'tpl/quickstart/android2.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad){
+                              return $ocLazyLoad.load([
+                                  'js/app/quickstart/quickstart.js'
+                              ]);
                           }]
                   }
               })

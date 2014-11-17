@@ -41,6 +41,34 @@ object DashboardDao extends DatabasePool {
       return dashboard
   }
   
+  
+  
+  def getDashboardInfo(appid: String, usercount : Int, today : String): Map[String, Any] = databasePool withSession {
+    implicit session =>
+      val revenuequery = sql"""
+      select buydate, sum(price) from Monetization 
+		where applicationid = $appid
+		and buydate = $today
+       """.as[(String, Int)]
+
+      val revenue = revenuequery.list
+      var revenues: List[Map[String, Any]] = List();
+      revenue.foreach { p =>
+        revenues ++= List(Map("date" -> p._1, "sum" -> p._2))
+      }
+      
+       val apirequestquery = sql"""
+      select count(*) from Requestlog 
+		where applicationid = $appid
+		and reqdate = $today
+       """.as[(Int)]
+
+      val apirequest = apirequestquery.list
+      
+      val dashboard = Map("revenue" -> revenues, "usercount" -> usercount, "request"-> apirequest(0))
+
+      return dashboard
+  }
 }
 
 // push_table.filter(p => p.appid === appid).sortBy(_.sendtime.desc).drop(page * limit).take(limit).run

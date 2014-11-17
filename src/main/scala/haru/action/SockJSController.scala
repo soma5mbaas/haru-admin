@@ -5,7 +5,6 @@ import scala.util.parsing.json.JSON._
 import scala.util.parsing.json.JSON
 import scala.util.parsing.json.JSONArray
 import scala.util.parsing.json.JSONObject
-
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
@@ -23,9 +22,26 @@ import xitrum.SockJsText
 import xitrum.WebSocketAction
 import xitrum.annotation.GET
 import xitrum.annotation.SOCKJS
-
 import spray.json._
 import DefaultJsonProtocol._
+import haru.dao.WebHookDao
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+
+@GET("webhook/info")
+class getWebhookInfo extends Api2 {
+  def execute() {
+    val appid = param[String]("appid").trim()
+    
+    println(Today())
+    
+    val recent = WebHookDao.getRecentLatestQnR(appid)
+    respondJson(recent)
+  }
+  
+  def Today(pattern: String = "yyyy-MM-dd") = DateTimeFormat.forPattern(pattern).print(DateTime.now())
+}
+
 
 @GET("/crawler/webhook")
 class CrawlerWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatRoom {
@@ -35,6 +51,8 @@ class CrawlerWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateC
     val appid = param[String]("appid")
     val messagetype = param[String]("messagetype")
     val body = paramo[String]("Body")
+
+    WebHookDao.insertLatestQnR(appid, messagetype, "Review Crawler Complete");
 
     val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype)) :: Nil).toString()
     registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
@@ -63,6 +81,8 @@ class QnAWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatR
     val messagetype = param[String]("messagetype")
     val title = paramo[String]("title")
     val body = paramo[String]("Body")
+
+    WebHookDao.insertLatestQnR(appid, messagetype, body.getOrElse(""));
 
     val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype)) :: Nil).toString()
     registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
@@ -106,7 +126,7 @@ class SockJsChatActor extends SockJsAction with LookupOrCreateChatRoom {
     case SockJsText(msg) =>
       log.debug(msg)
       import MyJsonProtocol._
-      
+
       val jsonAst = msg.parseJson
       val parsemsg = jsonAst.convertTo[ChatRoom.RegisterSockJS]
       chatRoom ! parsemsg

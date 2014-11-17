@@ -105,7 +105,7 @@ object ReviewDao extends DatabasePool {
 
       // 긍정댓글 갯수 
       val negativequery = sql"""
-      select SUBSTRING(strdate, 6, 6)  strdate, count(*) negative 
+      select SUBSTRING(strdate, 6, 6)  date, count(*) negative 
       from Reviews where applicationid = $appid and strdate >= ADDDATE(DATE(NOW()), -14) and location=$code and rating <= 2 
       group by strdate
        """.as[(String, Int)]
@@ -118,7 +118,7 @@ object ReviewDao extends DatabasePool {
 
       // 부정댓글 갯수 
       val positivequery = sql"""
-      select  SUBSTRING(strdate, 6, 6)  strdate, count(*) positive 
+      select  SUBSTRING(strdate, 6, 6)  date, count(*) positive 
       from Reviews where applicationid =  $appid and strdate >= ADDDATE(DATE(NOW()), -14)  and location=$code and rating >= 4 
       group by strdate
        """.as[(String, Int)]

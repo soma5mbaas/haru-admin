@@ -22,48 +22,89 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
 
     var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
 
-    dashboards.getDashboardData(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
-      console.log(result);
 
-      var apirequest = result.api;
-      var pushrequest = result.push;
+    $scope.dashboard = {usercount:0, revenue:0, request:0};
 
-      var apirequestdatas = [];
-      var pushrequestdatas = [];
+    getDashboardinfo = function(){
+      dashboards.getDashboard(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
+        $scope.dashboard.usercount = result.usercount;
+        $scope.dashboard.request = result.request;
 
+        if(result.revenue.length == 2){
+          $scope.dashboard.revenue = result.revenue[1].sum;
 
-      lineticks.forEach(function(elem, index){
-        var apicount = 0;
-        for(i = 0; i < apirequest.length; i++ ){
-          if(elem[1] == apirequest[i].reqdate){
-            apicount = apirequest[i].count;
-            break;
-          }
+        } else {
+          $scope.dashboard.revenue = result.revenue[0].sum;
+
         }
-        apirequestdatas.push([(index +1) , apicount]);
 
-        var pushcount = 0;
-        for(i = 0; i < pushrequest.length; i++ ){
-          if(elem[1] == pushrequest[i].reqdate){
-            pushcount = pushrequest[i].count;
-            break;
-          }
-        }
-        pushrequestdatas.push([(index +1), pushcount]);
-
+        console.log('getDashboard',result);
       });
-      $scope.apirequestdatas = apirequestdatas;
-      $scope.pushrequestdatas = pushrequestdatas;
 
-      console.log(JSON.stringify(apirequestdatas));
-      console.log(JSON.stringify(pushrequestdatas));
-
-    }, function (error) {
-      console.log(error);
-    })
-  }
+    };
+    getDashboardinfo();
 
 
+    var refluash = 0;
+    getDashboardRequestData = function(){
+      dashboards.getDashboardRequestData(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
+        console.log(result);
+
+        var apirequest = result.api;
+        var pushrequest = result.push;
+
+        var apirequestdatas = [];
+        var pushrequestdatas = [];
+
+
+        lineticks.forEach(function(elem, index){
+          var apicount = 0;
+          for(i = 0; i < apirequest.length; i++ ){
+            if(elem[1] == apirequest[i].reqdate){
+              apicount = apirequest[i].count;
+              break;
+            }
+          }
+          apirequestdatas.push([(index +1) , apicount]);
+
+          var pushcount = 0;
+          for(i = 0; i < pushrequest.length; i++ ){
+            if(elem[1] == pushrequest[i].reqdate){
+              pushcount = pushrequest[i].count;
+              break;
+            }
+          }
+
+          pushrequestdatas.push([(index +1), pushcount]);
+
+        });
+        $scope.apirequestdatas = apirequestdatas;
+        $scope.pushrequestdatas = pushrequestdatas;
+
+        //console.log(JSON.stringify(apirequestdatas));
+        //console.log(JSON.stringify(pushrequestdatas));
+
+        $scope.reflash = refluash++;
+      }, function (error) {
+        console.log(error);
+      })
+    }
+  };
+  getDashboardRequestData();
+  $scope.clickrequestchart = function(){
+    $scope.reflash = refluash++;
+  };
+
+  $scope.$watch('user.currentproject', function(){
+    getDashboardinfo();
+    getDashboardRequestData();
+  });
+
+
+  $scope.removeLatestrnq = function (index) {
+    console.log(index);
+    $scope.LatestRnQ.splice(index, 1);
+  };
 
 
 

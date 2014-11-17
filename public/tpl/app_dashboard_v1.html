@@ -1,7 +1,7 @@
 <div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="
     app.settings.asideFolded = false; 
     app.settings.asideDock = false;
-  ">
+  " ng-controller="DashboardCtrl">
   <!-- main -->
   <div class="col">
     <!-- main header -->
@@ -34,14 +34,14 @@
       </div>
     </div>
     <!-- / main header -->
-    <div class="wrapper-md" ng-controller="DashboardCtrl">
+    <div class="wrapper-md" >
       <!-- stats -->
       <div class="row">
         <div class="col-md-5">
           <div class="row row-sm text-center">
             <div class="col-xs-6">
               <div class="panel padder-v item">
-                <div class="h1 text-info font-thin h1">521</div>
+                <div class="h1 text-info font-thin h1" ng-bind="dashboard.usercount"></div>
                 <span class="text-muted text-xs">Users</span>
                 <div class="top text-right w-full">
                   <i class="fa fa-caret-down text-warning m-r-sm"></i>
@@ -59,7 +59,7 @@
             </div>
             <div class="col-xs-6">
               <a href class="block panel padder-v bg-info item">
-                <span class="text-white font-thin h1 block">432</span>
+                <span class="text-white font-thin h1 block" ng-bind="dashboard.request"></span>
                 <span class="text-muted text-xs">Request</span>
                 <span class="top text-left">
                   <i class="fa fa-caret-up text-warning m-l-sm"></i>
@@ -81,8 +81,8 @@
                   <div ng-init="data1=[60,40]" ui-jq="sparkline" ui-options="{{data1}}, {type:'pie', height:40, sliceColors:['{{app.color.warning}}','#fff']}" class="sparkline inline"></div>
                 </div>
                 <div class="col dk padder-v r-r">
-                  <div class="text-primary-dk font-thin h1"><span>$12,670</span></div>
-                  <span class="text-muted text-xs">Revenue, 60% of the goal</span>
+                  <div class="text-primary-dk font-thin h1"><span>${{dashboard.revenue | number}}</span></div>
+                  <span class="text-muted text-xs">Revenue</span>
                 </div>
               </div>
             </div>
@@ -91,8 +91,8 @@
         <div class="col-md-7">
           <div class="panel wrapper">
            <label class="btn-group pull-right" ng-init="messagetype = '0'">
-              <label class="btn btn-sm btn-info"    ng-model="messagetype" btn-radio="'0'"><i class="fa fa-check text-active"></i> API</label>
-              <label class="btn btn-sm btn-primary"    ng-model="messagetype" btn-radio="'1'"><i class="fa fa-check text-active"></i> Push</label>
+              <label class="btn btn-sm btn-info"    ng-model="messagetype" ng-click="clickrequestchart()" btn-radio="'0'"><i class="fa fa-check text-active"></i> API</label>
+              <label class="btn btn-sm btn-primary"    ng-model="messagetype" ng-click="clickrequestchart()"  btn-radio="'1'"><i class="fa fa-check text-active"></i> Push</label>
             </label>
             <!--
             <label class="i-switch bg-warning pull-right" ng-init="showSpline=true">
@@ -102,7 +102,7 @@
             </label>
             -->
             <h4 class="font-thin m-t-none m-b text-muted">Latest Requests</h4>
-            <div ui-jq="plot" ui-refresh="messagetype" ui-options="
+            <div ui-jq="plot" ui-refresh="reflash" ui-options="
               [
                 { data: {{apirequestdatas}}, label:'API', points: { show: true, radius: 1},  splines: { show: true, tension: 0.4, lineWidth: 1, fill: 0.8 }},
               ],
@@ -119,7 +119,7 @@
               }
             " style="height:246px"  ng-show="messagetype == 0"> </div>
 
-              <div ui-jq="plot" ui-refresh="messagetype" ui-options="
+              <div ui-jq="plot" ui-refresh="reflash" ui-options="
               [
                  { data: {{pushrequestdatas}}, label:'push', points: { show: true, radius: 1},  splines: { show: true, tension: 0.4, lineWidth: 1, fill: 0.8}}
               ],
@@ -366,22 +366,19 @@
   </div>
   <!-- / main -->
   <!-- /.col -->
+
   <div class="col w-md bg-white-only b-l bg-auto no-border-xs">
     <div class="wrapper">
       <div class="panel b-a">
         <h4 class="font-thin padder">Latest Question & Reviews</h4>
         <ul class="list-group">
-          <li class="list-group-item">
-            <p> be finished crawlering app review <a href class="text-info">play store</a></p>
-            <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> 2 minuts ago</small>
-          </li>
-          <li class="list-group-item">
-            <p>Morbi nec <a href class="text-info">@Jonathan George</a> nunc condimentum ipsum dolor sit amet, consectetur</p>
-            <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> 1 hour ago</small>
-          </li>
-          <li class="list-group-item">
-            <p><a href class="text-info">@Josh Long</a> Vestibulum ullamcorper sodales nisi nec adipiscing elit. Morbi id neque quam. Aliquam sollicitudin venenatis</p>
-            <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> 2 hours ago</small>
+          <li  ng-animate="{enter: 'repeat-enter',
+                        leave: 'repeat-leave',
+                        move: 'repeat-move'}"  class="list-group-item animated fade-in-left" ng-repeat="rnq in LatestRnQ | reverse" ng-click="removeLatestrnq($index)" >
+            <a href ui-sref="app.helpcenter.review">
+            <p> {{rnq.content}} <a href class="text-info">play store</a></p>
+            <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{rnq.time * 1000 | fromNow}}</small>
+            </a>
           </li>
         </ul>
       </div>

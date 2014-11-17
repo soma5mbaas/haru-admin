@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$sessionStorage', '$window', '$state', 'UserService', 'crypt', 'toaster', '$socket',
-    function(              $rootScope,   $scope,   $translate,   $localStorage,   $sessionStorage,   $window,   $state,   UserService,   crypt,   toaster, $socket ) {
+  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$sessionStorage', '$window', '$state', 'UserService', 'crypt', 'toaster', '$socket', '$q', '$http',
+    function(              $rootScope,   $scope,   $translate,   $localStorage,   $sessionStorage,   $window,   $state,   UserService,   crypt,   toaster, $socket, $q, $http ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -210,6 +210,10 @@ angular.module('app')
           $sessionStorage.currentproject = crypt.encrypt($scope.user.currentproject);
 
           $socket.send("change", $scope.user.currentproject.applicationkey);
+
+          getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
+            $scope.LatestRnQ = result;
+          });
         }
       };
 
@@ -250,15 +254,43 @@ angular.module('app')
           } else if (data.type == 'qna') {
             toaster.pop('note', 'Q&A', '질문...');
           }
+          $scope.LatestRnQ.splice(0, 1);
 
+          $scope.LatestRnQ.push({content: "Review Crawler Complete",messagetype: "crawler",time: 1416194690})
         } else {
           console.log(data.appid);
         }
 
       });
 
+      var getLatestQnR = function(applicationkey){
+        var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
 
+        var param = {'csrf-token':csrf, 'appid': applicationkey};
 
+        var url = '/webhook/info';
+        var deferred = $q.defer();
+        $http({url:url,
+          method:'GET',
+          params:param,
+          headers:{'Application-Id':applicationkey, 'Content-Type': 'application/x-www-form-urlencoded'}})
+            .then(function(response) {
+              deferred.resolve(response.data);
+            }, function(x) {
+              deferred.reject({ error: "Server Error" });
+            });
+        return deferred.promise;
+      };
 
+      $scope.LatestRnQ = [];
+
+      if($scope.user.currentproject != undefined
+          && $scope.user.currentproject.applicationkey != undefined) {
+
+        getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
+          $scope.LatestRnQ = result;
+        });
+
+      }
 
     }]);

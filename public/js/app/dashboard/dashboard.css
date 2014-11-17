@@ -1,0 +1,27 @@
+.repeat-enter-setup, .repeat-leave-setup, .repeat-move-setup {
+    -webkit-transition:all linear 1s;
+    -moz-transition:all linear 1s;
+    -ms-transition:all linear 1s;
+    -o-transition:all linear 1s;
+    transition:all linear 1s;
+}
+.repeat-enter-setup {
+    max-height: 0;
+    opacity:0;
+}
+.repeat-enter-setup.repeat-enter-start {
+    max-height: 250px;
+    opacity:1;
+}
+.repeat-leave-setup {
+    opacity:1;
+    max-height: 250px;
+}
+.repeat-leave-setup.repeat-leave-start {
+    opacity:0;
+    max-height: 0;
+}
+.repeat-move-setup {
+}
+.repeat-move-setup.repeat-move-start {
+}

@@ -50,11 +50,8 @@ class cachetest extends Api2 {
 	val cache = new Cache();
 	cache.put("1", "test");
 	
-	
 	val cachevalue = cache.getAs("1")
 	
-	
     respondJson(cachevalue)
-    
   }
 }

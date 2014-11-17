@@ -62,6 +62,18 @@ app.controller('QuickstartCtrl', ['$scope', '$state', '$window', function($scope
     $scope.clickfinish = function(){
         $scope.steps.percent=100;
         console.log('finish');
+
+        console.log( $scope.selectproduct);
+        console.log( $scope.selectplatform);
+        console.log( $scope.selectTypeProject);
+
+        if($scope.selectplatform == '1'){
+           if($scope.selectTypeProject == "1"){
+               $state.go('app.android1');
+           } else if($scope.selectTypeProject == "2"){
+               $state.go('app.android2');
+           }
+        }
     }
 
 
