@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$sessionStorage', '$window', '$state', 'UserService', 'crypt', 'toaster', '$socket', '$q', '$http',
-    function(              $rootScope,   $scope,   $translate,   $localStorage,   $sessionStorage,   $window,   $state,   UserService,   crypt,   toaster, $socket, $q, $http ) {
+  .controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage', '$sessionStorage', '$window', '$state', 'UserService', 'crypt', 'toaster', '$socket', '$q', '$http', '$timeout',
+    function(              $rootScope,   $scope,   $translate,   $localStorage,   $sessionStorage,   $window,   $state,   UserService,   crypt,   toaster, $socket, $q, $http, $timeout ) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -289,17 +289,15 @@ angular.module('app')
         return deferred.promise;
       };
 
-
-      if($scope.user.currentproject != undefined
-          && $scope.user.currentproject.applicationkey != undefined) {
-
-        getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
-          $scope.LatestRnQ = result;
-        });
-
-      }
-
-
+      $scope.$watch('user.currentproject', function(){
+        if($scope.user.currentproject != undefined
+            && $scope.user.currentproject.applicationkey != undefined) {
+          console.log('timeout LatestRnQ');
+          getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
+            $scope.LatestRnQ = result;
+          });
+        }
+      });
 
       $scope.clickLink = function (index) {
         console.log(index);

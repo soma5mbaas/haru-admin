@@ -123,20 +123,6 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
   };
 
 
-
-
-
-
-
-  if($scope.user.currentproject != undefined
-      && $scope.user.currentproject.applicationkey != undefined) {
-
-      dashboards.getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
-        $scope.parent.LatestRnQ = result;
-      });
-  }
-
-
   $scope.getRandomData = function() {
     var data = [],
         totalPoints = 150;
