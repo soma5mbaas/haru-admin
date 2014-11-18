@@ -9,7 +9,7 @@ angular.module('app')
         cryptProvider.setSecret('abcdefg1234567890');
         FacebookProvider.init('858617410822846');
         GooglePlusProvider.init({
-            clientId: '619633840927-vu2p1v16sd2fi015u6c0apnifg5cosm0.apps.googleusercontent.com',
+            clientId: '974639913694-n9mc312ljjf9mrce85la0ipaloabj6tp.apps.googleusercontent.com',
             apiKey: 'derp'
         });
 
