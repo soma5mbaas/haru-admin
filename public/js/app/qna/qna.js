@@ -29,7 +29,7 @@ app.controller('QNACtrl', ['$scope', 'qnas', '$state', '$window', 'toaster', fun
 
     $scope.deleteQna = function(index){
         console.log(index);
-        var id = $scope.questions[index].Id;
+        var id = $scope.questions[index]._id;
 
         qnas.deleteQna($scope.user.currentproject.applicationkey, id).then(function(result){
             getQuestionList();
@@ -37,7 +37,7 @@ app.controller('QNACtrl', ['$scope', 'qnas', '$state', '$window', 'toaster', fun
     };
     $scope.addComment = function(index){
         console.log(index);
-        var id = $scope.questions[index].Id;
+        var id = $scope.questions[index]._id;
 
         qnas.addComment($scope.user.currentproject.applicationkey, id, $scope.comment[index]).then(function(result){
             getQuestionList();
