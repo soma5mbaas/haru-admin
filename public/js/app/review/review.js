@@ -6,7 +6,7 @@
 
 
 
-app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window', 'toster',
+app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window', 'toaster',
     function($scope,   reviews,   $state,   $window, toaster) {
         console.log('test');
         function isEmpty(obj) {
