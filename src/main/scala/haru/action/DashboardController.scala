@@ -1,17 +1,19 @@
 package haru.action
 
-import haru.dao.ReviewDao
-import xitrum.annotation.GET
-import haru.dao.DashboardDao
-import org.apache.http.impl.client.HttpClientBuilder
 import java.net.URLEncoder
-import org.apache.http.client.methods.HttpGet
+
+import scala.reflect.runtime.universe
+
 import org.apache.http.client.config.RequestConfig
-import spray.json._
-import spray.json.DefaultJsonProtocol
-import haru.dao.WebHookDao
-import org.joda.time.format.DateTimeFormat
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.HttpClientBuilder
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+
+import UserCountProtocol.UserCountJsonFormat
+import haru.dao.DashboardDao
+import spray.json.pimpString
+import xitrum.annotation.GET
 
 
 @GET("/dashboard/request")
@@ -27,8 +29,6 @@ class dashbaordGraph extends Api2 {
 class getDashboardInfo extends Api2 {
   def execute() {
     val appid = param[String]("appid")
-    
-
       
     val usercount = getUserCount(appid)
     println(usercount);
