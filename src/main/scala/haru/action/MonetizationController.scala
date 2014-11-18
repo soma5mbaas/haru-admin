@@ -10,7 +10,7 @@ import haru.dao.MonetizationDao
 import spray.json._
 import spray.json.DefaultJsonProtocol
 import xitrum.annotation.GET
-//{"results":[],"count":2}
+
 
 case class UserCount(results: Option[Any], count: Int)
 object UserCountProtocol extends DefaultJsonProtocol {
