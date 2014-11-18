@@ -41,7 +41,7 @@ app.controller('ProjectsController', ['$rootScope', '$scope', '$window', '$http'
             } else if (menu == 'push') {
                 $state.go('app.push.list');
             } else if (menu == 'analysis') {
-                $state.go('app.monetizations');
+                $state.go('app.monetization');
             } else if (menu == 'helpcenter') {
                 $state.go('app.helpcenter.review');
             } else if (menu == 'quickstart') {
