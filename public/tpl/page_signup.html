@@ -16,7 +16,10 @@
               <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required>
             </div>
             <div class="list-group-item">
-               <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" required>
+               <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" name="pw1" id="pw1" required>
+            </div>
+            <div class="list-group-item">
+              <input type="password" placeholder="Check Password" class="form-control no-border" ng-model="user.repassword2" pw-check="pw1">
             </div>
           </div>
           <div class="checkbox m-b-md m-t-none">

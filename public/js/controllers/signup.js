@@ -1,8 +1,8 @@
 'use strict';
 
 // signup controller
-app.controller('SignupFormController', ['$scope', '$http', '$state', 'UserService', '$localStorage',
-        function($scope,   $http,   $state,   UserService,   $localStorage) {
+app.controller('SignupFormController', ['$scope', '$http', '$state', 'UserService', '$localStorage', '$window',
+        function($scope,   $http,   $state,   UserService,   $localStorage, $window) {
             $scope.authError = null;
 
             $scope.signup = function() {
@@ -12,6 +12,9 @@ app.controller('SignupFormController', ['$scope', '$http', '$state', 'UserServic
                     $scope.user.authuser = data;
 
                     $localStorage.auth = {'token':data.token, 'provider':data.provider};
+
+
+                    $window.alert('환영합니다. 회원가입되었습니다.')
                     $state.go('access.project');
                     //$scope.$emit('Signup', data);
                 },function(data) {

@@ -28,6 +28,8 @@
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
     "WIDGETS" : "Widgets",
+    "PRIVACY" : "개인정보취급방침",
+    "TERMS" : "이용약관",
     "setting" : {
         "SETTING" : "설정",
         "GENERAL" : "일반",
@@ -35,6 +37,18 @@
         "KEYS" : "키 관리",
         "EMAIL" : "이메일",
         "COLLORATORS" : "협업"
+      },
+     "documents" : {
+        "DOCUMENTS" : "문서",
+        "OVERVIEW" : "개요",
+        "QUICKSTART" : "빠른시작",
+        "ANDROID" : "Android",
+        "iOS" : "iOS",
+        "RESTAPI" : "REST API",
+        "DOWNLOAD" : "다운로드",
+        "APILIBRARY" : "라이브러리",
+        "TUTORIALS" : "튜토리얼",
+        "VIDEOS" : "비디오"
       },
     "components" : {
       "COMPONENTS" : "문서",

@@ -49,12 +49,13 @@ class CrawlerWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateC
 
   def execute() {
     val appid = param[String]("appid")
-    val messagetype = param[String]("messagetype")
-    val body = paramo[String]("Body")
+    //val messagetype = param[String]("messagetype")
+    val store = param[String]("store")
+    val messagetype ="App Review"
 
-    WebHookDao.insertLatestQnR(appid, messagetype, "Review Crawler Complete");
+      WebHookDao.insertLatestQnR(appid, messagetype , store);
 
-    val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype)) :: Nil).toString()
+    val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype, "message"->store)) :: Nil).toString()
     registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
     context.become(WebHookRegister(appid, message))
   }
@@ -78,13 +79,13 @@ class QnAWebHook extends ActorAction with SkipCsrfCheck with LookupOrCreateChatR
 
   def execute() {
     val appid = param[String]("appid")
-    val messagetype = param[String]("messagetype")
-    val title = paramo[String]("title")
-    val body = paramo[String]("Body")
+    //val messagetype = param[String]("messagetype")
+    val messagetype = "Q&A"
+    val body = param[String]("body")
 
-    WebHookDao.insertLatestQnR(appid, messagetype, body.getOrElse(""));
+    WebHookDao.insertLatestQnR(appid, messagetype, body);
 
-    val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype)) :: Nil).toString()
+    val message = JSONArray("message" :: JSONObject(Map("appid" -> appid, "type" -> messagetype, "message"->body)) :: Nil).toString()
     registry ! Registry.Register(ROOM_NAME, Props[ChatRoom])
     context.become(WebHookRegister(appid, message))
   }

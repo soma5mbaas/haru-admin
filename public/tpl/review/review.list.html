@@ -185,11 +185,13 @@
                 <ul class="list-group">
                     <li  ng-animate="{enter: 'repeat-enter',
                         leave: 'repeat-leave',
-                        move: 'repeat-move'}"  class="list-group-item animated fade-in-left" ng-repeat="rnq in LatestRnQ | reverse" ng-click="removeLatestrnq($index)" >
-                        <a href ui-sref="app.helpcenter.review">
-                            <p> {{rnq.content}} <a href class="text-info">play store</a></p>
-                            <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{rnq.time * 1000 | fromNow}}</small>
-                        </a>
+                        move: 'repeat-move'}"  class="list-group-item animated fade-in-left" ng-repeat="rnq in LatestRnQ" ng-click="clickLink($index)" >
+                        <a href >
+                            <p>
+                                <span class="text-info">{{rnq.messagetype}}</span>
+                                {{rnq.content}}</p>
+                            <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{rnq.time * 1000 | fromNow}}</small></a>
+
                     </li>
                 </ul>
             </div>

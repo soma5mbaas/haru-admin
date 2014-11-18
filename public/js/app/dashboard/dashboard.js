@@ -1,12 +1,7 @@
 app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$state', 'toaster', function($scope, $http, dashboards, $window, $state, toaster) {
 
 
-  if(isEmpty($scope.user.authuser)) {
-    $state.go('access.signin');
-  } else if(isEmpty($scope.user.currentproject)){
-    //$window.alert('project를 선택해 주십시오!!!');
-
-
+ if(isEmpty($scope.user.currentproject)){
     toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
     console.log($scope.user.currentproject, $state.current.name);
     $state.go('app.projects');
@@ -57,7 +52,7 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
 
     getDashboardRequestData = function(){
       dashboards.getDashboardRequestData(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
-        console.log(result);
+        //console.log(result);
 
         var apirequest = result.api;
         var pushrequest = result.push;
@@ -99,14 +94,14 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
       });
 
       dashboards.getFileSize($scope.user.currentproject.applicationkey).then(function (result) {
-        console.log(result);
+        //console.log(result);
         $scope.dashboard.totalSize = result.totalSize;
       }, function (error) {
         console.log(error);
       });
 
       dashboards.getQnaCount($scope.user.currentproject.applicationkey).then(function (result) {
-        console.log(result);
+        //console.log(result);
         $scope.dashboard.qnacount = result.return;
       }, function (error) {
         console.log(error);
@@ -129,12 +124,17 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
 
 
 
-  $scope.removeLatestrnq = function (index) {
-    console.log(index);
-    $scope.LatestRnQ.splice(index, 1);
-  };
 
 
+
+
+  if($scope.user.currentproject != undefined
+      && $scope.user.currentproject.applicationkey != undefined) {
+
+      dashboards.getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
+        $scope.parent.LatestRnQ = result;
+      });
+  }
 
 
   $scope.getRandomData = function() {

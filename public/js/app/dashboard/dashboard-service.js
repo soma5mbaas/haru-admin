@@ -72,5 +72,25 @@ app.factory('dashboards', ['$http', '$q', 'server_url', function ($http, $q, ser
         return deferred.promise;
     };
 
+    factory.getLatestQnR = function(applicationkey){
+        var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
+
+        var param = {'csrf-token':csrf, 'appid': applicationkey};
+
+        var url = '/webhook/info';
+        var deferred = $q.defer();
+        $http({url:url,
+            method:'GET',
+            params:param,
+            headers:{'Application-Id':applicationkey, 'Content-Type': 'application/x-www-form-urlencoded'}})
+            .then(function(response) {
+                deferred.resolve(response.data);
+            }, function(x) {
+                deferred.reject({ error: "Server Error" });
+            });
+        return deferred.promise;
+    };
+
+
     return factory;
 }]);

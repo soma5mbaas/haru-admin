@@ -4,14 +4,21 @@
 'use strict';
 
 /* Controllers */
-app.controller('ProjectsController', ['$rootScope', '$scope', '$window', '$http', '$state', '$sessionStorage', 'crypt', 'toaster',
-    function($rootScope,   $scope,   $window,   $http,   $state,   $sessionStorage,   crypt, toaster) {
+app.controller('ProjectsController', ['$rootScope', '$scope', '$window', '$http', '$state', '$sessionStorage', 'crypt', 'toaster', '$timeout',
+    function($rootScope,   $scope,   $window,   $http,   $state,   $sessionStorage,   crypt, toaster, $timeout) {
         console.log('test');
-        if(isEmpty($scope.user.authuser)){
-            //$window.alert('project를 선택해 주십시오!!!');
-            //toaster.pop('note', 'Please Login Site', '로그인을 해주세요');
-            //$state.go('access.signin');
-        }
+
+
+        $timeout(function(){
+            if(isEmpty($scope.user.authuser)){
+                $window.alert('로그인을 해주십시오!');
+                //toaster.pop('note', 'Please Login Site', '로그인을 해주세요');
+                $state.go('access.signin');
+            }
+
+        }, 500);
+
+
         function isEmpty(obj) {
             return Object.keys(obj).length === 0;
         }
@@ -40,7 +47,7 @@ app.controller('ProjectsController', ['$rootScope', '$scope', '$window', '$http'
             } else if (menu == 'quickstart') {
                 $state.go('app.quickstart');
             } else if (menu == 'setting') {
-                $state.go('app.setting');
+                $state.go('app.setting.general');
             }
         };
     }])

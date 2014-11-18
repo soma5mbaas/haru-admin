@@ -242,6 +242,9 @@ angular.module('app')
         console.log(event, data);
       });
 
+      $scope.LatestRnQ = [];
+
+
       $socket.on("message", function (event, data) {
         // process the data here
         console.log(event, data);
@@ -249,15 +252,19 @@ angular.module('app')
         if (data.appid == $scope.user.currentproject.applicationkey) {
           console.log(data.appid);
 
-          if (data.type == 'crawler') {
+          if (data.type == 'App Review') {
             toaster.pop('note', '리뷰 수집', '리뷰 수집이 완료되었습니다.');
-          } else if (data.type == 'qna') {
-            toaster.pop('note', 'Q&A', '질문...');
-          }
-          $scope.LatestRnQ.splice(0, 1);
+            $scope.LatestRnQ.splice($scope.LatestRnQ.length -1, 1);
+            $scope.LatestRnQ.unshift({content: data.message +"수집이 완료되었습니다.", messagetype: "App Review", time: 1416194690})
 
-          $scope.LatestRnQ.push({content: "Complete Review Crawling ",messagetype: "crawler",time: 1416194690})
-        } else {
+          } else if (data.type == 'Q&A') {
+            toaster.pop('note', 'Q&A',  data.message);
+
+            $scope.LatestRnQ.splice($scope.LatestRnQ.length -1, 1);
+            $scope.LatestRnQ.unshift({content: data.message, messagetype: "Q&A",time: 1416194690})
+          }
+          console.log(JSON.stringify($scope.LatestRnQ));
+         } else {
           console.log(data.appid);
         }
 
@@ -282,7 +289,6 @@ angular.module('app')
         return deferred.promise;
       };
 
-      $scope.LatestRnQ = [];
 
       if($scope.user.currentproject != undefined
           && $scope.user.currentproject.applicationkey != undefined) {
@@ -292,5 +298,19 @@ angular.module('app')
         });
 
       }
+
+
+
+      $scope.clickLink = function (index) {
+        console.log(index);
+        var type = $scope.LatestRnQ[index].messagetype;
+        if(type == 'Q&A'){
+          $state.go('app.helpcenter.qna');
+        }else {
+          $state.go('app.helpcenter.review');
+        }
+
+        //$scope.LatestRnQ.splice(index, 1);
+      };
 
     }]);

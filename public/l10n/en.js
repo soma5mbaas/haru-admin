@@ -28,6 +28,8 @@
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
     "WIDGETS" : "Widgets",
+    "PRIVACY":"Privacy policy",
+    "TERMS":"Terms of use",
     "setting" : {
         "SETTING" : "Setting",
         "GENERAL" : "General",
@@ -35,6 +37,18 @@
         "KEYS" : "Keys",
         "EMAIL" : "Email",
         "COLLORATORS" : "Collorators"
+      },
+    "documents" : {
+        "DOCUMENTS" : "Documents",
+        "OVERVIEW" : "Overview",
+        "QUICKSTART" : "Quickstart",
+        "ANDROID" : "Android",
+        "iOS" : "iOS",
+        "RESTAPI" : "REST API",
+        "DOWNLOAD" : "SDK Downloads",
+        "APILIBRARY" : "API Libraries",
+        "TUTORIALS" : "Tutorials",
+        "VIDEOS" : "Videos"
       },
     "components" : {
       "COMPONENTS" : "Documents",
