@@ -103,7 +103,7 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
 
         if($scope.messagetype == '0'){
             if($scope.message != undefined && $scope.message != ''){
-                $scope.jsonmessage = '{"message":"' +  $scope.message + '"}';
+                $scope.jsonmessage = '{"type":1, "message":"' +  $scope.message + '"}';
             } else {
                 $scope.jsonmessage = '';
             }
@@ -116,7 +116,7 @@ app.controller('PushNewCtrl', ['$scope', '$state', '$window', 'pushs', function(
     $scope.$watch('messagekvs',function(newVal){
         if(newVal.length != 1 || newVal[0].key != '') {
             var str = '';
-            str= "{";
+            str= '{"type":1, ';
             newVal.forEach(function(elem, index, array){
                 console.log(elem.key, elem.value);
                 if(elem.key != ''){
