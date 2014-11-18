@@ -1,8 +1,11 @@
-app.controller('DatabrowserCtrl', ['$rootScope', '$scope', 'databrowsers', '$window', '$state', '$stateParams','$modal', '$log',
-    function($rootScope, $scope, databrowsers, $window, $state, $stateParams, $modal, $log) {
+app.controller('DatabrowserCtrl', ['$rootScope', '$scope', 'databrowsers', '$window', '$state', '$stateParams','$modal', '$log', 'toaster',
+    function($rootScope, $scope, databrowsers, $window, $state, $stateParams, $modal, $log, toaster) {
 
-        if(isEmpty($scope.user.currentproject)){
-            $window.alert('project를 선택해 주십시오!!!');
+        if(isEmpty($scope.user.authuser)) {
+            $state.go('access.signin');
+        } else if(isEmpty($scope.user.currentproject)){
+            //$window.alert('project를 선택해 주십시오!!!');
+            toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
 
             console.log($scope.user.currentproject, $state.current.name);
             $state.go('app.projects');

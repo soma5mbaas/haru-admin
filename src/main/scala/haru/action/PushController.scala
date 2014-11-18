@@ -37,7 +37,8 @@ class PushRegister extends Api2{
       
     val id = PushDao.insertPush(appid, pushtype, Some(wherevalue), message, messagetype, totalcount, DateTimeZone.forID(sendtimezone).getID(), sendtime, expirationtime, status);
     
-
+    log.debug(message)
+    
     sendPushActor(id._1, appid, message)
     
     respondJson("{success:1}");
@@ -77,6 +78,7 @@ class PushActor extends Actor with ActorLogging {
 	    post.addHeader("Application-Id", appid)
 	    post.addHeader("Content-Type","application/json")
 	    val json = "{\"installations\":{\"pushType\": \"mqtt\"}, \"notification\":"+message+"}"
+	    Log.debug(json)
 	    post.setEntity(new StringEntity(json));
 	    
 	    // send the post request

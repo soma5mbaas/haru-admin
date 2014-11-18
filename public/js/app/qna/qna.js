@@ -2,10 +2,11 @@
  * Created by pheadra on 10/31/14.
  */
 
-app.controller('QNACtrl', ['$scope', 'qnas', '$state', '$window', function($scope, qnas, $state, $window) {
+app.controller('QNACtrl', ['$scope', 'qnas', '$state', '$window', 'toaster', function($scope, qnas, $state, $window, toaster) {
 
     if(isEmpty($scope.user.currentproject)){
-        $window.alert('project를 선택해 주십시오!!!');
+        //$window.alert('project를 선택해 주십시오!!!');
+        toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
 
         console.log($scope.user.currentproject, $state.current.name);
         $state.go('app.projects');

@@ -15,6 +15,7 @@
                     </a>
 
                     <div class="clear">
+                        <a href  ng-click="clickMenu($parent.$index + $index, 'dashboard')">
                         <div class="h3 m-t-xs m-b-xs">
                             {{project.title}}
                             <button class=" btn btn-default no-shadow pull-right" ui-toggle-class="active">
@@ -23,6 +24,7 @@
 
                         </div>
                         <small class="text-muted">{{project.company}}</small>
+                        </a>
                     </div>
                 </div>
             </div>

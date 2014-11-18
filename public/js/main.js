@@ -256,7 +256,7 @@ angular.module('app')
           }
           $scope.LatestRnQ.splice(0, 1);
 
-          $scope.LatestRnQ.push({content: "Review Crawler Complete",messagetype: "crawler",time: 1416194690})
+          $scope.LatestRnQ.push({content: "Complete Review Crawling ",messagetype: "crawler",time: 1416194690})
         } else {
           console.log(data.appid);
         }

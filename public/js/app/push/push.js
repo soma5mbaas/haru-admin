@@ -1,8 +1,8 @@
-app.controller('PushCtrl', ['$scope', '$state', '$window', function($scope, $state, $window) {
+app.controller('PushCtrl', ['$scope', '$state', '$window', 'toaster', function($scope, $state, $window, toaster) {
 
     if(isEmpty($scope.user.currentproject)){
-        $window.alert('project를 선택해 주십시오!!!');
-
+        //$window.alert('project를 선택해 주십시오!!!');
+        toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
         console.log($scope.user.currentproject, $state.current.name);
         $state.go('app.projects');
     }

@@ -73,12 +73,18 @@ app.controller('QuickstartCtrl', ['$scope', '$state', '$window', function($scope
            } else if($scope.selectTypeProject == "2"){
                $state.go('app.android2');
            }
+        } else if($scope.selectplatform == '2'){
+            $window.alert('comming soon');
+        } else if($scope.selectplatform == '3'){
+            $window.alert('comming soon');
+
         }
     }
 
 
 
 }]);
+/*
 
 app.controller('QuickstartStep1Ctrl', ['$scope', '$state', '$window', function($scope, $state, $window) {
 
@@ -96,4 +102,4 @@ app.controller('QuickstartStep1Ctrl', ['$scope', '$state', '$window', function($
         angular.element(document.querySelector('select')).imagepicker();
     }
     $scope.init();
-}]);
+}]);*/

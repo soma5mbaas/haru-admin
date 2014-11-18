@@ -1,11 +1,11 @@
 /**
  * Created by pheadra on 10/31/14.
  */
-app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', '$window',
-                      function($scope, notices, $modal, $log, $state, $window) {
+app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', '$window', 'toaster',
+                      function($scope, notices, $modal, $log, $state, $window, toaster) {
     if(isEmpty($scope.user.currentproject)){
-        $window.alert('project를 선택해 주십시오!!!');
-
+        //$window.alert('project를 선택해 주십시오!!!');
+        toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
         console.log($scope.user.currentproject, $state.current.name);
         $state.go('app.projects');
     }
@@ -43,7 +43,7 @@ app.controller('NoticeCtrl', ['$scope', 'notices', '$modal', '$log', '$state', '
 
     $scope.deleteNotice = function(index){
         console.log(index);
-        var id = $scope.notices[index].Id;
+        var id = $scope.notices[index]._id;
 
         //ar data = '{ "fields": ["'+ key+'"] }';
         console.log(id);

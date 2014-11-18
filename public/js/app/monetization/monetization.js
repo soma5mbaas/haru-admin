@@ -13,8 +13,16 @@ function genernatiorticks(start, end){
   return lineticks;
 }
 
-app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter','monetizations',  function($scope, $http, limitToFilter, monetizations) {
+app.controller('MonetizationCtrl', ['$scope', '$http', 'limitToFilter','monetizations', 'toaster', '$state', function($scope, $http, limitToFilter, monetizations, toaster, $state) {
   //ng-init="date ='07/15/2014 - 07/15/2014'"
+
+  if(isEmpty($scope.user.currentproject)){
+    //$window.alert('project를 선택해 주십시오!!!');
+    toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
+    console.log($scope.user.currentproject, $state.current.name);
+    $state.go('app.projects');
+  }
+
   function isEmpty(obj) {
     return Object.keys(obj).length === 0;
   }

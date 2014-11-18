@@ -6,8 +6,8 @@
 
 
 
-app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
-    function($scope,   reviews,   $state,   $window) {
+app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window', 'toster',
+    function($scope,   reviews,   $state,   $window, toaster) {
         console.log('test');
         function isEmpty(obj) {
             return Object.keys(obj).length === 0;
@@ -20,8 +20,8 @@ app.controller('ReviewCtrl', ['$scope', 'reviews', '$state', '$window',
             return r;
         }
         if(isEmpty($scope.user.currentproject)){
-            $window.alert('project를 선택해 주십시오!!!');
-
+            //$window.alert('project를 선택해 주십시오!!!');
+            toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
             //console.log($scope.user.currentproject, $state.current.name);
             $state.go('app.projects');
         }

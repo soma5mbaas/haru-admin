@@ -12,7 +12,7 @@ object DashboardDao extends DatabasePool {
     implicit session =>
       /// TODO 만약없다면 exception??
       val apirequestquery = sql"""
-      select reqdate, count(reqdate) count  from UserRequestlog 
+      select reqdate, count(reqdate) count  from Requestlog 
       where applicationid = $appid
       group by reqdate having reqdate >= ADDDATE(DATE(NOW()), -7)
        """.as[(String, Int)]

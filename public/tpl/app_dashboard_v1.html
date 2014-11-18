@@ -50,7 +50,7 @@
             </div>
             <div class="col-xs-6">
               <a href class="block panel padder-v bg-primary item">
-                <span class="text-white font-thin h1 block">930</span>
+                <span class="text-white font-thin h1 block">{{dashboard.totalSize | bytes}}</span>
                 <span class="text-muted text-xs">Uploads</span>
                 <span class="bottom text-right w-full">
                   <i class="fa fa-cloud-upload text-muted m-r-sm"></i>
@@ -68,7 +68,7 @@
             </div>
             <div class="col-xs-6">
               <div class="panel padder-v item">
-                <div class="font-thin h1">129</div>
+                <div class="font-thin h1" ng-bind="dashboard.qnacount"></div>
                 <span class="text-muted text-xs">Help Center</span>
                 <div class="bottom text-left">
                   <i class="fa fa-caret-up text-warning m-l-sm"></i>

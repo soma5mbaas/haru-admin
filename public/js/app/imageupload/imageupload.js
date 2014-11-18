@@ -1,4 +1,19 @@
-app.controller('FileUploadCtrl', ['$scope', 'FileUploader', 'server_url', function($scope, FileUploader, server_url) {
+app.controller('FileUploadCtrl', ['$scope', 'FileUploader', 'server_url', '$state', 'toaster', function($scope, FileUploader, server_url, $state, toaster) {
+
+    if(isEmpty($scope.user.authuser)) {
+        $state.go('access.signin');
+    } else if(isEmpty($scope.user.currentproject)){
+        //$window.alert('project를 선택해 주십시오!!!');
+        toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
+        console.log($scope.user.currentproject, $state.current.name);
+        $state.go('app.projects');
+    }
+
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+
+
     var uploader = $scope.uploader = new FileUploader({
         url: server_url + '/1/files',
         headers : {'Application-Id':$scope.user.currentproject.applicationkey}

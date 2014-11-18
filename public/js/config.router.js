@@ -824,7 +824,10 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad){
                               return $ocLazyLoad.load([
-                                  'js/app/quickstart/quickstart.js'
+                                  'js/app/quickstart/quickstart.js',
+                                  'js/app/quickstart/quickstart-android.js',
+                                  'js/app/quickstart/quickstart-service.js'
+
                               ]);
                           }]
                   }
@@ -836,7 +839,9 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad){
                               return $ocLazyLoad.load([
-                                  'js/app/quickstart/quickstart.js'
+                                  'js/app/quickstart/quickstart.js',
+                                  'js/app/quickstart/quickstart-android.js',
+                                  'js/app/quickstart/quickstart-service.js'
                               ]);
                           }]
                   }

@@ -1,11 +1,89 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Android Exist Project</h1>
+</div>
+<div class="wrapper-md" ng-controller="QuickStartAndroidCtrl">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="blog-post">
+                <div class="panel">
+                    <div class="wrapper-lg">
+                        <div class="row">
+                            <div class="text-center h2 font-bold">Install the SDK</div>
 
+                            <div class="h3" >1. Download & unzip the SDK</div>
 
+                            <div class="m-t m-l">
+                                <a href="/download/haru-core-0.1.0.jar" ><button class="btn m-b-xs btn-sm btn-success btn-addon"><i class="icon icon-cloud-download"></i>Download the Android SDK</button></a>
+                            </div>
 
-<div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="wrapper b-b bg">
-        <span class="h3">Android Exist Project</span>
-    </div>
-    <div class="container" >
-        android1
+                            <div class="h3 m-t-lg">2. Add the SDK to your app </div>
+                            <div class="h4 m-l m-t">Android Studio</div>
+                            <ul>
+                                <li>Drag the haru-core-*.jar you downloaded into your existing app's "libs" folder and add the following to your build.gradle</li>
+                            </ul>
+                            <pre class="alert alert-info m-r m-l">
+dependencies {
+    compile fileTree(dir: 'libs', include: 'haru-core-*.jar')
+}</pre>
+                            <div class="h4 m-l m-t">Eclipse</div>
+                            <ul>
+                                <li>Import the zip file's contents into your existing Android project by extracting it into your "libs" folder. If your project does not already have a "libs" folder, create one at the root of the project by right-clicking the project and choosing "New" and then "Folder".</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-post">
+                <div class="panel">
+                    <div class="wrapper-lg">
+                        <div class="row">
+                            <div class="text-center h2 font-bold">Connect your app to Plugy</div>
+
+                            <div class="h4 m-t" >Before continuing, select your Parse app from the menu at the right. These steps are for your "{{user.currentproject.title}}" app.</div>
+                            <br />
+                            <div class="h4 m-t" >Add your keys to your project:</div>
+
+                            <div class="code m-t">
+                                <pre class="brush:java;">
+public void onCreate() {
+    Haru.init(this, "{{user.currentproject.applicationkey}}", "{{user.currentproject.clientkey}}");
+}</pre>
+                            </div>
+                            <div class="h4 m-t" >Compile and run!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-post">
+                <div class="panel">
+                    <div class="wrapper-lg">
+                        <div class="row">
+                            <div class="text-center h2 font-bold">Test the SDK</div>
+
+                            <div class="h4 m-t" >After installing the SDK, copy and paste this code into your app, for example in Application.onCreate:</div>
+
+                            <div class="code m-t">
+                                <pre class="brush:java;">
+final Entity entity = new Entity("TestObject");
+entity.put("foo", "bar");
+entity.saveInBackground();</pre>
+                            </div>
+                            <div class="h4 m-t" >Run your app. A new object of class TestObject will be sent to the Plugy server and saved. When you're ready, click the button below to test if your data was sent.</div>
+                        </div>
+                        <div class="text-center m-t"><button class="btn m-b-xs btn-group-xs btn-success btn-addon" ng-click="testSdk()"><i class="icon icon-cloud-download"></i>TEST SDK</button></div>
+                        <pre class="alert alert-info m-t" ng-show="visible">
+<span class="h3"> Congrats! Welcome to Plugy mBaas Service.</span>
+
+<em>{{results | json}}</em></pre>
+                         <pre class="alert alert-warning m-t" ng-show="errorvisible">
+<span class="h3"> No data yet...</span>
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+

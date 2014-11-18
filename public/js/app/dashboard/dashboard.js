@@ -1,8 +1,13 @@
-app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$state', function($scope, $http, dashboards, $window, $state) {
+app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$state', 'toaster', function($scope, $http, dashboards, $window, $state, toaster) {
 
-  if(isEmpty($scope.user.currentproject)){
-    $window.alert('project를 선택해 주십시오!!!');
 
+  if(isEmpty($scope.user.authuser)) {
+    $state.go('access.signin');
+  } else if(isEmpty($scope.user.currentproject)){
+    //$window.alert('project를 선택해 주십시오!!!');
+
+
+    toaster.pop('note', 'Select Project', '프로젝트를 선택해주세요.');
     console.log($scope.user.currentproject, $state.current.name);
     $state.go('app.projects');
   }
@@ -10,8 +15,13 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
     return Object.keys(obj).length === 0;
   }
 
+  var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
+  var applicationkey = $scope.user.currentproject.applicationkey;
+
   $scope.apirequestdatas = [];
   $scope.pushrequestdatas = [];
+  $scope.dashboard = {usercount:0, revenue:0, request:0, totalSize:0, qnacount:0};
+
 
   if(!isEmpty($scope.user.currentproject)) {
     var lineticks = [];
@@ -20,10 +30,8 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
     }
     $scope.lineticks = lineticks;
 
-    var csrf = angular.element(document.querySelector('meta[name=csrf-token]')).context.content;
 
 
-    $scope.dashboard = {usercount:0, revenue:0, request:0};
 
     getDashboardinfo = function(){
       dashboards.getDashboard(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
@@ -38,7 +46,7 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
 
         }
 
-        console.log('getDashboard',result);
+        //console.log('getDashboard',result);
       });
 
     };
@@ -46,6 +54,7 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
 
 
     var refluash = 0;
+
     getDashboardRequestData = function(){
       dashboards.getDashboardRequestData(csrf, $scope.user.currentproject.applicationkey).then(function (result) {
         console.log(result);
@@ -65,7 +74,7 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
               break;
             }
           }
-          apirequestdatas.push([(index +1) , apicount]);
+          apirequestdatas.push([(index) , apicount]);
 
           var pushcount = 0;
           for(i = 0; i < pushrequest.length; i++ ){
@@ -75,7 +84,7 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
             }
           }
 
-          pushrequestdatas.push([(index +1), pushcount]);
+          pushrequestdatas.push([(index), pushcount]);
 
         });
         $scope.apirequestdatas = apirequestdatas;
@@ -87,18 +96,37 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
         $scope.reflash = refluash++;
       }, function (error) {
         console.log(error);
-      })
+      });
+
+      dashboards.getFileSize($scope.user.currentproject.applicationkey).then(function (result) {
+        console.log(result);
+        $scope.dashboard.totalSize = result.totalSize;
+      }, function (error) {
+        console.log(error);
+      });
+
+      dashboards.getQnaCount($scope.user.currentproject.applicationkey).then(function (result) {
+        console.log(result);
+        $scope.dashboard.qnacount = result.return;
+      }, function (error) {
+        console.log(error);
+      });
+
     }
+    getDashboardRequestData();
+
+    $scope.$watch('user.currentproject', function(){
+      console.log('test');
+      getDashboardinfo();
+      getDashboardRequestData();
+    });
   };
-  getDashboardRequestData();
+
+
   $scope.clickrequestchart = function(){
     $scope.reflash = refluash++;
   };
 
-  $scope.$watch('user.currentproject', function(){
-    getDashboardinfo();
-    getDashboardRequestData();
-  });
 
 
   $scope.removeLatestrnq = function (index) {
@@ -108,63 +136,6 @@ app.controller('DashboardCtrl', ['$scope', '$http', 'dashboards', '$window', '$s
 
 
 
-  var d111 = [];
-  for (var i = 0; i <= 10; i += 1) {
-    d111.push([i, parseInt(Math.random() * 30)]);
-  }
-  $scope.d111 = d111;
-
-  var d222 = [];
-  for (var i = 0; i <= 10; i += 1) {
-    d222.push([i, parseInt(Math.random() * 30)]);
-  }
-  $scope.d222 = d222;
-  var d333 = [];
-  for (var i = 0; i <= 10; i += 1) {
-    d333.push([i, parseInt(Math.random() * 30)]);
-  }
-  $scope.d333 = d333;
-
-  var data = [],
-      series = Math.floor(Math.random() * 6) + 3;
-
-  for (var i = 0; i < series; i++) {
-    data[i] = {
-      label: "Series" + (i + 1),
-      data: Math.floor(Math.random() * 100) + 1
-    }
-  }
-  $scope.flotpiedata = data;
-
-  $scope.d = [ [1,6.5],[2,6.5],[3,7],[4,8],[5,7.5],[6,7],[7,6.8],[8,7],[9,7.2],[10,7],[11,6.8],[12,7] ];
-
-  $scope.d0_1 = [ [0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7] ];
-
-  $scope.d0_2 = [ [0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3] ];
-
-  $scope.d1_1 = [ [10, 120], [20, 70], [30, 70], [40, 60] ];
-
-  $scope.d1_2 = [ [10, 50],  [20, 60], [30, 90],  [40, 35] ];
-
-  $scope.d1_3 = [ [10, 80],  [20, 40], [30, 30],  [40, 20] ];
-
-  $scope.d2 = [];
-
-  for (var i = 0; i < 20; ++i) {
-    $scope.d2.push([i, Math.sin(i)]);
-  }
-
-  $scope.d3 = [
-    { label: "iPhone5S", data: 40 },
-    { label: "iPad Mini", data: 10 },
-    { label: "iPad Mini Retina", data: 20 },
-    { label: "iPhone4S", data: 12 },
-    { label: "iPad Air", data: 18 }
-  ];
-
-  $scope.refreshData = function(){
-    $scope.d0_1 = $scope.d0_2;
-  };
 
   $scope.getRandomData = function() {
     var data = [],
