@@ -71,7 +71,7 @@ app.controller('GridDemoCtrl', ['$rootScope', '$scope', '$http', '$stateParams',
                     schemakeys = schemakeys.sort();
 
                     schemakeys.forEach(function (elem) {
-                        if (!(elem == '_id' || elem == 'updatedAt' || elem == 'createdAt' || elem == 'ACL')) {
+                        if (!(elem == '_id' || elem == 'updatedAt' || elem == 'createdAt' || elem == 'ACL' || elem == 'password')) {
 
                             var field = {};
                             field.field = elem;
