@@ -11,30 +11,21 @@ app.controller('FAQCtrl', ['$scope', 'faqs', '$state', '$window', 'toaster', fun
   }
 
 
-  $scope.labels = [
-    {name: 'Angular', filter:'angular', color:'#23b7e5'},
-    {name: 'Bootstrap', filter:'bootstrap', color:'#7266ba'},
-    {name: 'Client', filter:'client', color:'#fad733'},
-    {name: 'Work', filter:'work', color:'#27c24c'}
-  ];
 
   var colorlist = ['#7266ba', '#fad733', '#27c24c'];
-
-
   var colorindex = 0;
+
   $scope.faqcategory = [];
   faqs.getFaqCategory($scope.user.currentproject.applicationkey).then(function(faqresult){
-    //console.log(faqresult);
     var result = faqresult.return;
 
-    $scope.faqcategory.push(
-        {
+    $scope.faqcategory.push({
           Id:'',
           category: 'All',
           filter : '',
           color: '#7266ba'
-        }
-    );
+        });
+
     result.forEach(function(value, index){
       colorindex = colorindex+1
       var item = value;
@@ -56,18 +47,15 @@ app.controller('FAQCtrl', ['$scope', 'faqs', '$state', '$window', 'toaster', fun
       }
     });
 
+    // 존재하지 않으면 추가
     if(existcategory == false){
-
       colorindex = colorindex +1;
-
-      $scope.faqcategory.push(
-          {
+      $scope.faqcategory.push({
             Id:'',
             category: category,
             filter : category,
             color: colorlist[colorindex % 3]
-          }
-      );
+          });
 
       faqs.addFaqCategory($scope.user.currentproject.applicationkey, category).then(function(result){
         console.log(result);
@@ -75,13 +63,7 @@ app.controller('FAQCtrl', ['$scope', 'faqs', '$state', '$window', 'toaster', fun
 
     }
     $scope.newLabel.name = '';
-
-
   };
-
-
-
-
 
   $scope.isCollapsed = true;
   $scope.sortableOptions = {
@@ -125,6 +107,16 @@ app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope
   getfaqlist();
 
 
+  $scope.remove = function(index){
+    console.log($scope.faqlists [index]);
+
+    faqs.deleteFaq($scope.user.currentproject.applicationkey,$scope.faqlists [index]._id).then(function(result){
+      console.log(result);
+      getfaqlist();
+
+    });
+    $scope.faqlists.splice(index, 1);
+  };
 }]);
 
 app.controller('FAQAddCtrl', ['$scope', 'faqs', '$state', function($scope, faqs, $state) {

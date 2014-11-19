@@ -5,12 +5,12 @@
   <ul ui-jq="sortable" ui-refresh="reflash" ui-options="sortableOptions" class="list-group gutter list-group-lg list-group-sp">
     <li ng-repeat="faq in faqlists track by $index" class="list-group-item bg-info" color="{{category.color}}" label-color  index="sortableitem1">
       <span class="pull-right" >
-        <a href><i class="fa fa-pencil fa-fw m-r-xs h5"></i></a>
-        <a href><i class="fa fa-times fa-fw  h5"></i></a>
+        <a href ><i class="fa fa-pencil fa-fw m-r-xs h5"></i></a>
+        <a href ng-click="remove($index)"><i class="fa fa-times fa-fw  h5"></i></a>
       </span>
       <span class="pull-left"><i class="fa fa-sort text-muted fa m-r-sm h4"></i> </span>
       <div class="clear"  ng-click="isCollapsed = !isCollapsed">
-        <span class="h5 font-bold" >{{faq.title}} {{faq.category}}</span>
+        <span class="h5 font-bold" >[{{faq.category}}] {{faq.title}} </span>
 
         <div collapse="isCollapsed" class="m-t">
           <blockquote class="m-n h5"  ta-bind ng-model="faq.body"></blockquote>

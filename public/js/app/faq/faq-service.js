@@ -97,8 +97,8 @@ app.factory('faqs', ['$http', '$q', 'server_url', function ($http, $q, server_ur
     return deferred.promise;
   };
 
-  factory.deleteNotice = function(applicationkey, id) {
-    var url = server_url + '/1/notice/' + id;
+  factory.deleteFaq = function(applicationkey, id) {
+    var url = server_url + '/1/faq/' + id;
     var deferred = $q.defer();
     $http({url:url,
       method:'DELETE',
