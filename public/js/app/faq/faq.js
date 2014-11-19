@@ -92,18 +92,14 @@ app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope
   $scope.faqlists = [];
   getfaqlist = function() {
     faqs.getFaqList($scope.user.currentproject.applicationkey, $scope.fold).then(function (result) {
-      //console.log(result);
-
       if (result.return === null) {
         $scope.faqlists = [];
       } else {
         $scope.faqlists = result.return;
       }
-
       $scope.reflash = $scope.reflash + 1;
     });
   };
-
   getfaqlist();
 
 
@@ -117,6 +113,7 @@ app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope
     });
     $scope.faqlists.splice(index, 1);
   };
+
 }]);
 
 app.controller('FAQAddCtrl', ['$scope', 'faqs', '$state', function($scope, faqs, $state) {
@@ -141,17 +138,3 @@ app.controller('FAQAddCtrl', ['$scope', 'faqs', '$state', function($scope, faqs,
 
 
 }]);
-/*
-
-app.controller('FAQListCtrl', ['$scope', 'faqs', '$stateParams', function($scope, mails, $stateParams) {
-  $scope.fold = $stateParams.fold;
-  faqs.all().then(function(mails){
-    $scope.mails = mails;
-  });
-}]);
-*/
-angular.module('app').directive('labelColor', function(){
-  return function(scope, $el, attrs){
-    $el.css({'color': attrs.color});
-  }
-});
