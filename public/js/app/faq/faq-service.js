@@ -8,6 +8,8 @@ app.factory('faqs', ['$http', '$q', 'server_url', function ($http, $q, server_ur
 
     var url = server_url + '/1/faq/category/list';
     var deferred = $q.defer();
+    //console.log(url);
+
     $http({url:url,
       method:'GET',
       headers:{'Application-Id':applicationkey}})
@@ -38,16 +40,18 @@ app.factory('faqs', ['$http', '$q', 'server_url', function ($http, $q, server_ur
   factory.getFaqList = function(applicationkey,catgory) {
 
     var url = server_url + '/1/faq/list';
+
     if(catgory != 'All'){
       url = url + '/'+catgory;
     }
+    console.log(url);
 
     var deferred = $q.defer();
     $http({url:url,
       method:'GET',
       headers:{'Application-Id':applicationkey}})
         .then(function(response) {
-          console.log(response);
+          //console.log(response);
           deferred.resolve(response.data);
         }, function(x) {
           deferred.reject({ error: "Server Error" });
@@ -56,8 +60,11 @@ app.factory('faqs', ['$http', '$q', 'server_url', function ($http, $q, server_ur
   };
 
 
-  factory.createNotice = function(applicationkey, data) {
-    var url = server_url + '/1/notice/add';
+  factory.createFaq = function(applicationkey, title, body, category) {
+    //{"title": "Header","body": "booooody","category": "Accounts FAQ","platform": "ios"}
+    var data = {title:title, body:body, category:category, platform:"android"};
+    //console.log(data);
+    var url = server_url + '/1/faq/add';
     var deferred = $q.defer();
     $http({url:url,
       method:'POST',

@@ -739,7 +739,7 @@ angular.module('app')
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function ($ocLazyLoad) {
-                              return $ocLazyLoad.load([
+                              return $ocLazyLoad.load(['textAngular',
                                   'js/app/faq/faq.js',
                                   'js/app/faq/faq-service.js'
                               ]);
@@ -753,7 +753,9 @@ angular.module('app')
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function ($ocLazyLoad) {
-                              return $ocLazyLoad.load(['textAngular']);
+                              return $ocLazyLoad.load(['textAngular',
+                                  'js/app/faq/faq.js',
+                                  'js/app/faq/faq-service.js']);
                           }]
                   }
               })

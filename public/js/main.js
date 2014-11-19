@@ -12,7 +12,7 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'Plugy.io',
+        name: 'PlugY.io',
         version: '1.0.0',
         // for chart colors
         color: {
@@ -292,7 +292,6 @@ angular.module('app')
       $scope.$watch('user.currentproject', function(){
         if($scope.user.currentproject != undefined
             && $scope.user.currentproject.applicationkey != undefined) {
-          console.log('timeout LatestRnQ');
           getLatestQnR($scope.user.currentproject.applicationkey).then(function(result){
             $scope.LatestRnQ = result;
           });
@@ -310,5 +309,7 @@ angular.module('app')
 
         //$scope.LatestRnQ.splice(index, 1);
       };
+
+
 
     }]);

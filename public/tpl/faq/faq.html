@@ -10,7 +10,7 @@
         <li ng-repeat="category in faqcategory" ui-sref-active="active">
           <a ui-sref="app.helpcenter.faq.list({fold:category.filter})">
             <i class="fa fa-fw fa-circle text-muted" color="{{category.color}}" label-color ></i>
-            {{category.Category}}
+            {{category.category}}
           </a>
         </li>
       </ul>
